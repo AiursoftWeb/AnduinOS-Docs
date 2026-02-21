@@ -3,7 +3,7 @@ site_description: The official documentation for AnduinOS.
 
 # Repository
 repo_name: anduin/anduinos-docs
-repo_url: https://gitlab.aiursoft.com/anduin/anduinos-docs
+repo_url: https://gitlab.aiursoft.com/aiursoft/anduinos-docs
 edit_uri: ""
 
 use_directory_urls: true
