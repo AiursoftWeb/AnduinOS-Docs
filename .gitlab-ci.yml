@@ -4,9 +4,6 @@ stages:
 deploy_docker_all:
     stage: deploy
     environment: production
-    needs:
-        - lint
-        - test
     script:
         - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then TAG="latest"; else TAG="$CI_COMMIT_REF_NAME"; fi
         - if [ "$CI_PROJECT_NAMESPACE" = "anduin" ]; then HUB_NAMESPACE="anduin2019"; else HUB_NAMESPACE="$CI_PROJECT_NAMESPACE"; fi
