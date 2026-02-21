@@ -53,6 +53,7 @@ To get the source code of AnduinOS, you can visit:
 
 To discuss with other AnduinOS users, you can join our community on:
 
+* [AnduinOS Discord](https://discord.com/invite/b2N3aB7Ndv)
 * [AnduinOS Revolt](https://rvlt.gg/AE7Kx4qD)
 
 ## Copyright
