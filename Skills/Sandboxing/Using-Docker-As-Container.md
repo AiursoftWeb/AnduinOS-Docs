@@ -92,7 +92,7 @@ docker inspect container_id_or_name
 docker inspect image_name:tag
 ```
 
-## Use `docker-compose` to Manage Multi-Container Applications
+## Use `docker compose` to Manage Multi-Container Applications
 
 ### `docker-compose.yml` Example:
 
@@ -112,7 +112,7 @@ services:
 ### Run the Application:
 
 ```bash title="Run the Application"
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Tag and Push an Image to a Registry
@@ -438,8 +438,7 @@ Use this Dockerfile when you need to run GUI applications inside a Docker contai
 To cross-compile for ARM on a regular x86 machine you need **QEMU user-mode emulation** and the **buildx plugin**:
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y qemu-user-static docker-buildx
+sudo apt install -y qemu-user-static docker-buildx
 ```
 
 `qemu-user-static` registers itself with the Linux kernel's `binfmt_misc` subsystem. From that point on, the kernel silently hands any foreign binary (e.g., an ARM64 executable) to the right QEMU translator instead of refusing to run it — which is how an x86 host can execute ARM container layers.
