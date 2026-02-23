@@ -120,8 +120,8 @@ If you haven't installed Docker yet, do so now (see the top of this page). Then,
 
 ```bash title="Install Nvidia Toolkit"
 # Add the repository
-curl -fsSL [https://nvidia.github.io/libnvidia-container/gpgkey](https://nvidia.github.io/libnvidia-container/gpgkey) | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
-curl -s -L [https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list](https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list) | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 
 # Install packages
 sudo apt-get update
@@ -146,9 +146,14 @@ Using GPUs in Swarm mode requires manual configuration of the Docker daemon reso
 ```bash title="Configuring Docker Daemon for Swarm GPU"
 echo "Configuring docker daemon for Nvidia GPU..."
 
-# Get the GPU UUID cleanly
-GPU_ID=$(nvidia-smi --query-gpu=gpu_uuid --format=csv,noheader)
-echo "Detected GPU_ID: $GPU_ID"
+# Get the GPU UUIDs and format them as a JSON array
+raw_gpu_output=$(nvidia-smi --query-gpu=gpu_uuid --format=csv,noheader)
+JSON_GPU_RESOURCES=""
+for ID in $raw_gpu_output; do
+    JSON_GPU_RESOURCES+="\"NVIDIA-GPU=$ID\","
+done
+JSON_GPU_RESOURCES=${JSON_GPU_RESOURCES%,}  # Remove trailing comma
+echo "Detected GPU resources: $JSON_GPU_RESOURCES"
 
 # Backup existing config
 if [ -f /etc/docker/daemon.json ]; then
@@ -166,7 +171,7 @@ sudo tee /etc/docker/daemon.json <<EOF
   },
   "default-runtime": "nvidia",
   "node-generic-resources": [
-    "NVIDIA-GPU=$GPU_ID"
+    $JSON_GPU_RESOURCES
   ]
 }
 EOF

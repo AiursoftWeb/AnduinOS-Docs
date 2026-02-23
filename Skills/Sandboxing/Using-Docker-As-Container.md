@@ -214,25 +214,25 @@ docker cp container_id:/foo.txt foo.txt
 ### Backup a MySQL Database:
 
 ```bash title="Backup a MySQL Database"
-sudo docker exec 9cc920668c42 sh -c 'exec mysqldump -u root -p"<root_password>" anduin' > ./Anduin.backup.sql
+sudo docker exec <container_id_or_name> sh -c 'exec mysqldump -u root -p"<root_password>" <database_name>' > ./backup.sql
 ```
 
 ### Backup a MariaDB Database:
 
 ```bash title="Backup a MariaDB Database"
-sudo docker exec 9cc920668c42 sh -c 'exec mysqldump -u root -p"<root_password>" anduin' > ./Anduin.backup.sql
+sudo docker exec <container_id_or_name> sh -c 'exec mysqldump -u root -p"<root_password>" <database_name>' > ./backup.sql
 ```
 
 ### Restore a MySQL Database:
 
 ```bash title="Restore a MySQL Database"
-sudo docker exec -i 9cc920668c42 sh -c 'exec mysql   -u root -p"<root_password>" anduin' < ./Anduin.backup.sql
+sudo docker exec -i <container_id_or_name> sh -c 'exec mysql   -u root -p"<root_password>" <database_name>' < ./backup.sql
 ```
 
 ### Restore a MariaDB Database:
 
 ```bash title="Restore a MariaDB Database"
-sudo docker exec -i 9cc920668c42 sh -c 'exec mariadb -u root -p"<root_password>" anduin' < ./Anduin.backup.sql
+sudo docker exec -i <container_id_or_name> sh -c 'exec mariadb -u root -p"<root_password>" <database_name>' < ./backup.sql
 ```
 
 ## Sort Containers by Resource Usage
@@ -575,3 +575,36 @@ before_script:
     ```
 
     You should see a JSON structure containing a `manifests` array with separate entries for `linux/amd64` and `linux/arm64`, each with its own digest. If you see that, your multi-architecture image is correctly published.
+
+### 11. Advanced: Speed Up Builds with Native Cross-Compilation
+
+Running heavy compilation steps (e.g., `npm install`, `dotnet build`, `go build`) inside QEMU is notoriously slow — QEMU translates every single instruction at runtime. For compile-heavy images you can side-step this entirely by running the build tools on the **host's native CPU** and only targeting the foreign architecture as the output.
+
+BuildKit provides two automatic build arguments to make this possible:
+
+| Argument | Value | Example |
+|---|---|---|
+| `$BUILDPLATFORM` | Platform of the machine running the build | `linux/amd64` |
+| `$TARGETPLATFORM` / `$TARGETARCH` | Platform/arch the image is built *for* | `linux/arm64` / `arm64` |
+
+The pattern is to use `FROM --platform=$BUILDPLATFORM` for any stage that only runs build tooling, and switch to the default (target) platform for the final stage:
+
+```dockerfile
+# Stage 1: build on the HOST architecture (native speed, no QEMU)
+FROM --platform=$BUILDPLATFORM golang:1.22 AS builder
+ARG TARGETARCH
+WORKDIR /app
+COPY . .
+# The Go toolchain cross-compiles to TARGETARCH without QEMU
+RUN GOARCH=$TARGETARCH go build -o myapp main.go
+
+# Stage 2: final image uses the TARGET architecture
+FROM alpine:latest
+COPY --from=builder /app/myapp /usr/local/bin/
+ENTRYPOINT ["myapp"]
+```
+
+!!! tip "Why this works"
+    Go, Rust (`--target`), and most modern compilers support native cross-compilation — they can emit ARM64 machine code while running on an x86 CPU without QEMU. Only the *output binary* is ARM64. The compilation process itself runs at full native speed.
+
+    For interpreted runtimes (Python, Node.js) that don't have a cross-compile mode, QEMU is still needed for `RUN` steps, but you can still use native stages to handle any ahead-of-time asset building before handing off to the QEMU-based stage.
