@@ -6,21 +6,7 @@ In some cases, you don't want to setup a complicated Linux Desktop environment o
 
 To install Docker, follow the instructions in the [Docker](../../Applications/Development/Docker/Docker.md) guide.
 
-## Method 1 - Pull my built image from Docker Hub
-
-I have built a Docker image with the Linux Desktop environment. You can run the container with the following command:
-
-```bash
-docker run -d -p 33900:3389 --name remote-desktop hub.aiursoft.com/aiursoft/internalimages/remote-desktop:latest
-```
-
-Now, you can use a Remote Desktop client to connect to `localhost:33900` to access the Linux Desktop environment.
-
-User name is `test`, password is `1234`.
-
-## Method 2 - Build the image yourself
-
-If you want to build the image yourself, you can write a new `Dockerfile` with the following content:
+Write a new `Dockerfile` with the following content:
 
 ```Dockerfile
 FROM ubuntu:22.04
