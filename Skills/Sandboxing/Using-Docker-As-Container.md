@@ -6,7 +6,23 @@ The following are some useful Docker commands and techniques that can help you m
 
 To install Docker on AnduinOS, please follow the instructions [here](../../Applications/Development/Docker/Docker.md).
 
+!!! tip "Also install recommended plugins"
+    It is recommended to also install the following packages at the same time:
+
+    | Package | Purpose |
+    |---|---|
+    | `qemu-user-static` | Enables cross-architecture emulation via the kernel's `binfmt_misc` |
+    | `docker-buildx` | BuildKit-backed builder — required for multi-architecture image builds |
+    | `docker-compose-v2` | Compose v2 plugin (`docker compose`) for multi-container application management |
+
+    ```bash
+    sudo apt install -y qemu-user-static docker-buildx docker-compose-v2
+    ```
+
 ## Build an Image from a Dockerfile
+
+!!! warning "Legacy build command"
+    `docker build` uses the classic builder and **does not support multi-architecture targets**. It is gradually being superseded by `docker buildx build`, which is backed by BuildKit and is the recommended approach going forward. See the [Build Multi-Architecture Images with `docker buildx`](#build-multi-architecture-images-with-docker-buildx) section at the bottom of this page for details.
 
 ```bash title="Build an Image from a Dockerfile"
 docker build -t image_name:tag .
@@ -409,3 +425,154 @@ ENTRYPOINT ["/opt/apps/com.qq.weixin.deepin/files/run.sh"]
 **When to use:**
 
 Use this Dockerfile when you need to run GUI applications inside a Docker container, such as for testing or development purposes. The setup allows the container to display GUI applications on the host's X server.
+
+---
+
+## Build Multi-Architecture Images with `docker buildx`
+
+!!! info "Why `buildx`?"
+    Supporting both **x86 (AMD64)** and **ARM64** in a single image tag is now a baseline expectation for public container images. The classic `docker build` command cannot produce a multi-architecture manifest. `docker buildx`, powered by **BuildKit**, solves this cleanly — one command, one tag, every architecture.
+
+### 1. Install Prerequisites
+
+To cross-compile for ARM on a regular x86 machine you need **QEMU user-mode emulation** and the **buildx plugin**:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y qemu-user-static docker-buildx
+```
+
+`qemu-user-static` registers itself with the Linux kernel's `binfmt_misc` subsystem. From that point on, the kernel silently hands any foreign binary (e.g., an ARM64 executable) to the right QEMU translator instead of refusing to run it — which is how an x86 host can execute ARM container layers.
+
+### 2. Create and Bootstrap a Builder
+
+The default Docker builder does not support multi-architecture output. Create a dedicated **BuildKit**-backed builder and set it as the active one:
+
+```bash
+# Create a new builder instance and switch to it immediately
+docker buildx create --use --name mybuilder
+
+# Pull the BuildKit engine container and verify the builder is healthy
+docker buildx inspect --bootstrap
+```
+
+!!! note "A background container appears"
+    After `--bootstrap`, running `docker ps` will reveal a container named `buildx_buildkit_mybuilder0` using the `moby/buildkit` image. **This is expected.** BuildKit offloads all compilation work to this dedicated container, which gives it capabilities the standard Docker Daemon lacks (multi-arch manifest lists, advanced caching, parallelism). It is idle when not building and consumes negligible resources.
+
+    To pause it: `docker buildx stop mybuilder`  
+    To destroy it (and its cache): `docker buildx rm mybuilder`
+
+### 3. Verify Supported Platforms
+
+```bash
+docker buildx ls
+```
+
+The output should list a wide range of platforms such as `linux/amd64`, `linux/arm64`, `linux/riscv64`, etc., thanks to the QEMU registration performed in step 1.
+
+### 4. Manage Builders
+
+| Task | Command |
+|---|---|
+| List all builders | `docker buildx ls` |
+| Inspect a builder | `docker buildx inspect mybuilder` |
+| Prune build cache | `docker buildx prune -a` |
+| Stop a builder | `docker buildx stop mybuilder` |
+| Remove a builder | `docker buildx rm mybuilder` |
+
+### 5. Build and Push a Multi-Architecture Image
+
+Replace `docker build` with `docker buildx build` and add `--platform`:
+
+```bash
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  -t hub.yourdomain.com/my-app:latest \
+  --push \
+  .
+```
+
+!!! warning "Always use `--push` for multi-arch builds"
+    A multi-architecture image is not a single fat blob — it is a **Manifest List** (or OCI Index) that acts as a directory: `amd64 → digest A`, `arm64 → digest B`. The traditional local Docker daemon cannot store a Manifest List. Without `--push`, BuildKit has nowhere to assemble it.
+
+    If you do not have a registry available yet, export to an OCI tar instead:
+
+    ```bash
+    docker buildx build \
+      --platform linux/amd64,linux/arm64 \
+      -o type=oci,dest=/tmp/my-app-multi.tar \
+      .
+    ```
+
+### 6. How Cross-Compilation Actually Works
+
+When `buildx` builds the ARM64 variant on your x86 machine:
+
+1. The kernel intercepts every ARM binary encountered during the `RUN` steps.
+2. It transparently forwards them to `qemu-aarch64-static` (registered by `qemu-user-static`).
+3. QEMU translates ARM instructions to x86 on the fly and returns the results.
+
+The container never knows it is not running on real ARM hardware. The trade-off is speed — cross-compiled `RUN` steps are slower than native. Actual compile artefacts (the final binaries) are correct native ARM64 code.
+
+### 7. How the Manifest List Works on Pull
+
+When a client runs `docker pull my-app:latest`:
+
+1. Docker fetches the **Manifest List** (the "menu").
+2. It reads the host's CPU architecture.
+3. It downloads **only** the matching image layers — no wasted bandwidth.
+
+No image duplication: one tag, zero redundancy.
+
+### 8. Test an ARM Image on an x86 Machine
+
+Thanks to QEMU you can run the ARM variant locally without any extra setup:
+
+```bash
+docker run --rm -it --platform linux/arm64 hub.yourdomain.com/my-app:latest uname -m
+# Expected output: aarch64
+```
+
+### 9. CI/CD: Inject QEMU Without Installing Anything on the Host
+
+In most CI environments (GitLab Runner, GitHub Actions) you should avoid running `apt install` on the host. The official way to register QEMU inside a CI job that only has Docker access is:
+
+```bash
+docker run --privileged --rm tonistiigi/binfmt --install all
+```
+
+This image is maintained by **Tõnis Tiigi**, the primary author of BuildKit. It mounts the host kernel's `binfmt_misc` filesystem (requires `--privileged`), registers all QEMU translators, then immediately exits (`--rm`). Nothing is left running; the kernel retains the registrations.
+
+A complete, portable CI initialisation block:
+
+```yaml title=".gitlab-ci.yml (before_script)"
+before_script:
+  # Register multi-architecture QEMU support without touching the host OS
+  - docker run --privileged --rm tonistiigi/binfmt --install all
+  # Create an isolated builder for this job
+  - docker buildx create --use --name builder-${CI_JOB_ID}
+  - docker buildx inspect --bootstrap
+```
+
+### 10. Common Pitfalls
+
+!!! danger "Architecture-specific dependencies break cross-compilation"
+    If your Dockerfile downloads a pre-built binary or installs a package that only exists for one architecture (e.g., `gcc-x86-64-linux-gnu`), the ARM64 build leg will fail. **If any architecture fails, the entire `buildx` task fails and nothing is pushed.**
+
+    The fix is to make your Dockerfile architecture-aware. BuildKit exposes `TARGETARCH` as a build argument automatically:
+
+    ```dockerfile
+    ARG TARGETARCH
+    RUN curl -Lo /usr/local/bin/mytool \
+        "https://example.com/releases/mytool-linux-${TARGETARCH}" && \
+        chmod +x /usr/local/bin/mytool
+    ```
+
+!!! tip "Verify a published multi-arch image with `regctl`"
+    [`regctl`](https://github.com/regclient/regclient) is an open-source registry CLI that lets you inspect remote manifests:
+
+    ```bash
+    regctl image manifest hub.yourdomain.com/my-app:latest
+    ```
+
+    You should see a JSON structure containing a `manifests` array with separate entries for `linux/amd64` and `linux/arm64`, each with its own digest. If you see that, your multi-architecture image is correctly published.

@@ -50,6 +50,41 @@ Then just click `Install` and `Run` to launch the game. Steam will automatically
 
 ![black_myth_wukong_running_on_linux](./black_myth.png)
 
+### Troubleshooting: Proton Games Failing to Launch
+
+When playing games via Proton (especially when forcing Proton on titles with outdated or broken native Linux versions, such as *Human: Fall Flat*), you may find that the game fails to launch immediately or runs with an extremely low framerate.
+
+This often happens because Proton's core component (DXVK, which translates DirectX into Vulkan) **strictly requires 32-bit Vulkan and OpenGL libraries**. If your system only has 64-bit graphics drivers installed, DXVK will fail to initialize, causing the game to crash or fall back to pure CPU software rendering (LLVMPipe).
+
+To fix this missing dependency issue and ensure high-performance rendering, follow these steps:
+
+#### 1. Install 32-bit Graphics and Vulkan Drivers
+
+Enable the 32-bit architecture and install the required 32-bit libraries.
+
+!!! warning "Check your current Nvidia driver version"
+    Identify whether you are using the standard/open-source Nvidia driver or the server driver before running these commands. Mixing them might accidentally uninstall your existing 64-bit drivers!
+
+**For Closed-Source/Server Nvidia Drivers (e.g., `nvidia-driver-580-server`):**
+
+```bash
+sudo dpkg --add-architecture i386
+sudo apt update
+sudo apt install libnvidia-gl-580-server:i386 libvulkan1:i386 mesa-vulkan-drivers:i386
+```
+
+*(Note for AMD/Intel graphics users: `libvulkan1:i386` and `mesa-vulkan-drivers:i386` are usually sufficient.)*
+
+#### 2. Clear Dirty Prefix and Caches
+
+If you have repeatedly switched between a native Linux version and Proton, Steam's compatibility container and shader cache may be corrupted. Cleaning them forces Steam to rebuild a fresh Proton environment.
+
+```bash
+# Replace <SteamID> with your game's Steam ID (e.g., 477160 for Human: Fall Flat)
+rm -rf ~/.local/share/Steam/steamapps/compatdata/<SteamID>
+rm -rf ~/.local/share/Steam/steamapps/shadercache/<SteamID>
+```
+
 ## Install Xbox Controller Driver
 
 By default, your Xbox Controller may not work properly on AnduinOS. You can install the Xbox Controller driver to mitigate this issue.

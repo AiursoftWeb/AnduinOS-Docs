@@ -99,9 +99,7 @@ Install Docker **on each node**:
 Ceph’s deployment mechanism uses Docker to manage its components.
 
 ```bash title="Install Docker"
-curl -fsSL get.docker.com -o get-docker.sh
-CHANNEL=stable sh get-docker.sh
-rm get-docker.sh
+sudo apt install -y docker.io
 ```
 
 ## 7. Bootstrap the Ceph Cluster

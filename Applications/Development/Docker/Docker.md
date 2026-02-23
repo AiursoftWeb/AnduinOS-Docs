@@ -9,10 +9,23 @@ Docker is a set of platform-as-a-service products that use OS-level virtualizati
 To install Docker on AnduinOS, run the following commands:
 
 ```bash title="Install Docker"
-curl -fsSL get.docker.com -o get-docker.sh
-CHANNEL=stable sh get-docker.sh
-rm get-docker.sh
+sudo apt install -y docker.io
 ```
+
+!!! tip "Also install recommended plugins"
+    It is recommended to install the following packages at the same time:
+
+    | Package | Purpose |
+    |---|---|
+    | `qemu-user-static` | Enables cross-architecture emulation via the kernel's `binfmt_misc` |
+    | `docker-buildx` | BuildKit-backed builder — required for multi-architecture image builds |
+    | `docker-compose-v2` | Compose v2 plugin (`docker compose`) for multi-container application management |
+
+    ```bash
+    sudo apt install -y qemu-user-static docker-buildx docker-compose-v2
+    ```
+
+    See the [Docker tips handbook](../../../Skills/Sandboxing/Using-Docker-As-Container.md#build-multi-architecture-images-with-docker-buildx) for usage details.
 
 To quickly learn how to use Docker, visit the [official Docker documentation](https://docs.docker.com/get-started/). You can also view our quick Docker handbook [here](../../../Skills/Sandboxing/Using-Docker-As-Container.md).
 
@@ -51,17 +64,23 @@ This creates a separate Docker instance using user namespaces. The socket path w
 
 ## Docker Compose
 
-Modern Docker installations include the Docker Compose plugin by default. You can verify it is installed by running:
+Install the Compose v2 plugin via apt if it is not already present:
+
+```bash title="Install Docker Compose v2"
+sudo apt install -y docker-compose-v2
+```
+
+Verify the installation:
 
 ```bash
 docker compose version
 ```
 
-!!! note "Docker Compose v2"
+!!! note "Docker Compose v2 vs v1"
 
-    Docker Compose v2 is the latest version and is recommended for all users.
+    Docker Compose v2 is the current standard and is recommended for all users. It is invoked as `docker compose` (space, no hyphen) and ships as a Docker CLI plugin.
 
-    Some older documentation may still reference Docker Compose v1, with command `docker-compose` instead of `docker compose`. These commands are functionally equivalent.
+    Some older documentation may still reference Docker Compose v1, with the standalone binary `docker-compose` (hyphenated). The two are functionally equivalent for most use-cases, but v1 is no longer maintained.
 
 ### Enable Swarm Mode (Optional)
 

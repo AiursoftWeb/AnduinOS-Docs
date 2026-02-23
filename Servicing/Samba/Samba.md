@@ -7,9 +7,7 @@ To host Samba on AnduinOS, run the following commands.
 First, make sure Docker is installed on your machine. If not, you can install Docker by running the following commands:
 
 ```bash title="Install Docker"
-curl -fsSL get.docker.com -o get-docker.sh
-CHANNEL=stable sh get-docker.sh
-rm get-docker.sh
+sudo apt install -y docker.io
 ```
 
 Create a new folder to save the service configuration files:
