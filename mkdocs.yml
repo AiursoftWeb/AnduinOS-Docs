@@ -197,6 +197,7 @@ nav:
         - Jetbrains Rider: ./Applications/Code-Editors/Jetbrains-Rider/Jetbrains-Rider.md
         - Code::Blocks: ./Applications/Code-Editors/Code-Blocks/Code-Blocks.md
         - Gemini CLI: ./Applications/Code-Editors/Gemini-CLI/Gemini-CLI.md
+        - OpenCode: ./Applications/Code-Editors/OpenCode/OpenCode.md
         - Antigravity: ./Applications/Code-Editors/Antigravity/Antigravity.md
 
       - Store:
