@@ -36,33 +36,17 @@ rm wps.deb
 
     This is because the software provider didn't setup a repository for automatic updates. You will need to check the official website for updates.
 
-## WPS Office CN
+## WPS Office 中文版
 
-Please visit the [official website](https://www.wps.cn/product/wpslinux) to get the latest version.
+如果您需要原生中文界面以及 WPS AI 等特有功能，可以通过以下步骤手动下载并安装官方中文版：
 
-If you want to automatically update via `sudo apt upgrade`, you can try adding [wcbing APT Repo](https://packages.wcbing.top/deb/). This is a third-party software repository that is updated more timely. 
+1. 在浏览器中访问官网：[linux.wps.cn](https://linux.wps.cn/)。
+2. 点击 **立即下载**，然后选择 **64位 Deb格式 (For X64)** 下载 `.deb` 安装包。
+3. 打开终端，进入您的下载目录（例如 `~/Downloads`），然后运行以下命令进行安装：
 
-If you have not added it before, please follow the steps below:
-
-```sh
-curl -O https://packages.wcbing.top/deb/wcbing-keyring.deb
-sudo apt install ./wcbing-keyring.deb
-rm ./wcbing-keyring.deb
+```bash
+sudo apt install ./wps-office_*_amd64.deb -y
 ```
-
-Then, you can install via apt:
-
-```sh
-sudo apt update
-sudo apt install wps-office
-```
-
-!!! warning "This is a third-party repository"
-
-    This is a repository maintained by third-party, and AnduinOS does not make any guarantees for it.
-
-    The author stadeclared that he used index redirection to allow users to download directly from the official distribution of the software, ensuring the security and legality of the source of the software package.
-
 
 ## Fix the `missing fonts` issue
 
