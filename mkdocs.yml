@@ -323,6 +323,7 @@ nav:
     - Setting up new Linux Server: ./Servicing/Linux.md
     - Hosting Services:
       - GitLab: ./Servicing/GitLab/GitLab.md
+      - Gitea: ./Servicing/Gitea/Gitea.md
       - Jellyfin: ./Servicing/Jellyfin/Jellyfin.md
       - Nextcloud: ./Servicing/Nextcloud/Nextcloud.md
       - Registry: ./Servicing/Registry/Registry.md
@@ -332,6 +333,14 @@ nav:
       - Apt Mirror: ./Servicing/AptMirror/AptMirror.md
       - SqlServer: ./Servicing/SqlServer/SqlServer.md
       - Samba: ./Servicing/Samba/Samba.md
+      - Memos: ./Servicing/Memos/Memos.md
+      - Uptime Kuma: ./Servicing/UptimeKuma/UptimeKuma.md
+      - Vaultwarden: ./Servicing/Vaultwarden/Vaultwarden.md
+      - Vikunja: ./Servicing/Vikunja/Vikunja.md
+      - Grafana: ./Servicing/Grafana/Grafana.md
+      - PeerTube: ./Servicing/PeerTube/PeerTube.md
+      - Authentik: ./Servicing/Authentik/Authentik.md
+      - Verdaccio: ./Servicing/Verdaccio/Verdaccio.md
 
   - Virtualization:
     - Windows: ./Virtualization/Windows.md
