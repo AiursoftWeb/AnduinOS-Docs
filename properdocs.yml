@@ -200,6 +200,7 @@ nav:
         - Claude Code: Applications/Code-Editors/Claude-Code/Claude-Code.md
         - OpenCode: Applications/Code-Editors/OpenCode/OpenCode.md
         - Antigravity: Applications/Code-Editors/Antigravity/Antigravity.md
+        - Qwen Code: Applications/Code-Editors/Qwen-Code/Qwen-Code.md
 
       - Store:
         - Flathub: Applications/Store/Flathub/Flathub.md
