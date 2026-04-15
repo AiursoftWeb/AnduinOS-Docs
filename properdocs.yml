@@ -1,0 +1,348 @@
+site_name: AnduinOS Documentation
+site_description: The official documentation for AnduinOS.
+
+# Repository
+repo_name: AiursoftWeb/anduinos-docs
+repo_url: https://github.com/AiursoftWeb/AnduinOS-Docs
+edit_uri: ""
+
+use_directory_urls: true
+docs_dir: Docs
+theme:
+  logo: Assets/logo_128.png
+  favicon: Assets/logo_128.png
+  font: false
+  name: material
+  language: en
+  features:
+    - content.code.annotate
+    - content.code.select
+    - content.code.copy
+    # - content.tabs.link
+    # - header.autohide
+    # - navigation.expand
+    # - navigation.indexes
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.footer
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    # - toc.integrate
+  search_index_only: true
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/link
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off
+        name: Switch to system preference
+
+extra:
+  homepage: https://www.anduinos.com
+  icon:
+    annotation: material/arrow-right-circle 
+    admonition:
+      note: octicons/tag-16
+      abstract: octicons/checklist-16
+      info: octicons/info-16
+      tip: octicons/squirrel-16
+      success: octicons/check-16
+      question: octicons/question-16
+      warning: octicons/alert-16
+      failure: octicons/x-circle-16
+      danger: octicons/zap-16
+      bug: octicons/bug-16
+      example: octicons/beaker-16
+      quote: octicons/quote-16
+
+markdown_extensions:
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - abbr
+  - pymdownx.snippets
+  - pymdownx.tilde
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+plugins:
+  - offline
+  - search
+  - minify:
+      minify_html: true
+
+nav:
+  - Home:
+    - Documentation: README.md
+    - Versions table: VERSIONS.md
+    - Change Log: CHANGELOG.md
+    - News & Updates: https://news.anduinos.com/
+    - Known Issues: KNOWN_ISSUES.md
+    # COMMON GPT-v3 license URL
+    - License: https://gitlab.aiursoft.com/anduin/anduinos/-/blob/1.2/LICENSE
+  - Install:
+    - Installing AnduinOS:
+      - System Requirements: Install/System-Requirements.md
+      - Download AnduinOS: Install/Download-AnduinOS.md
+      - Burn a USB stick: Install/Burn-A-USB-Stick.md
+      - Burn AnduinOS ToGo: Install/styles/Burn-AnduinOS-ToGo.md
+      - Change NVME LBA size: Install/Change-NVME-LBA-Size.md
+      - Install AnduinOS from USB: Install/Install-AnduinOS-From-USB.md
+      - Dual Boot With Windows: Install/Dual-Boot-With-Windows.md
+    - Setting Up AnduinOS:
+      - First Boot for Secure Boot: Install/First-Boot-For-Secure-Boot.md
+      - Select best apt source: Install/Select-Best-Apt-Source.md
+      - Install Drivers: Install/Install-Drivers.md
+      - Install NVIDIA Driver: Install/Install-Nvidia-Drivers.md
+      - Enable Firewall: Install/Enable-Firewall.md
+      - Manage Swap: Install/Manage-Swap.md
+      - Mount second disk: Install/Mount-Second-Disk.md
+      - Install input method: Install/Install-Input-Method.md
+      - Update your system: Install/Update-Your-System.md
+      - Switch To Your Language: Install/Switch-To-Your-Language.md
+      - Update firmware: Install/Upgrade-Firmware.md
+      - Configure Power Settings: Install/Configure-Power-Settings.md
+      - Allow sudo without password: Install/Allow-Sudo-Without-Password.md
+      - Install an App Store: Install/Install-An-App-Store.md
+      - Enable SSH and Firewall: Install/Enable-SSH-And-Firewall.md
+      - Enable RDP: Install/Enable-RDP.md
+      - Add Printers: Install/Managing-Printers.md
+    - Learning AnduinOS:
+      - Keyboard Shortcuts: Install/Keyboard-Shortcuts.md
+    - Personalizing AnduinOS:
+      - Personalize Your Desktop: Install/Personalize-Your-Desktop.md
+      - Setup Wallpaper Slideshow: Install/Setup-Wallpaper--Slideshow.md
+    - Maintaining AnduinOS:
+      - Setup Backup: Install/Backup-And-Restore.md
+      - Install Ubuntu Pro: Install/Install-Ubuntu-Pro.md
+
+  - Skills:
+    - Introduction: Skills/Introduction.md
+    - System Management:
+      - Diagnose Sleep: Skills/System-Management/Diagnose-Sleep.md
+      - Check system layout: Skills/System-Management/Check-System-Layout.md
+      - Change the Distro Name: Skills/System-Management/Change-The-Distro-Name.md
+      - Manage App Icons: Skills/System-Management/Manage-App-Icons.md
+      - Enter terminal mode: Skills/System-Management/Terminal-Mode.md
+      - Use APT to manage packages: Skills/System-Management/Use-APT-to-manage-packages.md
+      - Update Kernel Parameters: Skills/System-Management/Update-Kernel-Parameters.md
+      - Debug storage consumption: Skills/System-Management/Debug-Storage-Consumption.md
+      - Check file format: Skills/System-Management/Check-File-Format.md
+      - Remove duplicate apt source: Skills/System-Management/Remove-Duplicate-Apt-Source.md
+      - Auto Repair: Skills/System-Management/Auto-Repair.md
+    - File System Management:
+      - Mounting remote folders: Skills/File-System-Management/Mounting-Remote-Folder.md
+      - Use dd to manage disks: Skills/File-System-Management/Use-dd-Manage-Disk.md
+      - Use ZFS: Skills/File-System-Management/Use-ZFS.md
+      - Make a RAM disk: Skills/File-System-Management/Make-A-RAM-Disk.md
+      - Make a Bcache disk: Skills/File-System-Management/Make-A-Bcache-Disk.md
+      - Make a RAID cluster: Skills/File-System-Management/Make-A-RAID-Cluster.md
+      - Make a Ceph cluster: Skills/File-System-Management/Make-A-Ceph-Cluster.md
+      - Crack Zip Password: Skills/File-System-Management/Crack-Zip-Password.md
+    - Sandboxing:
+      - Using Docker as container: Skills/Sandboxing/Using-Docker-As-Container.md
+      - Run Ubuntu Desktop in Container: Skills/Sandboxing/Remote-Desktop-To-Ubuntu-Container.md
+      - Run Windows Apps with Wine: Skills/Sandboxing/Run-Windows-Apps.md
+    - Secret Management:
+      - Use Yubikey to unlock LUKS: Skills/Secret-Management/Use-Yubikey-To-Unlock-LUKS.md
+      - Use Yubikey to login: Skills/Secret-Management/Use-Yubikey-To-Login.md
+      - Manage SSH Keys: Skills/Secret-Management/Manage-SSH-Keys.md
+      - Manage SSH Keys with Yubikey: Skills/Secret-Management/Manage-SSH-Keys-with-Yubikey.md
+    - Developing:
+      - Build your own kernel: Skills/Developing/Build-Your-Own-Kernel.md
+
+  - Applications:
+    - Introduction: Applications/Introduction.md
+    - By Type:
+      - Web Browsers:
+        - Google Chrome: Applications/Web-Browsers/Google-Chrome/Google-Chrome.md
+        - Chromium: Applications/Web-Browsers/Chromium/Chromium.md
+        - Firefox: Applications/Web-Browsers/Firefox/Firefox.md
+        - Microsoft Edge: Applications/Web-Browsers/Microsoft-Edge/Microsoft-Edge.md
+        - Opera: Applications/Web-Browsers/Opera/Opera.md
+
+      - Code Editors:
+        - Visual Studio Code: Applications/Code-Editors/Visual-Studio-Code/Visual-Studio-Code.md
+        - Sublime Text: Applications/Code-Editors/Sublime-Text/Sublime-Text.md
+        - Jetbrains Rider: Applications/Code-Editors/Jetbrains-Rider/Jetbrains-Rider.md
+        - Code::Blocks: Applications/Code-Editors/Code-Blocks/Code-Blocks.md
+        - Gemini CLI: Applications/Code-Editors/Gemini-CLI/Gemini-CLI.md
+        - Copilot CLI: Applications/Code-Editors/Copilot-CLI/Copilot-CLI.md
+        - Claude Code: Applications/Code-Editors/Claude-Code/Claude-Code.md
+        - OpenCode: Applications/Code-Editors/OpenCode/OpenCode.md
+        - Antigravity: Applications/Code-Editors/Antigravity/Antigravity.md
+
+      - Store:
+        - Flathub: Applications/Store/Flathub/Flathub.md
+        - Snap Store: Applications/Store/Snap-Store/Snap-Store.md
+        - Nix: Applications/Store/Nix/Nix.md
+
+      - File Managers:
+        - Nemo: Applications/File-Managers/Nemo/Nemo.md
+
+      - Communication:
+        - Telegram: Applications/Communication/Telegram/Telegram.md
+        - Signal: Applications/Communication/Signal/Signal.md
+        - WeChat: Applications/Communication/WeChat/WeChat.md
+        - QQ: Applications/Communication/QQ/QQ.md
+        - Zoom: Applications/Communication/Zoom/Zoom.md
+        - Slack: Applications/Communication/Slack/Slack.md
+        - Evolution: Applications/Communication/Evolution/Evolution.md
+        - Thunderbird: Applications/Communication/Thunderbird/Thunderbird.md
+        - Discord: Applications/Communication/Discord/Discord.md
+        - Feishu: Applications/Communication/Feishu/Feishu.md
+        - Nextcloud Talk: Applications/Communication/NextcloudTalk/NextcloudTalk.md
+
+      - Internet Services:
+        - Nextcloud: Applications/Internet-Services/Nextcloud/Nextcloud.md
+        - Dropbox: Applications/Internet-Services/Dropbox/Dropbox.md
+
+      - Media Players:
+        - VLC Media Player: Applications/Media-Players/VLC-Media-Player/VLC-Media-Player.md
+        - Spotify: Applications/Media-Players/Spotify/Spotify.md
+        - QQ Music: Applications/Media-Players/QQ-Music/QQ-Music.md
+        - Yes Play Music: Applications/Media-Players/Yes-Play-Music/Yes-Play-Music.md
+        - mpv: Applications/Media-Players/mpv/mpv.md
+
+      - Media Editing:
+        - GIMP: Applications/Media-Editing/GIMP/GIMP.md
+        - Krita: Applications/Media-Editing/Krita/Krita.md
+        - Kdenlive: Applications/Media-Editing/Kdenlive/Kdenlive.md
+        - OpenShot: Applications/Media-Editing/OpenShot/OpenShot.md
+        - Shotcut: Applications/Media-Editing/Shotcut/Shotcut.md
+        - Audacity: Applications/Media-Editing/Audacity/Audacity.md
+        - Pinta: Applications/Media-Editing/Pinta/Pinta.md
+        - OBS Studio: Applications/Media-Editing/OBS-Studio/OBS-Studio.md
+        - Blender: Applications/Media-Editing/Blender/Blender.md
+        - Inkscape: Applications/Media-Editing/Inkscape/Inkscape.md
+        - HandBrake: Applications/Media-Editing/HandBrake/HandBrake.md
+        - MuseScore: Applications/Media-Editing/MuseScore/MuseScore.md
+
+      - Office:
+        - WPS Office: Applications/Office/WPS-Office/WPS-Office.md
+        - OnlyOffice: Applications/Office/OnlyOffice/OnlyOffice.md
+        - LibreOffice: Applications/Office/LibreOffice/LibreOffice.md
+        - Obsidian: Applications/Office/Obsidian/Obsidian.md
+
+      - Shell Tools:
+        - lsd: Applications/Shell-Tools/lsd/lsd.md
+        - eza: Applications/Shell-Tools/eza/eza.md
+        - zoxide: Applications/Shell-Tools/zoxide/zoxide.md
+        - bat: Applications/Shell-Tools/bat/bat.md
+        - dstat: Applications/Shell-Tools/dstat/dstat.md
+        - delta: Applications/Shell-Tools/delta/delta.md
+        - duf: Applications/Shell-Tools/duf/duf.md
+        - fd: Applications/Shell-Tools/fd/fd.md
+        - fzf: Applications/Shell-Tools/fzf/fzf.md
+        - nvtop: Applications/Shell-Tools/nvtop/nvtop.md
+        - btop: Applications/Shell-Tools/btop/btop.md
+        - ripgrep: Applications/Shell-Tools/ripgrep/ripgrep.md
+        - tldr: Applications/Shell-Tools/tldr/tldr.md
+        - gh: Applications/Shell-Tools/gh/gh.md
+        - glab: Applications/Shell-Tools/glab/glab.md
+        - ncdu: Applications/Shell-Tools/ncdu/ncdu.md
+
+      - Download Tools:
+        - Motrix: Applications/Download-Tools/Motrix/Motrix.md
+        - qBittorrent: Applications/Download-Tools/qBittorrent/qBittorrent.md
+        - Deluge: Applications/Download-Tools/Deluge/Deluge.md
+        - uGet: Applications/Download-Tools/uGet/uGet.md
+        - Youtube-dl: Applications/Download-Tools/Youtube-dl/Youtube-dl.md
+
+      - Utilities:
+        - Google Earth: Applications/Utilities/Google-Earth/Google-Earth.md
+        - Insomnia: Applications/Utilities/Insomnia/Insomnia.md
+        - MissionCenter: Applications/Utilities/MissionCenter/MissionCenter.md
+        - Postman: Applications/Utilities/Postman/Postman.md
+        - GameConqueror: Applications/Utilities/GameConqueror/GameConqueror.md
+        - Terminus: Applications/Utilities/Terminus/Terminus.md
+        - Cool Retro Term: Applications/Utilities/Cool-Retro-Term/Cool-Retro-Term.md
+        - Fastfetch: Applications/Utilities/Fastfetch/Fastfetch.md
+        - Brasero: Applications/Utilities/Brasero/Brasero.md
+        - KDiskMark: Applications/Utilities/KDiskMark/KDiskMark.md
+        - GSmartControl: Applications/Utilities/GSmartControl/GSmartControl.md
+        - Deskmon: Applications/Utilities/Deskmon/Deskmon.md
+
+      - Development:
+        - Docker: Applications/Development/Docker/Docker.md
+        - CUDA: Applications/Development/CUDA/CUDA.md
+        - Node: Applications/Development/Node/Node.md
+        - .NET: Applications/Development/Dotnet/Dotnet.md
+        - PowerShell: Applications/Development/PowerShell/PowerShell.md
+        - Golang: Applications/Development/Golang/Golang.md
+        - Ollama: Applications/Development/Ollama/Ollama.md
+        - Podman: Applications/Development/Podman/Podman.md
+
+      - Database Tools:
+        - Azure Data Studio: Applications/Database-Tools/Azure-Data-Studio/Azure-Data-Studio.md
+        - DBeaver: Applications/Database-Tools/DBeaver/DBeaver.md
+        - Sqlite Browser: Applications/Database-Tools/Sqlite-Browser/Sqlite-Browser.md
+
+      - Virtual Machines:
+        - VirtualBox: Applications/Virtual-Machines/VirtualBox/VirtualBox.md
+        - Gnome Boxes: Applications/Virtual-Machines/Gnome-Boxes/Gnome-Boxes.md
+        - Virt Manager: Applications/Virtual-Machines/Virt-Manager/Virt-Manager.md
+
+      - Games:
+        - Minecraft: Applications/Games/Minecraft/Minecraft.md
+        - Steam: Applications/Games/Steam/Steam.md
+        - Stellarium: Applications/Games/Stellarium/Stellarium.md
+        - 0AD: Applications/Games/0AD/0AD.md
+        - XPlane12: Applications/Games/XPlane12/XPlane12.md
+
+  - Servicing:
+    - Introduction: Servicing/Introduction.md
+    - Setting up new Linux Server: Servicing/Linux.md
+    - Hosting Services:
+      - GitLab: Servicing/GitLab/GitLab.md
+      - Gitea: Servicing/Gitea/Gitea.md
+      - Jellyfin: Servicing/Jellyfin/Jellyfin.md
+      - Nextcloud: Servicing/Nextcloud/Nextcloud.md
+      - Registry: Servicing/Registry/Registry.md
+      - MoongladePure: Servicing/MoongladePure/MoongladePure.md
+      - OpenGist: Servicing/OpenGist/OpenGist.md
+      - NekoImageGallery: Servicing/NekoImageGallery/NekoImageGallery.md
+      - Apt Mirror: Servicing/AptMirror/AptMirror.md
+      - SqlServer: Servicing/SqlServer/SqlServer.md
+      - Samba: Servicing/Samba/Samba.md
+      - Memos: Servicing/Memos/Memos.md
+      - Uptime Kuma: Servicing/UptimeKuma/UptimeKuma.md
+      - Vaultwarden: Servicing/Vaultwarden/Vaultwarden.md
+      - Vikunja: Servicing/Vikunja/Vikunja.md
+      - Grafana: Servicing/Grafana/Grafana.md
+      - PeerTube: Servicing/PeerTube/PeerTube.md
+      - Authentik: Servicing/Authentik/Authentik.md
+      - Verdaccio: Servicing/Verdaccio/Verdaccio.md
+
+  - Virtualization:
+    - Windows: Virtualization/Windows.md
+    - Boot Physical Disk: Virtualization/Boot-Physical-Disk.md

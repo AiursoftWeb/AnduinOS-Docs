@@ -19,7 +19,8 @@ RUN PIP_BREAK_SYSTEM_PACKAGES=1 python3 -m pip install --no-cache-dir --upgrade 
 
 COPY . .
 
-RUN python3 -m mkdocs build --strict
+ENV DISABLE_MKDOCS_2_WARNING=true
+RUN python3 -m properdocs build --strict -f properdocs.yml
 
 # ============================
 # Prepare Runtime Environment

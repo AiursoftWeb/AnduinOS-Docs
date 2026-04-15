@@ -1,4 +1,4 @@
 mkdocs-material
-mkdocs-same-dir
+properdocs>=1.6.7
 mkdocs-minify-plugin
 pymdown-extensions
