@@ -200,6 +200,7 @@ nav:
         - Copilot CLI: ./Applications/Code-Editors/Copilot-CLI/Copilot-CLI.md
         - Claude Code: ./Applications/Code-Editors/Claude-Code/Claude-Code.md
         - OpenCode: ./Applications/Code-Editors/OpenCode/OpenCode.md
+        - Qwen Code: ./Applications/Code-Editors/Qwen-Code/Qwen-Code.md
         - Antigravity: ./Applications/Code-Editors/Antigravity/Antigravity.md
 
       - Store:
