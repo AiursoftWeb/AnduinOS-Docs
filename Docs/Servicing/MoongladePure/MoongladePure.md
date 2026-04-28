@@ -118,7 +118,7 @@ That's it! You have successfully hosted MoongladePure on AnduinOS.
 
 You can access MoongladePure by visiting `http://localhost:5000` in your browser.
 
-The default username is `admin` and the default password is `admin123`.
+The default username is `admin` and the default password is `Admin@123456!`.
 
 ## Uninstall
 
