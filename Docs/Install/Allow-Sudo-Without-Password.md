@@ -22,6 +22,16 @@ That's it! You can now run sudo commands without entering your password.
 
 Instead of completely disabling passwords (which is risky), you can configure Linux to accept a physical touch on your YubiKey as authentication. This offers **password-less convenience** with **hardware-level security**.
 
+!!! danger "NOPASSWD conflicts with YubiKey PAM"
+
+    If you have `NOPASSWD:ALL` set in `/etc/sudoers.d/`, sudo **completely skips** the PAM authentication stack — your YubiKey will never be asked for. The two settings are mutually exclusive.
+
+    **Remove the NOPASSWD entry first:**
+    ```bash
+    sudo rm /etc/sudoers.d/$USER
+    ```
+    Then proceed with YubiKey setup below.
+
 !!! warning "Replacing an old YubiKey?"
 
     U2F registration (for sudo/login) and SSH key generation (`ssh-keygen -t ecdsa-sk`) use **completely separate slots** on your YubiKey — they are independent registration paths. Replacing your key means you must re-register for both.
@@ -42,19 +52,7 @@ fi
 echo "👉 Please touch your YubiKey now to register it..."
 pamu2fcfg --username="$(whoami)" >> ~/.config/Yubico/u2f_keys
 
-# 3. Verify the connected key matches a registered one
-CONNECTED=$(pamu2fcfg -n --username="$(whoami)" 2>/dev/null | awk -F: '{print $2}')
-REGISTERED=$(cat ~/.config/Yubico/u2f_keys 2>/dev/null | awk -F: '{print $2}')
-
-if [ -z "$CONNECTED" ]; then
-    echo "❌ No YubiKey detected!"
-elif echo "$REGISTERED" | grep -qF "$CONNECTED"; then
-    echo "✅ Key verified — ready for sudo authentication"
-else
-    echo "❌ Connected key NOT found in u2f_keys! Registration may have failed."
-fi
-
-# 4. Configure PAM to allow YubiKey authentication
+# 3. Configure PAM to allow YubiKey authentication
 if grep -q "pam_u2f.so" /etc/pam.d/sudo; then
     echo "⚠️  Sudo PAM is already configured for YubiKey."
 else
@@ -63,8 +61,14 @@ else
 
     # Insert the auth rule at line 2 (right after include common-auth)
     sudo sed -i '2i auth       sufficient   pam_u2f.so cue' /etc/pam.d/sudo
-    echo "✅ PAM configured. Try running 'sudo -k' then 'sudo ls' to test."
+    echo "✅ PAM configured."
 fi
+
+# 4. Test: clear sudo cache and verify YubiKey is required
+echo ""
+echo "👉 Testing — touch your YubiKey when LED flashes..."
+sudo -k
+sudo ls 2>&1 && echo "✅ YubiKey sudo authentication works!" || echo "❌ Test failed"
 ```
 
 To learn more about how to use Yubikey to protect your SSH key, you can continue read more here: [Manage SSH Keys with Yubikey](../Skills/Secret-Management/Manage-SSH-Keys-with-Yubikey.md) guide to set up your YubiKey for SSH authentication.
@@ -101,16 +105,9 @@ ykman list 2>/dev/null
 
 ### Cross-check: is the connected key trusted?
 
-```bash title="Verify connected key against registered U2F keys"
-CONNECTED=$(pamu2fcfg -n --username="$(whoami)" 2>/dev/null | awk -F: '{print $2}')
-REGISTERED=$(cat ~/.config/Yubico/u2f_keys 2>/dev/null | awk -F: '{print $2}')
+The most reliable way to verify your YubiKey is registered correctly is to test it directly. Run a sudo command after clearing the credential cache:
 
-if [ -z "$CONNECTED" ]; then
-    echo "No YubiKey detected"
-elif echo "$REGISTERED" | grep -qF "$CONNECTED"; then
-    echo "✅ Connected key IS trusted for login/sudo"
-else
-    echo "⚠️  Connected key is NOT registered."
-    echo "   Run: pamu2fcfg --username=$(whoami) >> ~/.config/Yubico/u2f_keys"
-fi
+```bash title="Test sudo with YubiKey"
+sudo -k && sudo ls
+# Touch YubiKey when LED flashes
 ```

@@ -22,17 +22,8 @@ fi
 echo "👉 Please touch your YubiKey now to register it..."
 pamu2fcfg --username="$(whoami)" >> ~/.config/Yubico/u2f_keys
 
-# Verify the connected key matches a registered one
-CONNECTED=$(pamu2fcfg -n --username="$(whoami)" 2>/dev/null | awk -F: '{print $2}')
-REGISTERED=$(cat ~/.config/Yubico/u2f_keys 2>/dev/null | awk -F: '{print $2}')
-
-if [ -z "$CONNECTED" ]; then
-    echo "❌ No YubiKey detected!"
-elif echo "$REGISTERED" | grep -qF "$CONNECTED"; then
-    echo "✅ Key verified — ready for GDM login"
-else
-    echo "❌ Connected key NOT found in u2f_keys! Registration may have failed."
-fi
+# Verify: lock screen (Super+L) and try unlocking with YubiKey touch
+echo "✅ Registration written. Lock your screen (Super+L) to test — touch the key when LED flashes."
 ```
 
 Then configure GDM (GNOME Display Manager) to use your YubiKey for login authentication.
@@ -106,16 +97,12 @@ ykman list 2>/dev/null
 
 ### Cross-check: is the connected key trusted?
 
-```bash title="Verify connected key against registered U2F keys"
-CONNECTED=$(pamu2fcfg -n --username="$(whoami)" 2>/dev/null | awk -F: '{print $2}')
-REGISTERED=$(cat ~/.config/Yubico/u2f_keys 2>/dev/null | awk -F: '{print $2}')
+The most reliable way to verify your YubiKey is registered correctly is to test it directly:
 
-if [ -z "$CONNECTED" ]; then
-    echo "No YubiKey detected"
-elif echo "$REGISTERED" | grep -qF "$CONNECTED"; then
-    echo "✅ Connected key IS trusted for login/sudo"
-else
-    echo "⚠️  Connected key is NOT registered."
-    echo "   Run: pamu2fcfg --username=$(whoami) >> ~/.config/Yubico/u2f_keys"
-fi
+- **GDM login:** Lock your screen (`Super+L`). If the YubiKey LED flashes, touch it — you should be logged in.
+- **sudo:** Run `sudo -k` (clears cache), then `sudo ls`. The YubiKey LED should flash — touch to authenticate.
+
+```bash title="Quick sudo test"
+sudo -k && sudo ls
+# Touch YubiKey when LED flashes
 ```
