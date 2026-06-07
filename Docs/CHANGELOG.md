@@ -10,6 +10,17 @@ Please note: `do_anduinos_upgrade` will only update in a forked version of Andui
 
 Please note: `do-anduinos-autorepair` command is added in v1.1.11, v1.3.8 and v1.4.1 to help users to fix common system issues. This command will download latest AnduinOS ISO and try to repair the system by comparing the system files with the ISO image.
 
+## v2.0.0 - The Declarative Revolution (Under development)
+
+AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire system. We have fundamentally changed how AnduinOS is built, distributed, and maintained.
+
+* Deprecation of Imperative Shell Scripts: All legacy Bash scripts used for system configuration and building have been entirely removed to eliminate edge-case failures.
+* Introduction of aosproj and apkg: Implemented a proprietary, XML-based declarative Domain Specific Language (aosproj) to define expected system states, alongside an automated compilation toolchain, a static syntax linter, and a package management server that outputs native apkg binaries.
+* Hybrid Declarative-APT Ecosystem: Achieved a fully declarative system architecture that maintains 100% native compatibility with apt, preserving access to standard Ubuntu repositories, kernel management, and software ecosystems.
+* Performance Tuning: Replaced or reconfigured core upstream Ubuntu components and kernel parameters explicitly for desktop workloads, delivering lower latency and higher performance than standard LTS builds.
+* Footprint Efficiency: Refactored the core system infrastructure to deliver full desktop capabilities within a ~2.5GB ISO footprint. And all languages support will be included in the single ISO image, eliminating the need for separate language-specific builds.
+* Modern Hardware Stack: Shipped with Linux Kernel 7 to provide extensive out-of-the-box hardware compatibility and up-to-date graphics pipelines.
+
 ## v1.4.2
 
 * Changed the default apt source to `https://ubuntu.mirror.letscloud.io/ubuntu/` for Brazil build.
