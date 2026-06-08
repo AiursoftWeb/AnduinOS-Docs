@@ -20,6 +20,12 @@ AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire 
 * Performance Tuning: Replaced or reconfigured core upstream Ubuntu components and kernel parameters explicitly for desktop workloads, delivering lower latency and higher performance than standard LTS builds.
 * Footprint Efficiency: Refactored the core system infrastructure to deliver full desktop capabilities within a ~2.5GB ISO footprint. And all languages support will be included in the single ISO image, eliminating the need for separate language-specific builds.
 * Modern Hardware Stack: Shipped with Linux Kernel 7 to provide extensive out-of-the-box hardware compatibility and up-to-date graphics pipelines.
+* Use `vim-tiny` to replace `vim` as the default text editor to reduce the ISO size.
+* Use `gnome-calculator` to replace `qalculate` as the default calculator app to reduce the ISO size.
+* Disabled `simple-weather-extension` by default to respect privacy concerns. Users can easily enable it from the Gnome Extensions app if they want to use it.
+* No longer ships the image with `build-essentials`, `gdb`, `gcc` and `git` packages to reduce the ISO size. Users can easily install it.
+* Use `AppIndicator and KStatusNotifierItem Support` extension to replace `tray icons` extension to provide better support for tray icons in Gnome 45+.
+* Updated images in the `ubiquity` to reflect latest AnduinOS branding.
 
 ## v1.4.2
 
