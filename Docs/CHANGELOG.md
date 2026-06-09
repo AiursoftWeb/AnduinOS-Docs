@@ -25,6 +25,7 @@ AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire 
   * File watching: `fs.inotify` limits raised to 524288 for heavy file-watching workloads.
 * Footprint Efficiency: Refactored the core system infrastructure to deliver full desktop capabilities within a ~2.5GB ISO footprint.
 * Modern Hardware Stack: Shipped with Linux Kernel 7 to provide extensive out-of-the-box hardware compatibility and up-to-date graphics pipelines.
+* Provides the `firmware-sof-anduinos` package to deliver always-latest Intel SOF audio firmware for all users, without breaking Secure Boot.
 * Use `vim-tiny` to replace `vim` as the default text editor to reduce the ISO size.
 * Use `gnome-calculator` to replace `qalculate` as the default calculator app to reduce the ISO size.
 * Disabled `simple-weather-extension` by default to respect privacy concerns. Users can easily enable it from the Gnome Extensions app if they want to use it.
