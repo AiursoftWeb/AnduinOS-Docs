@@ -26,6 +26,7 @@ AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire 
 * Disabled `simple-weather-extension` by default to respect privacy concerns. Users can easily enable it from the Gnome Extensions app if they want to use it.
 * No longer ships the image with `build-essentials`, `gdb`, `gcc` and `git` packages to reduce the ISO size. Users can easily install it.
 * Use `AppIndicator and KStatusNotifierItem Support` extension to replace `tray icons` extension to provide better support for tray icons in Gnome 45+.
+* Use `Loupe` as the only image viewer, `Showtime` as the only video player, and `Resources` as the only task manager to reduce the ISO size.
 * Updated images in the `ubiquity` to reflect latest AnduinOS branding.
 * Expanded language support to 28 locales: Arabic (العربية), Chinese Simplified (中文(简体)), Chinese Hong Kong (中文(香港)), Chinese Traditional (中文(繁體)), Danish (Dansk), Dutch (Nederlands), English, English UK, Finnish (Suomi), French (Français), German (Deutsch), Greek (Ελληνικά), Hindi (हिन्दी), Indonesian (Bahasa Indonesia), Italian (Italiano), Japanese (日本語), Korean (한국어), Polish (Polski), Portuguese (Português), Portuguese Brazil (Português do Brasil), Romanian (Română), Russian (Русский), Spanish (Español), Swedish (Svenska), Thai (ภาษาไทย), Turkish (Türkçe), Ukrainian (Українська), Vietnamese (Tiếng Việt) — all in a single ISO image, eliminating the need for separate language-specific builds.
 
