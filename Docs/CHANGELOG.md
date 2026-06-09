@@ -19,6 +19,10 @@ AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire 
 * Hybrid Declarative-APT Ecosystem: Achieved a fully declarative system architecture that maintains 100% native compatibility with apt, preserving access to standard Ubuntu repositories, kernel management, and software ecosystems.
 * No more `do_anduinos_upgrade` command. `sudo apt update && sudo apt upgrade` is now the only way to update the system. And removed `do-anduinos-autorepair` command. No no apt rules to block any package updates. The system will be fully compatible with standard Ubuntu repositories and updates.
 * Performance Tuning: Replaced or reconfigured core upstream Ubuntu components and kernel parameters explicitly for desktop workloads, delivering lower latency and higher performance than standard LTS builds.
+  * Memory responsiveness: `vm.swappiness=10`, `vm.vfs_cache_pressure=50`.
+  * Disk I/O: `vm.dirty_background_ratio=5`, `vm.dirty_ratio=10` to prevent UI freezes during heavy writes.
+  * Network throughput: BBR congestion control, `tcp_fastopen=3`, increased socket buffers.
+  * File watching: `fs.inotify` limits raised to 524288 for heavy file-watching workloads.
 * Footprint Efficiency: Refactored the core system infrastructure to deliver full desktop capabilities within a ~2.5GB ISO footprint.
 * Modern Hardware Stack: Shipped with Linux Kernel 7 to provide extensive out-of-the-box hardware compatibility and up-to-date graphics pipelines.
 * Use `vim-tiny` to replace `vim` as the default text editor to reduce the ISO size.
