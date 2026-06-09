@@ -19,7 +19,7 @@ AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire 
 * Hybrid Declarative-APT Ecosystem: Achieved a fully declarative system architecture that maintains 100% native compatibility with apt, preserving access to standard Ubuntu repositories, kernel management, and software ecosystems.
 * No more `do_anduinos_upgrade` command. `sudo apt update && sudo apt upgrade` is now the only way to update the system. And removed `do-anduinos-autorepair` command. No no apt rules to block any package updates. The system will be fully compatible with standard Ubuntu repositories and updates.
 * Performance Tuning: Replaced or reconfigured core upstream Ubuntu components and kernel parameters explicitly for desktop workloads, delivering lower latency and higher performance than standard LTS builds.
-* Footprint Efficiency: Refactored the core system infrastructure to deliver full desktop capabilities within a ~2.5GB ISO footprint. And all languages support will be included in the single ISO image, eliminating the need for separate language-specific builds.
+* Footprint Efficiency: Refactored the core system infrastructure to deliver full desktop capabilities within a ~2.5GB ISO footprint.
 * Modern Hardware Stack: Shipped with Linux Kernel 7 to provide extensive out-of-the-box hardware compatibility and up-to-date graphics pipelines.
 * Use `vim-tiny` to replace `vim` as the default text editor to reduce the ISO size.
 * Use `gnome-calculator` to replace `qalculate` as the default calculator app to reduce the ISO size.
@@ -27,6 +27,7 @@ AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire 
 * No longer ships the image with `build-essentials`, `gdb`, `gcc` and `git` packages to reduce the ISO size. Users can easily install it.
 * Use `AppIndicator and KStatusNotifierItem Support` extension to replace `tray icons` extension to provide better support for tray icons in Gnome 45+.
 * Updated images in the `ubiquity` to reflect latest AnduinOS branding.
+* Expanded language support to 28 locales: Arabic (العربية), Chinese Simplified (中文(简体)), Chinese Hong Kong (中文(香港)), Chinese Traditional (中文(繁體)), Danish (Dansk), Dutch (Nederlands), English, English UK, Finnish (Suomi), French (Français), German (Deutsch), Greek (Ελληνικά), Hindi (हिन्दी), Indonesian (Bahasa Indonesia), Italian (Italiano), Japanese (日本語), Korean (한국어), Polish (Polski), Portuguese (Português), Portuguese Brazil (Português do Brasil), Romanian (Română), Russian (Русский), Spanish (Español), Swedish (Svenska), Thai (ภาษาไทย), Turkish (Türkçe), Ukrainian (Українська), Vietnamese (Tiếng Việt) — all in a single ISO image, eliminating the need for separate language-specific builds.
 
 ## v1.4.2
 
