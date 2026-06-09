@@ -18,6 +18,7 @@ AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire 
 * Introduction of aosproj and apkg: Implemented a proprietary, XML-based declarative Domain Specific Language (aosproj) to define expected system states, alongside an automated compilation toolchain, a static syntax linter, and a package management server that outputs native apkg binaries.
 * Hybrid Declarative-APT Ecosystem: Achieved a fully declarative system architecture that maintains 100% native compatibility with apt, preserving access to standard Ubuntu repositories, kernel management, and software ecosystems.
 * No more `do_anduinos_upgrade` command. `sudo apt update && sudo apt upgrade` is now the only way to update the system. And removed `do-anduinos-autorepair` command. No no apt rules to block any package updates. The system will be fully compatible with standard Ubuntu repositories and updates.
+* Dracut Compatibility: Tested the ability for users to replace `initramfs-tools` with `dracut` as their initramfs framework. All published packages are validated under dracut to ensure compatibility.
 * Performance Tuning: Replaced or reconfigured core upstream Ubuntu components and kernel parameters explicitly for desktop workloads, delivering lower latency and higher performance than standard LTS builds.
   * Memory responsiveness: `vm.swappiness=10`, `vm.vfs_cache_pressure=50`.
   * Disk I/O: `vm.dirty_background_ratio=5`, `vm.dirty_ratio=10` to prevent UI freezes during heavy writes.
