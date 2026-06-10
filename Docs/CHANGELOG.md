@@ -14,6 +14,7 @@ Please note: `do-anduinos-autorepair` command is added in v1.1.11, v1.3.8 and v1
 
 AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire system. We have fundamentally changed how AnduinOS is built, distributed, and maintained.
 
+* Project Stewardship: AnduinOS 2 is now maintained by **AIURSOFT LIMITED**, a startup company founded and led by Anduin (the original author), which is actively expanding its team to accelerate development.
 * Deprecation of Imperative Shell Scripts: All legacy Bash scripts used for system configuration and building have been entirely removed to eliminate edge-case failures.
 * Introduction of aosproj and apkg: Implemented a proprietary, XML-based declarative Domain Specific Language (aosproj) to define expected system states, alongside an automated compilation toolchain, a static syntax linter, and a package management server that outputs native apkg binaries.
 * Hybrid Declarative-APT Ecosystem: Achieved a fully declarative system architecture that maintains 100% native compatibility with apt, preserving access to standard Ubuntu repositories, kernel management, and software ecosystems.
