@@ -10,9 +10,9 @@ Please note: `do_anduinos_upgrade` will only update in a forked version of Andui
 
 Please note: `do-anduinos-autorepair` command is added in v1.1.11, v1.3.8 and v1.4.1 to help users to fix common system issues. This command will download latest AnduinOS ISO and try to repair the system by comparing the system files with the ISO image.
 
-## v2.0.0 - The Declarative Revolution (Under development)
+## v2.0.0 Beta 1 - The Declarative Revolution
 
-AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire system. We have fundamentally changed how AnduinOS is built, distributed, and maintained.
+AnduinOS v2.0.0 Beta 1 is a complete, from-scratch architectural rewrite of the entire system. We have fundamentally changed how AnduinOS is built, distributed, and maintained.
 
 We heard the community's criticism: a lack of innovation in package management and the instability risks of a solo-maintained system. We redesigned the entire package management architecture while preserving full dpkg compatibility, and established AIURSOFT LIMITED (Hong Kong) to grow into a truly international team.
 
