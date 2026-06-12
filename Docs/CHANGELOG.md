@@ -12,38 +12,55 @@ Please note: `do-anduinos-autorepair` command is added in v1.1.11, v1.3.8 and v1
 
 ## v2.0.0 Beta 1 - The Declarative Revolution
 
-AnduinOS v2.0.0 Beta 1 is a complete, from-scratch architectural rewrite of the entire system. We have fundamentally changed how AnduinOS is built, distributed, and maintained.
+AnduinOS v2.0.0 Beta 1 marks a fundamental, ground-up rewrite of our entire operating system. Listening to community feedback regarding maintainability and package management, we have completely reimagined how AnduinOS is built, distributed, and maintained.
 
-We heard the community's criticism: a lack of innovation in package management and the instability risks of a solo-maintained system. We redesigned the entire package management architecture while preserving full dpkg compatibility, and established AIURSOFT LIMITED (Hong Kong) to grow into a truly international team.
+Welcome to the era of Distro Engineering. Source code is available at [AiursoftWeb/AnduinOS-2](https://github.com/aiursoftweb/anduinos-2).
 
-* Project Stewardship: AnduinOS 2 is now maintained by **AIURSOFT LIMITED**, a startup company founded and led by Anduin (the original author), which is actively expanding its team to accelerate development.
-* Licensing: All AnduinOS 2 and AnduinOS Packages projects are licensed under GPL-v3. All Shell extensions are also covered by GPL-3.0.
-* Deprecation of Imperative Shell Scripts: All legacy Bash scripts used for system configuration and building have been entirely removed to eliminate edge-case failures.
-* Introduction of aosproj and apkg: Implemented a proprietary, XML-based declarative Domain Specific Language (aosproj) to define expected system states, alongside an automated compilation toolchain, a static syntax linter, and a package management server that outputs native apkg binaries.
-* Hybrid Declarative-APT Ecosystem: Achieved a fully declarative system architecture that maintains 100% native compatibility with apt, preserving access to standard Ubuntu repositories, kernel management, and software ecosystems.
-* No more `do_anduinos_upgrade` command. `sudo apt update && sudo apt upgrade` is now the only way to update the system. And removed `do-anduinos-autorepair` command. No no apt rules to block any package updates. The system will be fully compatible with standard Ubuntu repositories and updates.
-* Dracut Compatibility: Tested the ability for users to replace `initramfs-tools` with `dracut` as their initramfs framework. All published packages are validated under dracut to ensure compatibility. Supports both `initrd` and `initrd.gz` dual naming conventions.
-* Global Package Network: All APT repositories are fully migrated to `packages.anduinos.com` with nodes in the United States, Europe, and Asia, delivering low-latency package updates worldwide via Cloudflare load balancing. Sources use `[arch=amd64]` to prevent multi-arch pollution.
-* Performance Tuning: Replaced or reconfigured core upstream Ubuntu components and kernel parameters explicitly for desktop workloads, delivering lower latency and higher performance than standard LTS builds.
-  * Memory responsiveness: `vm.swappiness=10`, `vm.vfs_cache_pressure=50`.
-  * Disk I/O: `vm.dirty_background_ratio=5`, `vm.dirty_ratio=10` to prevent UI freezes during heavy writes.
-  * Network throughput: BBR congestion control, `tcp_fastopen=3`, increased socket buffers.
-  * File watching: `fs.inotify` limits raised to 524288 for heavy file-watching workloads.
-* Footprint Efficiency: Refactored the core system infrastructure to deliver full desktop capabilities within a ~2.5GB ISO footprint.
-* Modern Hardware Stack: Shipped with Linux Kernel 7 to provide extensive out-of-the-box hardware compatibility and up-to-date graphics pipelines.
-* Provides the `firmware-sof-anduinos` package to deliver always-latest Intel SOF audio firmware for all users, without breaking Secure Boot.
-* Use `vim-tiny` to replace `vim` as the default text editor to reduce the ISO size.
-* Use `gnome-calculator` to replace `qalculate` as the default calculator app to reduce the ISO size.
-* Disabled `simple-weather-extension` by default to respect privacy concerns. Users can easily enable it from the Gnome Extensions app if they want to use it.
-* No longer ships the image with `build-essentials`, `gdb`, `gcc` and `git` packages to reduce the ISO size. Users can easily install it.
-* Use `AppIndicator and KStatusNotifierItem Support` extension to replace `tray icons` extension to provide better support for tray icons in Gnome 45+.
-* Use `Loupe` as the only image viewer, `Showtime` as the only video player, and `Resources` as the only task manager to reduce the ISO size.
-* Updated images in the `ubiquity` to reflect latest AnduinOS branding.
-* GRUB Multilingual Boot Menu: Language selection is now available before entering the live environment. Embedded `unicode.pf2` font enables rendering of CJK, Arabic, and Thai scripts across the 28-language submenu.
-* Ubiquity Language Filtering: The installer now only displays the 28 officially supported languages, providing a cleaner installation experience.
-* Keyboard Layout: Removed the hardcoded US keyboard layout; the layout now respects the user's language choice.
-* Chinese Input Method: For `zh_*` users, `anduinos-rime` is installed by default as the sole Chinese input method. Using `dpkg-divert` to hijack `pkg_depends`, Chinese users no longer pull 24 unrelated input method packages. Non-Chinese users are unaffected.
-* Expanded language support from 22 to 28 locales: newly added Danish (Dansk), Ukrainian (Українська), Indonesian (Bahasa Indonesia), Finnish (Suomi), Hindi (हिन्दी), and Greek (Ελληνικά); fixed `ar_EG` → `ar_SA`. Full list: Arabic (العربية), Chinese Simplified (中文(简体)), Chinese Hong Kong (中文(香港)), Chinese Traditional (中文(繁體)), Danish (Dansk), Dutch (Nederlands), English, English UK, Finnish (Suomi), French (Français), German (Deutsch), Greek (Ελληνικά), Hindi (हिन्दी), Indonesian (Bahasa Indonesia), Italian (Italiano), Japanese (日本語), Korean (한국어), Polish (Polski), Portuguese (Português), Portuguese Brazil (Português do Brasil), Romanian (Română), Russian (Русский), Spanish (Español), Swedish (Svenska), Thai (ภาษาไทย), Turkish (Türkçe), Ukrainian (Українська), Vietnamese (Tiếng Việt) — all in a single ISO image, eliminating the need for separate language-specific builds.
+### 🏗️ The Declarative Architecture
+
+* **Deprecation of Imperative Scripts:** We have entirely eliminated legacy Bash scripts for system configuration. The OS is now assembled within a clean, sandboxed `debootstrap` + `chroot` pipeline, completely preventing edge-case build failures.
+* **Introducing [`aosproj` & `apkg`](https://apkg.aiursoft.com/):** We engineered a proprietary, XML-based declarative Domain Specific Language (`aosproj`) to define system states. Powered by an automated compilation toolchain and static syntax linter, it outputs standard native `.deb` packages.
+* **The `AnduinOS-Packages` Repository:** The system core is now modularized into 56 standalone packages across three tiers: Hard Replacements (e.g., overriding `ubuntu-desktop`), Soft Overrides (e.g., `apt-config`), and Branding/Capability extensions.
+* **100% Native APT Compatibility:** Custom updaters (`do_anduinos_upgrade`, `do-anduinos-autorepair`) are officially retired. AnduinOS now relies purely on `sudo apt update && sudo apt upgrade`, preserving seamless compatibility with standard Ubuntu repositories and the broader software ecosystem.
+* **Dracut Ready:** We rigorously validated our packages under the `dracut` initramfs framework (supporting both `initrd` and `initrd.gz` conventions). Users can now safely replace `initramfs-tools` if they prefer.
+
+### 🌍 Global Infrastructure & Project Stewardship
+
+* **Backed by [AIURSOFT LIMITED](https://github.com/AiursoftWeb):** The project is now officially maintained by AIURSOFT LIMITED (Hong Kong) to transition from a solo-maintained project to an internationally backed ecosystem. All AnduinOS 2 projects and shell extensions are proudly licensed under **GPL-v3**.
+* **Global CDN Package Network:** All APT repositories have migrated to [`packages.anduinos.com`](https://packages.anduinos.com/). Powered by Cloudflare load balancing, our US, Europe, and Asia nodes deliver low-latency updates worldwide. We also enforced `[arch=amd64]` explicitly to prevent multi-arch dependency pollution.
+
+### 🚀 Base System & Performance Tuning
+
+* **Next-Gen Foundations:** Transitioned the system base from Ubuntu 25.10 (Questing) to the cutting-edge **Ubuntu 26.04 (Resolute)**, shipped with **Linux Kernel 7** for extensive out-of-the-box hardware and modern graphics support.
+* **Desktop-Optimized Kernel Parameters:** We overhauled upstream defaults to deliver a highly responsive desktop experience with lower latency:
+    * **Memory:** Adjusted `vm.swappiness=10` and `vm.vfs_cache_pressure=50` for better responsiveness.
+    * **Disk I/O:** Set `vm.dirty_background_ratio=5` and `vm.dirty_ratio=10` to eliminate UI freezes during heavy writes.
+    * **Network:** Enabled BBR congestion control and `tcp_fastopen=3` for maximized throughput.
+    * **Workloads:** Raised `fs.inotify` limits to 524288 for developer-heavy file-watching tasks.
+* **Intel SOF Audio Fix:** Shipped `firmware-sof-anduinos` to deliver the always-latest Intel SOF audio firmware without breaking Secure Boot.
+
+### 🌐 The "Single ISO" Multilingual Experience
+
+* **Runtime Language Selection:** We shifted our localization strategy from "build-time forking" to "runtime selection." All **28 officially supported languages** now ship in a **single ISO**.
+* **Multilingual GRUB Boot Menu:** Users can now select their native language directly from the GRUB boot menu before entering the live session. We embedded `unicode.pf2` to ensure proper rendering of CJK, Arabic, and Thai scripts right at the bootloader stage.
+* **Smart Installer & Keyboards:** Ubiquity now explicitly filters and displays only our 28 curated languages. Keyboard layouts dynamically adapt to the user's chosen language, dropping the hardcoded US default.
+* **Zero-Pollution Chinese Input:** Using `dpkg-divert` hijacking, `anduinos-rime` is installed as the exclusive Chinese input method for `zh_*` users. This prevents pulling 20+ unrelated legacy input method packages from upstream, keeping the system incredibly clean.
+* **Expanded Locales:** Added Danish, Ukrainian, Indonesian, Finnish, Hindi, and Greek, bringing the total supported locales to 28 across the globe.
+
+### 🪶 Streamlined Footprint (~2.5GB ISO)
+
+* **Build Quality Enforcement:** The CI pipeline now **hard-fails** if unwanted Ubuntu junk packages (like snapd or telemetry) are detected during the build, guaranteeing a pristine ISO output.
+* **Modern Lightweight Default Apps:** To reduce ISO bloat while maintaining a modern GNOME experience, we swapped legacy apps for their modern lightweight counterparts:
+    * Image Viewer: **Loupe**
+    * Video Player: **Showtime**
+    * Task Manager: **Resources**
+    * Calculator: **gnome-calculator** (replaced `qalculate`)
+    * Text Editor: **vim-tiny** (replaced full `vim`)
+* **Developer Tools Unbundled:** `build-essential`, `gdb`, `gcc`, and `git` are no longer pre-installed to save space. They remain easily installable via APT.
+* **Refined Extensions:**
+    * Replaced the legacy tray icons extension with `AppIndicator and KStatusNotifierItem Support` for robust GNOME 45+ compatibility.
+    * Disabled `simple-weather-extension` by default out of respect for privacy (easily toggleable in the Extensions app).
+* **Next-Gen Font Stack:** Completely replaced Ubuntu's default fonts with an elegant typographic stack: Cascadia Code, Noto Sans/Serif, and Nerd Fonts Symbols. Emoji rendering is now powered by Twemoji COLRv1 (with Noto Color Emoji as a fallback).
 
 ## v1.4.2
 
