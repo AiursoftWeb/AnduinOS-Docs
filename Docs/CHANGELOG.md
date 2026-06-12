@@ -16,7 +16,7 @@ AnduinOS v2.0.0 Beta 1 marks a fundamental, ground-up rewrite of our entire oper
 
 Welcome to the era of Distro Engineering. Source code is available at [AiursoftWeb/AnduinOS-2](https://github.com/aiursoftweb/anduinos-2).
 
-### 🏗️ The Declarative Architecture
+### The Declarative Architecture
 
 * **Deprecation of Imperative Scripts:** We have entirely eliminated legacy Bash scripts for system configuration. The OS is now assembled within a clean, sandboxed `debootstrap` + `chroot` pipeline, completely preventing edge-case build failures.
 * **Introducing [`aosproj` & `apkg`](https://apkg.aiursoft.com/):** We engineered a proprietary, XML-based declarative Domain Specific Language (`aosproj`) to define system states. Powered by an automated compilation toolchain and static syntax linter, it outputs standard native `.deb` packages.
@@ -24,12 +24,12 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
 * **100% Native APT Compatibility:** Custom updaters (`do_anduinos_upgrade`, `do-anduinos-autorepair`) are officially retired. AnduinOS now relies purely on `sudo apt update && sudo apt upgrade`, preserving seamless compatibility with standard Ubuntu repositories and the broader software ecosystem.
 * **Dracut Ready:** We rigorously validated our packages under the `dracut` initramfs framework (supporting both `initrd` and `initrd.gz` conventions). Users can now safely replace `initramfs-tools` if they prefer.
 
-### 🌍 Global Infrastructure & Project Stewardship
+### Global Infrastructure & Project Stewardship
 
 * **Backed by [AIURSOFT LIMITED](https://github.com/AiursoftWeb):** The project is now officially maintained by AIURSOFT LIMITED (Hong Kong) to transition from a solo-maintained project to an internationally backed ecosystem. All AnduinOS 2 projects and shell extensions are proudly licensed under **GPL-v3**.
 * **Global CDN Package Network:** All APT repositories have migrated to [`packages.anduinos.com`](https://packages.anduinos.com/). Powered by Cloudflare load balancing, our US, Europe, and Asia nodes deliver low-latency updates worldwide. We also enforced `[arch=amd64]` explicitly to prevent multi-arch dependency pollution.
 
-### 🚀 Base System & Performance Tuning
+### Base System & Performance Tuning
 
 * **Next-Gen Foundations:** Transitioned the system base from Ubuntu 25.10 (Questing) to the cutting-edge **Ubuntu 26.04 (Resolute)**, shipped with **Linux Kernel 7** for extensive out-of-the-box hardware and modern graphics support.
 * **Desktop-Optimized Kernel Parameters:** We overhauled upstream defaults to deliver a highly responsive desktop experience with lower latency:
@@ -39,7 +39,7 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
     * **Workloads:** Raised `fs.inotify` limits to 524288 for developer-heavy file-watching tasks.
 * **Intel SOF Audio Fix:** Shipped `firmware-sof-anduinos` to deliver the always-latest Intel SOF audio firmware without breaking Secure Boot.
 
-### 🌐 The "Single ISO" Multilingual Experience
+### The "Single ISO" Multilingual Experience
 
 * **Runtime Language Selection:** We shifted our localization strategy from "build-time forking" to "runtime selection." All **28 officially supported languages** now ship in a **single ISO**.
 * **Multilingual GRUB Boot Menu:** Users can now select their native language directly from the GRUB boot menu before entering the live session. We embedded `unicode.pf2` to ensure proper rendering of CJK, Arabic, and Thai scripts right at the bootloader stage.
@@ -47,7 +47,7 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
 * **Zero-Pollution Chinese Input:** Using `dpkg-divert` hijacking, `anduinos-rime` is installed as the exclusive Chinese input method for `zh_*` users. This prevents pulling 20+ unrelated legacy input method packages from upstream, keeping the system incredibly clean.
 * **Expanded Locales:** Added Danish, Ukrainian, Indonesian, Finnish, Hindi, and Greek, bringing the total supported locales to 28 across the globe.
 
-### 🪶 Streamlined Footprint (~2.5GB ISO)
+### Streamlined Footprint (~2.5GB ISO)
 
 * **Build Quality Enforcement:** The CI pipeline now **hard-fails** if unwanted Ubuntu junk packages (like snapd or telemetry) are detected during the build, guaranteeing a pristine ISO output.
 * **Modern Lightweight Default Apps:** To reduce ISO bloat while maintaining a modern GNOME experience, we swapped legacy apps for their modern lightweight counterparts:
