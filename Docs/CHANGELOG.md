@@ -14,6 +14,8 @@ Please note: `do-anduinos-autorepair` command is added in v1.1.11, v1.3.8 and v1
 
 AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire system. We have fundamentally changed how AnduinOS is built, distributed, and maintained.
 
+We heard the community's criticism: a lack of innovation in package management and the instability risks of a solo-maintained system. We redesigned the entire package management architecture while preserving full dpkg compatibility, and established AIURSOFT LIMITED (Hong Kong) to grow into a truly international team.
+
 * Project Stewardship: AnduinOS 2 is now maintained by **AIURSOFT LIMITED**, a startup company founded and led by Anduin (the original author), which is actively expanding its team to accelerate development.
 * Deprecation of Imperative Shell Scripts: All legacy Bash scripts used for system configuration and building have been entirely removed to eliminate edge-case failures.
 * Introduction of aosproj and apkg: Implemented a proprietary, XML-based declarative Domain Specific Language (aosproj) to define expected system states, alongside an automated compilation toolchain, a static syntax linter, and a package management server that outputs native apkg binaries.
@@ -36,6 +38,7 @@ AnduinOS v2.0.0 is a complete, from-scratch architectural rewrite of the entire 
 * Use `AppIndicator and KStatusNotifierItem Support` extension to replace `tray icons` extension to provide better support for tray icons in Gnome 45+.
 * Use `Loupe` as the only image viewer, `Showtime` as the only video player, and `Resources` as the only task manager to reduce the ISO size.
 * Updated images in the `ubiquity` to reflect latest AnduinOS branding.
+* For Chinese language variants, `anduinos-rime` is installed by default as the Chinese input method. Non-Chinese users are unaffected.
 * Expanded language support to 28 locales: Arabic (العربية), Chinese Simplified (中文(简体)), Chinese Hong Kong (中文(香港)), Chinese Traditional (中文(繁體)), Danish (Dansk), Dutch (Nederlands), English, English UK, Finnish (Suomi), French (Français), German (Deutsch), Greek (Ελληνικά), Hindi (हिन्दी), Indonesian (Bahasa Indonesia), Italian (Italiano), Japanese (日本語), Korean (한국어), Polish (Polski), Portuguese (Português), Portuguese Brazil (Português do Brasil), Romanian (Română), Russian (Русский), Spanish (Español), Swedish (Svenska), Thai (ภาษาไทย), Turkish (Türkçe), Ukrainian (Українська), Vietnamese (Tiếng Việt) — all in a single ISO image, eliminating the need for separate language-specific builds.
 
 ## v1.4.2
