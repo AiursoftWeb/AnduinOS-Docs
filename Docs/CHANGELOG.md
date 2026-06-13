@@ -10,9 +10,9 @@ Please note: `do_anduinos_upgrade` will only update in a forked version of Andui
 
 Please note: `do-anduinos-autorepair` command is added in v1.1.11, v1.3.8 and v1.4.1 to help users to fix common system issues. This command will download latest AnduinOS ISO and try to repair the system by comparing the system files with the ISO image.
 
-## v2.0.0 Beta 1 - The Declarative Revolution
+## v2.0.0 - The Declarative Revolution
 
-AnduinOS v2.0.0 Beta 1 marks a fundamental, ground-up rewrite of our entire operating system. Listening to community feedback regarding maintainability and package management, we have completely reimagined how AnduinOS is built, distributed, and maintained.
+AnduinOS v2.0.0 marks a fundamental, ground-up rewrite of our entire operating system. Listening to community feedback regarding maintainability and package management, we have completely reimagined how AnduinOS is built, distributed, and maintained.
 
 Welcome to the era of Distro Engineering. Source code is available at [AiursoftWeb/AnduinOS-2](https://github.com/aiursoftweb/anduinos-2).
 
@@ -55,6 +55,7 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
     * Video Player: **Showtime**
     * Task Manager: **Resources**
     * Calculator: **gnome-calculator** (replaced `qalculate`)
+    * Music Player: **GNOME Music** (replaced `rhythmbox` and `rhythmbox-plugins`)
     * Text Editor: **vim-tiny** (replaced full `vim`)
 * **Developer Tools Unbundled:** `build-essential`, `gdb`, `gcc`, and `git` are no longer pre-installed to save space. They remain easily installable via APT.
 * **Refined Extensions:**
