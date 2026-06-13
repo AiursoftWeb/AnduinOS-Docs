@@ -17,7 +17,7 @@ To install Slack on AnduinOS, you can run the following commands in the terminal
 <!-- The link needs to be updated regularly. -->
 
 ```bash
-link="https://downloads.slack-edge.com/desktop-releases/linux/x64/4.45.64/slack-desktop-4.45.64-amd64.deb"
+link="https://downloads.slack-edge.com/desktop-releases/linux/x64/4.50.136/slack-desktop-4.50.136-amd64.deb"
 wget $link -O slack.deb
 sudo apt install ./slack.deb -y
 rm slack.deb

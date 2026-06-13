@@ -17,7 +17,7 @@ To install Obsidian on AnduinOS, follow these steps:
 <!-- The link needs to be updated regularly. -->
 
 ```bash title="Install Obsidian"
-link=https://github.com/obsidianmd/obsidian-releases/releases/download/v1.9.14/obsidian_1.9.14_amd64.deb
+link=https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb
 wget $link -O /tmp/obsidian.deb
 sudo apt install /tmp/obsidian.deb -y
 rm /tmp/obsidian.deb

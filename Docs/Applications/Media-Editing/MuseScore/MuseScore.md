@@ -27,7 +27,7 @@ Or you can install the AppImage version of MuseScore:
 <!-- The link needs to be updated regularly. -->
 
 ```bash
-wget https://cdn.jsdelivr.net/musescore/v4.5.2/MuseScore-Studio-4.5.2.251141401-x86_64.AppImage -O musescore.AppImage
+wget https://cdn.jsdelivr.net/musescore/v4.7.3/MuseScore-Studio-4.7.3.260608135-x86_64.AppImage -O musescore.AppImage
 chmod +x musescore.AppImage
 ./musescore.AppImage --appimage-extract
 sudo mv squashfs-root /opt/musescore
