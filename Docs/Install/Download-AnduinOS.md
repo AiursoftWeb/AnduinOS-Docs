@@ -35,10 +35,6 @@ There are a few differences between different language versions:
 * Timezone is different. `zh_CN` version will use `Asia/Shanghai` by default.
 * Default apt mirror is different. `zh_CN` version will use Chinese mirrors by default.
 
-!!! note "You can still switch the language before or after the installation"
+!!! note "Language selection at boot time"
 
-    You can still switch the language before or after the installation. The only difference is the default settings.
-
-    For example, if you downloaded `en_US` version but you want to use Chinese language, you can install Chinese language packs and input methods after the installation. Or you can just select Chinese language during the installation process. Internet connection is required.
-
-    To switch the language, please refer to the [Change system language](./Switch-To-Your-Language.md) guide.
+    Starting with AnduinOS 2, all 28 supported languages ship in a **single ISO**. You can select your preferred language directly from the GRUB boot menu before entering the live session — no separate download needed, and no post-install language switching required.

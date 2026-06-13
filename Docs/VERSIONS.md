@@ -36,7 +36,7 @@ We suggest users download the latest Patch Version, which is 1.1.13.
 
 If you are an experienced developer or a tech enthusiast looking to experience the latest kernel and new features, we recommend downloading the latest Minor Version. However, these versions may undergo frequent changes and introduce new features regularly.
 
-## How to upgrade AnduinOS
+## How to upgrade AnduinOS 1.*
 
 Since AnduinOS currently does not have its own dedicated software repository (all software packages are sourced from Ubuntu), updates to AnduinOS itself are, for now, handled by executing a bash script. In the future, we plan to integrate the update mechanism directly into the `sudo apt upgrade` command.
 
@@ -49,3 +49,12 @@ To update AnduinOS to the latest dot build version, simply run the following com
 ```
 
 Please note that this command will **not** upgrade across fork versions—that is, it will not upgrade from 1.2.0 to 1.3.1.
+
+## How to upgrade AnduinOS 2.*
+
+AnduinOS 2 is a major release that introduces a new declarative configuration system. To upgrade AnduinOS 2, simply run the following commands:
+
+```bash
+sudo apt update
+sudo apt upgrade
+```

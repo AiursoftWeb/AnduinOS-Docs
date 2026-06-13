@@ -9,12 +9,6 @@ sudo apt update
 sudo apt upgrade
 ```
 
-to update AnduinOS itself, you can use the following command:
-
-```bash title="Update AnduinOS"
-sudo do_anduinos_upgrade
-```
-
 That's it! We recommend you to run those commands regularly to keep your system up-to-date.
 
 ??? Tip "Should those commands be run automatically?"
@@ -46,7 +40,6 @@ That's it! We recommend you to run those commands regularly to keep your system 
     echo "
     sudo apt update
     sudo DEBIAN_FRONTEND=noninteractive apt upgrade -y
-    sudo do_anduinos_upgrade
     sudo apt --purge autoremove -y" | sudo tee /usr/local/bin/update.sh
     sudo chmod +x /usr/local/bin/update.sh
     (crontab -l ; echo "0 2 * * 0 /usr/local/bin/update.sh") | crontab -
