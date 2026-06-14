@@ -67,6 +67,7 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
     * Replaced the legacy tray icons extension with `AppIndicator and KStatusNotifierItem Support` for robust GNOME 45+ compatibility.
     * Disabled `simple-weather-extension` by default out of respect for privacy (easily toggleable in the Extensions app).
 * **Next-Gen Font Stack:** Completely replaced Ubuntu's default fonts with an elegant typographic stack: Cascadia Code, Noto Sans/Serif, and Nerd Fonts Symbols. Emoji rendering is now powered by Twemoji COLRv1 (with Noto Color Emoji as a fallback).
+* **Brand New Wallpapers:** Introduced a fresh set of desktop wallpapers and GDM3 (login screen) wallpapers to give AnduinOS 2 a distinct visual identity.
 
 ## v1.4.2
 
