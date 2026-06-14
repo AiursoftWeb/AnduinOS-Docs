@@ -53,7 +53,7 @@ AnduinOS 2 is developed across a layered architecture. Pick the repository that 
 
 To discuss with other AnduinOS users, join our community on:
 
-* [AnduinOS Discord](https://discord.com/invite/b2N3aB7Ndv)
+* [AnduinOS Discord](https://discord.gg/YGBzvmyBrR)
 * [AnduinOS Revolt](https://rvlt.gg/AE7Kx4qD)
 
 ## Copyright
