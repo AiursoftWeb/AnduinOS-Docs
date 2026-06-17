@@ -67,8 +67,16 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
     * Replaced the legacy tray icons extension with `AppIndicator and KStatusNotifierItem Support` for robust GNOME 45+ compatibility.
     * Disabled `simple-weather-extension` by default out of respect for privacy (easily toggleable in the Extensions app).
 * **Next-Gen Font Stack:** Completely replaced Ubuntu's default fonts with an elegant typographic stack: Cascadia Code, Noto Sans/Serif, and Nerd Fonts Symbols. Emoji rendering is now powered by Twemoji COLRv1 (with Noto Color Emoji as a fallback).
-* **Brand New Wallpapers:** Introduced a fresh set of desktop wallpapers to give AnduinOS 2 a distinct visual identity.
-* **Brand New GDM Wallpaper:** Introduced a new GDM3 (login screen) wallpaper to give AnduinOS 2 a distinct visual identity right from the login screen.
+
+### Beta 2 → Beta 3
+
+* **AnduinOS Appearance:** First-party GTK4/Adwaita settings app with full 28-language i18n. Supports taskbar style switching (Windows 11 centered icons vs. Classic left-aligned), taskbar position (bottom/top/left/right), grouping behavior (Vista-style launcher separation), and About dialog with hamburger menu.
+* **GDM Wallpaper Picker:** Built-in login-screen wallpaper selector with image preview, backed by `pkexec` + `anduinos-gdm-set-wallpaper` engine using `Gio.Subprocess.wait_async` for async process tracking.
+* **GDM Full Fluent Theming:** `anduinos-gdm-set-wallpaper` now surgically injects the complete Fluent CSS + SVG assets into the GDM theme, making the login screen visually consistent with the desktop. Auto-regenerates on every package upgrade. Also fixed the a11y button from a stretched pill shape to a proper Fluent circle.
+* **Right-Click Menu Localization:** Dash-to-Panel panel menu (4 items × 22 languages), DING desktop menu (renamed to "AnduinOS Appearance Settings" × 30 languages), and ArcMenu (Pin/Unpin × 35+ languages) — all localized via `.mo` injection.
+* **Wallpaper Pack:** 4 new wallpaper pairs (New Mountain, New Bubbles, 11, AnduinOS); default changed to New Bubbles.
+* **Dash-to-Panel Fluent Borders:** Added `trans-border-*` keys for 1px Fluent-style panel borders.
+* **System Cleanup:** Removed GTK4 Desktop Icons NG and no-overview extensions; fixed DING `ding.js` crash (`spawnv` + `chmod +x`); fixed Fluent icon theme tarball bloat (`--exclude='.git'`); added missing `dconf update` calls across 12 extension postinst scripts; fixed 6 CI ↔ aosproj dependency inconsistencies.
 
 ## v1.4.2
 
