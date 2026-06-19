@@ -114,7 +114,7 @@ nav:
       - System Requirements: Install/System-Requirements.md
       - Download AnduinOS: Install/Download-AnduinOS.md
       - Burn a USB stick: Install/Burn-A-USB-Stick.md
-      - Burn AnduinOS ToGo: Install/styles/Burn-AnduinOS-ToGo.md
+      - Burn AnduinOS ToGo: Install/Burn-AnduinOS-ToGo.md
       - Change NVME LBA size: Install/Change-NVME-LBA-Size.md
       - Install AnduinOS from USB: Install/Install-AnduinOS-From-USB.md
       - Dual Boot With Windows: Install/Dual-Boot-With-Windows.md
@@ -126,25 +126,20 @@ nav:
       - Enable Firewall: Install/Enable-Firewall.md
       - Manage Swap: Install/Manage-Swap.md
       - Mount second disk: Install/Mount-Second-Disk.md
-      - Install input method: Install/Install-Input-Method.md
       - Update your system: Install/Update-Your-System.md
       - Switch To Your Language: Install/Switch-To-Your-Language.md
       - Update firmware: Install/Upgrade-Firmware.md
       - Configure Power Settings: Install/Configure-Power-Settings.md
       - Allow sudo without password: Install/Allow-Sudo-Without-Password.md
-      - Install an App Store: Install/Install-An-App-Store.md
       - Enable SSH and Firewall: Install/Enable-SSH-And-Firewall.md
       - Enable RDP: Install/Enable-RDP.md
       - Add Printers: Install/Managing-Printers.md
     - Learning AnduinOS:
       - Keyboard Shortcuts: Install/Keyboard-Shortcuts.md
     - Personalizing AnduinOS:
-      - Personalize Your Desktop: Install/Personalize-Your-Desktop.md
       - Setup Wallpaper Slideshow: Install/Setup-Wallpaper--Slideshow.md
     - Maintaining AnduinOS:
       - Setup Backup: Install/Backup-And-Restore.md
-      - Install Ubuntu Pro: Install/Install-Ubuntu-Pro.md
-
   - Skills:
     - Introduction: Skills/Introduction.md
     - System Management:
@@ -291,7 +286,6 @@ nav:
         - Brasero: Applications/Utilities/Brasero/Brasero.md
         - KDiskMark: Applications/Utilities/KDiskMark/KDiskMark.md
         - GSmartControl: Applications/Utilities/GSmartControl/GSmartControl.md
-        - Deskmon: Applications/Utilities/Deskmon/Deskmon.md
 
       - Development:
         - Docker: Applications/Development/Docker/Docker.md
