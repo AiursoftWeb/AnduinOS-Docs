@@ -78,6 +78,18 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
 * **Dash-to-Panel Fluent Borders:** Added `trans-border-*` keys for 1px Fluent-style panel borders.
 * **System Cleanup:** Removed GTK4 Desktop Icons NG and no-overview extensions; fixed DING `ding.js` crash (`spawnv` + `chmod +x`); fixed Fluent icon theme tarball bloat (`--exclude='.git'`); added missing `dconf update` calls across 12 extension postinst scripts; fixed 6 CI ↔ aosproj dependency inconsistencies.
 
+### Beta 3 → RC 1
+
+* Fixed an issue where the taskbar layout change feature may not take effect on multi-display setup.
+* Fixed localization issues of the `anduinos-appearance` app.
+* Updated screenshots of the `ubiquity` installer to reflect the new design.
+* Replaced `showtime` with `celluloid` as the default video player. Added `ffmpeg` and `yt-dlp` since `celluloid` relies on them for some video formats and online streaming.
+* Bumped `Fluent-icon-theme` to `2026-06-19` to support more icons including `Resources` and `Celluloid`.
+* Bumped `alsa-ucm-conf` to `v1.2.16.1`.
+* Separated the `anduinos-core-system` package to `anduinos-container` and `anduinos-core-system`.
+* Refactored the `Fluent-icon-them` and `Fluent-gtk-theme` packages as pure file extraction packages without any scripts makes the maintenance easier and better performance.
+* Refactored the way to package the gnome-shell-extensions that merged all `dconf update` calls into a single postinst script to improve the performance and stability of upgrades.
+
 ## v1.4.2
 
 * Changed the default apt source to `https://ubuntu.mirror.letscloud.io/ubuntu/` for Brazil build.
