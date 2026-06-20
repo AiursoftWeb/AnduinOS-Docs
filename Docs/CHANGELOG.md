@@ -61,7 +61,7 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
     * Task Manager: **Resources** (replaced `gnome-system-monitor`)
     * Email Client: **Geary**
     * Calculator: **gnome-calculator** (replaced `qalculate`)
-    * Music Player: **GNOME Music** (replaced `rhythmbox` and `rhythmbox-plugins`)
+    * Music Player: **Amberol** (replaced `rhythmbox` and `rhythmbox-plugins`)
     * Text Editor: **vim-tiny** (replaced full `vim`)
 * **Developer Tools Unbundled:** `build-essential`, `gdb`, `gcc`, and `git` are no longer pre-installed to save space. They remain easily installable via APT.
 * **Refined Extensions:**
@@ -92,6 +92,7 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
 * Refactored the `Fluent-icon-them` and `Fluent-gtk-theme` packages as pure file extraction packages without any scripts makes the maintenance easier and better performance.
 * Refactored the way to package the gnome-shell-extensions that merged all `dconf update` calls into a single postinst script to improve the performance and stability of upgrades.
 * Taskbar will isolate monitors and workspaces for multi-display setups by default.
+* Replaced `gnome-music` with `amberol` for better experience.
 
 ## v1.4.2
 
