@@ -56,9 +56,10 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
 
 * **Build Quality Enforcement:** The CI pipeline now **hard-fails** if unwanted Ubuntu junk packages (like snapd or telemetry) are detected during the build, guaranteeing a pristine ISO output.
 * **Modern Lightweight Default Apps:** To reduce ISO bloat while maintaining a modern GNOME experience, we swapped legacy apps for their modern lightweight counterparts:
-    * Image Viewer: **Loupe**
-    * Video Player: **Showtime**
-    * Task Manager: **Resources**
+    * Image Viewer: **Loupe** (replaced `shotwell`)
+    * Video Player: **Celluloid** (replaced `showtime`)
+    * Task Manager: **Resources** (replaced `gnome-system-monitor`)
+    * Email Client: **Geary**
     * Calculator: **gnome-calculator** (replaced `qalculate`)
     * Music Player: **GNOME Music** (replaced `rhythmbox` and `rhythmbox-plugins`)
     * Text Editor: **vim-tiny** (replaced full `vim`)
