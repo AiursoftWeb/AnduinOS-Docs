@@ -84,11 +84,13 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
 * Fixed localization issues of the `anduinos-appearance` app.
 * Updated screenshots of the `ubiquity` installer to reflect the new design.
 * Replaced `showtime` with `celluloid` as the default video player. Added `ffmpeg` and `yt-dlp` since `celluloid` relies on them for some video formats and online streaming.
+* Added new app `Geary` as the default email client.
 * Bumped `Fluent-icon-theme` to `2026-06-19` to support more icons including `Resources` and `Celluloid`.
 * Bumped `alsa-ucm-conf` to `v1.2.16.1`.
 * Separated the `anduinos-core-system` package to `anduinos-container` and `anduinos-core-system`.
 * Refactored the `Fluent-icon-them` and `Fluent-gtk-theme` packages as pure file extraction packages without any scripts makes the maintenance easier and better performance.
 * Refactored the way to package the gnome-shell-extensions that merged all `dconf update` calls into a single postinst script to improve the performance and stability of upgrades.
+* Taskbar will isolate monitors and workspaces for multi-display setups by default.
 
 ## v1.4.2
 
