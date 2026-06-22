@@ -94,6 +94,12 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
 * Taskbar will isolate monitors and workspaces for multi-display setups by default.
 * Replaced `gnome-music` with `amberol` for better experience.
 
+### RC1 -> RC2
+
+* Added a new app `anduinos-ufwall-gtk` to provide a GUI for `ufw` to manage firewall rules.
+* Fixed a bug of `blur-my-shell` which may not blur the taskbar correctly.
+* Removed gnome plugin `media-controls` because it may cause system freeze when playing Youtube videos in Chrome.
+
 ## v1.4.2
 
 * Changed the default apt source to `https://ubuntu.mirror.letscloud.io/ubuntu/` for Brazil build.
