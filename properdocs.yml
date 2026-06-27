@@ -103,7 +103,7 @@ plugins:
 nav:
   - Home:
     - Documentation: README.md
-    - Versions table: VERSIONS.md
+    - Versions table: https://www.anduinos.com/HistoryBuilds.html
     - Change Log: CHANGELOG.md
     - News & Updates: https://news.anduinos.com/
     - Known Issues: KNOWN_ISSUES.md
