@@ -25,7 +25,7 @@ AnduinOS 2 is shipped with GPL-v3 license. Apkg project is shipped with MIT lice
 
 ### The Declarative Architecture
 
-* **Deprecation of Imperative Scripts:** We have entirely eliminated legacy Bash scripts for system configuration. The OS is now assembled within a clean, sandboxed `debootstrap` + `chroot` pipeline, completely preventing edge-case build failures.
+* **Deprecation of Imperative Scripts:** We have entirely eliminated legacy Bash scripts for system configuration. The OS is now assembled within a clean, sandboxed `debootstrap` + `chroot` pipeline. While not strictly bit-for-bit reproducible, this declarative approach guarantees a highly predictable and consistent build output, completely preventing imperative edge-case failures.
 * **Introducing [`aosproj` & `apkg`](https://apkg.aiursoft.com/):** We engineered a proprietary, XML-based declarative Domain Specific Language (`aosproj`) to define system states. Powered by an automated compilation toolchain and static syntax linter, it outputs standard native `.deb` packages.
 * **The `AnduinOS-Packages` Repository:** The system core is now modularized into 56 standalone packages across three tiers: Hard Replacements (e.g., overriding `ubuntu-desktop`), Soft Overrides (e.g., `apt-config`), and Branding/Capability extensions.
 * **100% Native APT Compatibility:** Custom updaters (`do_anduinos_upgrade`, `do-anduinos-autorepair`) are officially retired. AnduinOS now relies purely on `sudo apt update && sudo apt upgrade`, preserving seamless compatibility with standard Ubuntu repositories and the broader software ecosystem.
@@ -52,7 +52,7 @@ AnduinOS 2 is shipped with GPL-v3 license. Apkg project is shipped with MIT lice
 * **Runtime Language Selection:** We shifted our localization strategy from "build-time forking" to "runtime selection." All **28 officially supported languages** now ship in a **single ISO**.
 * **Multilingual GRUB Boot Menu:** Users can now select their native language directly from the GRUB boot menu before entering the live session. We embedded `unicode.pf2` to ensure proper rendering of CJK, Arabic, and Thai scripts right at the bootloader stage.
 * **Smart Installer & Keyboards:** Ubiquity now explicitly filters and displays only our 28 curated languages. Keyboard layouts dynamically adapt to the user's chosen language, dropping the hardcoded US default.
-* **Zero-Pollution Chinese Input:** Using `dpkg-divert` hijacking, `anduinos-rime` is installed as the exclusive Chinese input method for `zh_*` users. This prevents pulling 20+ unrelated legacy input method packages from upstream, keeping the system incredibly clean.
+* **Zero-Pollution Chinese Input:** Using the `dpkg-divert` mechanism, `anduinos-rime` is installed as the exclusive Chinese input method for `zh_*` users. This prevents pulling 20+ unrelated legacy input method packages from upstream, keeping the system incredibly clean.
 * **Expanded Locales:** Added Danish, Ukrainian, Indonesian, Finnish, Hindi, and Greek, bringing the total supported locales to 28 across the globe.
 
 ### Streamlined Footprint (~2.5GB ISO)
@@ -74,10 +74,17 @@ AnduinOS 2 is shipped with GPL-v3 license. Apkg project is shipped with MIT lice
   * Removed the legacy `media-controls` extension to resolve system freezes during browser video playback.
 * **Next-Gen Font Stack:** Completely replaced Ubuntu's default fonts with an elegant typographic stack: Cascadia Code, Noto Sans/Serif, and Nerd Fonts Symbols. Emoji rendering is now powered by Twemoji COLRv1 (with Noto Color Emoji as a fallback).
 
+**Out-of-the-Box Conveniences:**
+
+* **AppImage Ready:** Pre-configured with `libfuse2t64` and OpenGL libraries to run AppImages instantly.
+* **Seamless Permissions:** Integrated `policykit-desktop-privileges` to allow passwordless prompts for standard desktop actions like mounting drives and running simple updates.
+* **Desktop Shortcuts:** Custom `deskmon.service` automatically allows executing `.desktop` files in the `~/Desktop` directory.
+* **Office & Hardware Ready:** Pre-installed printing (`cups`, `system-config-printer`) and scanning (`sane-airscan`) utilities.
+
 ### Refined Desktop Experience & Customization
 
 * **AnduinOS Appearance:** First-party GTK4/Adwaita settings app with full 28-language i18n. Supports taskbar style switching (Windows 11 centered icons vs. Classic left-aligned), taskbar position (bottom/top/left/right), grouping behavior (Vista-style launcher separation), and an About dialog with hamburger menu.
-* **GDM Wallpaper & Fluent Theming:** Built-in login-screen wallpaper selector with image preview, backed by `pkexec` + `anduinos-gdm-set-wallpaper` engine. The GDM login screen now surgically injects the complete Fluent CSS + SVG assets — including perfectly rounded a11y buttons — to match your desktop seamlessly, auto-regenerating on every package upgrade.
+* **GDM Wallpaper & Fluent Theming:** Built-in login-screen wallpaper selector with image preview, backed by `pkexec` + `anduinos-gdm-set-wallpaper` engine. The GDM login screen now surgically injects the complete Fluent CSS + SVG assets — including perfectly rounded a11y buttons — to match your desktop seamlessly, auto-regenerating on every package upgrade. We are proud to officially sponsor [@vinceliuice](https://github.com/vinceliuice) for the stunning Fluent GTK and Icon themes that power our desktop interface.
 * **Taskbar & Multitasking:** Dash-to-Panel now renders 1px Fluent-style panel borders. The taskbar isolates monitors and workspaces for multi-display setups by default, with layout changes reliably applied across all displays.
 * **Right-Click Menu Localization:** Dash-to-Panel panel menu (4 items × 22 languages), DING desktop menu (renamed to "AnduinOS Appearance Settings" × 30 languages), and ArcMenu (Pin/Unpin × 35+ languages) — all localized via `.mo` injection.
 * **Wallpaper Pack:** 4 new wallpaper pairs (New Mountain, New Bubbles, 11, AnduinOS); default changed to New Bubbles.
@@ -93,6 +100,10 @@ AnduinOS 2 is shipped with GPL-v3 license. Apkg project is shipped with MIT lice
 * Fixed Fluent icon theme tarball bloat (`--exclude='.git'`).
 * Fixed 6 CI ↔ aosproj dependency inconsistencies.
 * Added missing `dconf update` calls across 12 extension postinst scripts.
+
+### Standing on the Shoulders of Giants
+
+AnduinOS 2.0.0 is built upon the incredible work of the open-source community. From the Linux Kernel and Ubuntu foundation, to the GNOME desktop and the Rust/Cargo ecosystem powering our native tools, we owe our existence to these projects. Please review our [Third-Party Open Source Software Acknowledgements](OSS-ACKNOWLEDGMENTS.md) for a comprehensive list of the upstream projects and licenses that make AnduinOS possible.
 
 ## v1.4.2
 
