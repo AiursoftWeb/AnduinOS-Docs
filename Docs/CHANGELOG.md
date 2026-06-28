@@ -19,7 +19,9 @@ sudo apt upgrade
 
 AnduinOS v2.0.0 marks a fundamental, ground-up rewrite of our entire operating system. Listening to community feedback regarding maintainability and package management, we have completely reimagined how AnduinOS is built, distributed, and maintained.
 
-Welcome to the era of Distro Engineering. Source code is available at [AiursoftWeb/AnduinOS-2](https://github.com/aiursoftweb/anduinos-2).
+Welcome to the era of Distro Engineering. Our source code and packaging pipelines are fully open: [AnduinOS-2 (OS Builder)](https://github.com/aiursoftweb/anduinos-2), [AnduinOS-Packages (Package Sources)](https://github.com/aiursoftweb/anduinos-packages), and [Apkg (Declarative build tool)](https://github.com/aiursoftweb/apkg).
+
+AnduinOS 2 is shipped with GPL-v3 license. Apkg project is shipped with MIT license.
 
 ### The Declarative Architecture
 
@@ -28,6 +30,7 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
 * **The `AnduinOS-Packages` Repository:** The system core is now modularized into 56 standalone packages across three tiers: Hard Replacements (e.g., overriding `ubuntu-desktop`), Soft Overrides (e.g., `apt-config`), and Branding/Capability extensions.
 * **100% Native APT Compatibility:** Custom updaters (`do_anduinos_upgrade`, `do-anduinos-autorepair`) are officially retired. AnduinOS now relies purely on `sudo apt update && sudo apt upgrade`, preserving seamless compatibility with standard Ubuntu repositories and the broader software ecosystem.
 * **Dracut Ready:** We rigorously validated our packages under the `dracut` initramfs framework (supporting both `initrd` and `initrd.gz` conventions). Users can now safely replace `initramfs-tools` if they prefer.
+* **Optimized Package Delivery:** Refactored Fluent themes into pure file-extraction packages for better performance, split `anduinos-core-system` into `anduinos-container` and `anduinos-core-system` for container readiness, and merged extension `dconf` updates into single postinst scripts for atomic, stable upgrades.
 
 ### Global Infrastructure & Project Stewardship
 
@@ -38,10 +41,10 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
 
 * **Next-Gen Foundations:** Transitioned the system base from Ubuntu 25.10 (Questing) to the cutting-edge **Ubuntu 26.04 (Resolute)**, shipped with **Linux Kernel 7** for extensive out-of-the-box hardware and modern graphics support.
 * **Desktop-Optimized Kernel Parameters:** We overhauled upstream defaults to deliver a highly responsive desktop experience with lower latency:
-    * **Memory:** Adjusted `vm.swappiness=10` and `vm.vfs_cache_pressure=50` for better responsiveness.
-    * **Disk I/O:** Set `vm.dirty_background_ratio=5` and `vm.dirty_ratio=10` to eliminate UI freezes during heavy writes.
-    * **Network:** Enabled BBR congestion control and `tcp_fastopen=3` for maximized throughput.
-    * **Workloads:** Raised `fs.inotify` limits to 524288 for developer-heavy file-watching tasks.
+  * **Memory:** Adjusted `vm.swappiness=10` and `vm.vfs_cache_pressure=50` for better responsiveness.
+  * **Disk I/O:** Set `vm.dirty_background_ratio=5` and `vm.dirty_ratio=10` to eliminate UI freezes during heavy writes.
+  * **Network:** Enabled BBR congestion control and `tcp_fastopen=3` for maximized throughput.
+  * **Workloads:** Raised `fs.inotify` limits to 524288 for developer-heavy file-watching tasks.
 * **Intel SOF Audio Fix:** Shipped `firmware-sof-anduinos` to deliver the always-latest Intel SOF audio firmware without breaking Secure Boot.
 
 ### The "Single ISO" Multilingual Experience
@@ -56,49 +59,40 @@ Welcome to the era of Distro Engineering. Source code is available at [AiursoftW
 
 * **Build Quality Enforcement:** The CI pipeline now **hard-fails** if unwanted Ubuntu junk packages (like snapd or telemetry) are detected during the build, guaranteeing a pristine ISO output.
 * **Modern Lightweight Default Apps:** To reduce ISO bloat while maintaining a modern GNOME experience, we swapped legacy apps for their modern lightweight counterparts:
-    * Image Viewer: **Loupe** (replaced `shotwell`)
-    * Video Player: **Celluloid** (replaced `showtime`)
-    * Task Manager: **Resources** (replaced `gnome-system-monitor`)
-    * Email Client: **Geary**
-    * Calculator: **gnome-calculator** (replaced `qalculate`)
-    * Music Player: **Amberol** (replaced `rhythmbox` and `rhythmbox-plugins`)
-    * Text Editor: **vim-tiny** (replaced full `vim`)
+  * Image Viewer: **Loupe** (replaced `shotwell`)
+  * Video Player: **Celluloid** (replaced `showtime`, shipping with `ffmpeg` and `yt-dlp` for broad format and streaming support)
+  * Task Manager: **Resources** (replaced `gnome-system-monitor`)
+  * Email Client: **Geary**
+  * Calculator: **gnome-calculator** (replaced `qalculate`)
+  * Music Player: **Amberol** (replaced `gnome-music`, `rhythmbox`, and `rhythmbox-plugins`)
+  * Text Editor: **vim-tiny** (replaced full `vim`)
 * **Developer Tools Unbundled:** `build-essential`, `gdb`, `gcc`, and `git` are no longer pre-installed to save space. They remain easily installable via APT.
+* **First-Party Firewall GUI:** Introduced `anduinos-ufwall-gtk`, a brand-new native GTK4 GUI for UFW to easily manage your firewall rules.
 * **Refined Extensions:**
-    * Replaced the legacy tray icons extension with `AppIndicator and KStatusNotifierItem Support` for robust GNOME 45+ compatibility.
-    * Disabled `simple-weather-extension` by default out of respect for privacy (easily toggleable in the Extensions app).
+  * Replaced the legacy tray icons extension with `AppIndicator and KStatusNotifierItem Support` for robust GNOME 45+ compatibility.
+  * Disabled `simple-weather-extension` by default out of respect for privacy (easily toggleable in the Extensions app).
+  * Removed the legacy `media-controls` extension to resolve system freezes during browser video playback.
 * **Next-Gen Font Stack:** Completely replaced Ubuntu's default fonts with an elegant typographic stack: Cascadia Code, Noto Sans/Serif, and Nerd Fonts Symbols. Emoji rendering is now powered by Twemoji COLRv1 (with Noto Color Emoji as a fallback).
 
-### Beta 2 → Beta 3
+### Refined Desktop Experience & Customization
 
-* **AnduinOS Appearance:** First-party GTK4/Adwaita settings app with full 28-language i18n. Supports taskbar style switching (Windows 11 centered icons vs. Classic left-aligned), taskbar position (bottom/top/left/right), grouping behavior (Vista-style launcher separation), and About dialog with hamburger menu.
-* **GDM Wallpaper Picker:** Built-in login-screen wallpaper selector with image preview, backed by `pkexec` + `anduinos-gdm-set-wallpaper` engine using `Gio.Subprocess.wait_async` for async process tracking.
-* **GDM Full Fluent Theming:** `anduinos-gdm-set-wallpaper` now surgically injects the complete Fluent CSS + SVG assets into the GDM theme, making the login screen visually consistent with the desktop. Auto-regenerates on every package upgrade. Also fixed the a11y button from a stretched pill shape to a proper Fluent circle.
+* **AnduinOS Appearance:** First-party GTK4/Adwaita settings app with full 28-language i18n. Supports taskbar style switching (Windows 11 centered icons vs. Classic left-aligned), taskbar position (bottom/top/left/right), grouping behavior (Vista-style launcher separation), and an About dialog with hamburger menu.
+* **GDM Wallpaper & Fluent Theming:** Built-in login-screen wallpaper selector with image preview, backed by `pkexec` + `anduinos-gdm-set-wallpaper` engine. The GDM login screen now surgically injects the complete Fluent CSS + SVG assets — including perfectly rounded a11y buttons — to match your desktop seamlessly, auto-regenerating on every package upgrade.
+* **Taskbar & Multitasking:** Dash-to-Panel now renders 1px Fluent-style panel borders. The taskbar isolates monitors and workspaces for multi-display setups by default, with layout changes reliably applied across all displays.
 * **Right-Click Menu Localization:** Dash-to-Panel panel menu (4 items × 22 languages), DING desktop menu (renamed to "AnduinOS Appearance Settings" × 30 languages), and ArcMenu (Pin/Unpin × 35+ languages) — all localized via `.mo` injection.
 * **Wallpaper Pack:** 4 new wallpaper pairs (New Mountain, New Bubbles, 11, AnduinOS); default changed to New Bubbles.
-* **Dash-to-Panel Fluent Borders:** Added `trans-border-*` keys for 1px Fluent-style panel borders.
-* **System Cleanup:** Removed GTK4 Desktop Icons NG and no-overview extensions; fixed DING `ding.js` crash (`spawnv` + `chmod +x`); fixed Fluent icon theme tarball bloat (`--exclude='.git'`); added missing `dconf update` calls across 12 extension postinst scripts; fixed 6 CI ↔ aosproj dependency inconsistencies.
+* **System Cleanup:** Removed GTK4 Desktop Icons NG and no-overview extensions for a leaner desktop experience.
 
-### Beta 3 → RC 1
+### Under-the-Hood Polishes
 
-* Fixed an issue where the taskbar layout change feature may not take effect on multi-display setup.
-* Fixed localization issues of the `anduinos-appearance` app.
-* Updated screenshots of the `ubiquity` installer to reflect the new design.
-* Replaced `showtime` with `celluloid` as the default video player. Added `ffmpeg` and `yt-dlp` since `celluloid` relies on them for some video formats and online streaming.
-* Added new app `Geary` as the default email client.
-* Bumped `Fluent-icon-theme` to `2026-06-19` to support more icons including `Resources` and `Celluloid`.
-* Bumped `alsa-ucm-conf` to `v1.2.16.1`.
-* Separated the `anduinos-core-system` package to `anduinos-container` and `anduinos-core-system`.
-* Refactored the `Fluent-icon-them` and `Fluent-gtk-theme` packages as pure file extraction packages without any scripts makes the maintenance easier and better performance.
-* Refactored the way to package the gnome-shell-extensions that merged all `dconf update` calls into a single postinst script to improve the performance and stability of upgrades.
-* Taskbar will isolate monitors and workspaces for multi-display setups by default.
-* Replaced `gnome-music` with `amberol` for better experience.
-
-### RC1 -> RC2
-
-* Added a new app `anduinos-ufwall-gtk` to provide a GUI for `ufw` to manage firewall rules.
-* Fixed a bug of `blur-my-shell` which may not blur the taskbar correctly.
-* Removed gnome plugin `media-controls` because it may cause system freeze when playing Youtube videos in Chrome.
+* Fixed a `blur-my-shell` bug to ensure the taskbar is blurred correctly.
+* Updated Ubiquity installer screenshots to reflect the new 2.0 design language.
+* Bumped `Fluent-icon-theme` to include the latest icons for modern apps like Resources and Celluloid.
+* Bumped `alsa-ucm-conf` to v1.2.16.1 for broader audio hardware compatibility.
+* Fixed DING `ding.js` crash (`spawnv` + `chmod +x`).
+* Fixed Fluent icon theme tarball bloat (`--exclude='.git'`).
+* Fixed 6 CI ↔ aosproj dependency inconsistencies.
+* Added missing `dconf update` calls across 12 extension postinst scripts.
 
 ## v1.4.2
 
