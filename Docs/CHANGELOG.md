@@ -26,7 +26,7 @@ AnduinOS 2 is shipped with GPL-v3 license. Apkg project is shipped with MIT lice
 ### The Declarative Architecture
 
 * **Deprecation of Imperative Scripts:** We have entirely eliminated legacy Bash scripts for system configuration. The OS is now assembled within a clean, sandboxed `debootstrap` + `chroot` pipeline. While not strictly bit-for-bit reproducible, this declarative approach guarantees a highly predictable and consistent build output, completely preventing imperative edge-case failures.
-* **Introducing [`aosproj` & `apkg`](https://apkg.aiursoft.com/):** We engineered a XML-based declarative Domain Specific Language (`aosproj`) to define system states. Powered by an automated compilation toolchain and static syntax linter, it outputs standard native `.deb` packages.
+* **Introducing [`aosproj` & `apkg`](https://apkg.aiursoft.com/):** We engineered a custom, XML-based declarative Domain Specific Language (`aosproj`) to define system states. Powered by an automated compilation toolchain and static syntax linter, it outputs standard native `.deb` packages.
 * **The `AnduinOS-Packages` Repository:** The system core is now modularized into 56 standalone packages across three tiers: Hard Replacements (e.g., overriding `ubuntu-desktop`), Soft Overrides (e.g., `apt-config`), and Branding/Capability extensions.
 * **100% Native APT Compatibility:** Custom updaters (`do_anduinos_upgrade`, `do-anduinos-autorepair`) are officially retired. AnduinOS now relies purely on `sudo apt update && sudo apt upgrade`, preserving seamless compatibility with standard Ubuntu repositories and the broader software ecosystem.
 * **Dracut Ready:** We rigorously validated our packages under the `dracut` initramfs framework (supporting both `initrd` and `initrd.gz` conventions). Users can now safely replace `initramfs-tools` if they prefer.
@@ -103,7 +103,7 @@ AnduinOS 2 is shipped with GPL-v3 license. Apkg project is shipped with MIT lice
 
 ### Standing on the Shoulders of Giants
 
-AnduinOS 2.0.0 is built upon the incredible work of the open-source community. From the Linux Kernel and Ubuntu foundation, to the GNOME desktop and the Rust/Cargo ecosystem powering our native tools, we owe our existence to these projects. Please review our [Third-Party Open Source Software Acknowledgements](OSS-ACKNOWLEDGMENTS.md) for a comprehensive list of the upstream projects and licenses that make AnduinOS possible.
+AnduinOS 2.0.0 is built upon the incredible work of the open-source community. From the Linux Kernel and Ubuntu foundation, to the GNOME desktop and the Rust/Cargo ecosystem powering our native tools, we owe our existence to these projects. Please review our [Third-Party Open Source Software Acknowledgements](https://github.com/AiursoftWeb/AnduinOS-2/blob/master/OSS.md) for a comprehensive list of the upstream projects and licenses that make AnduinOS possible.
 
 ## v1.4.2
 
