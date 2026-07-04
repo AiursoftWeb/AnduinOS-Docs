@@ -30,7 +30,7 @@ sudo adduser $USER libvirt
 sudo adduser $USER kvm
 ```
 
-You may also want to isntall `virt-viewer` to view the virtual machine console:
+You may also want to install `virt-viewer` to view the virtual machine console:
 
 ```bash title="Install Virt Viewer"
 sudo apt install virt-viewer

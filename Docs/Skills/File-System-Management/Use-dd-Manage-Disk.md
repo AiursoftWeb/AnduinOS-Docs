@@ -126,7 +126,7 @@ Restores the image to the original disk (destructive!).
 dd if=/dev/sda of=/dev/sdb bs=4M status=progress
 ```
 
-Copies `/dev/sda` directly onto `/dev/sdb`. Useful for migration or duplicaion.
+Copies `/dev/sda` directly onto `/dev/sdb`. Useful for migration or duplication.
 
 ### 4. Wipe a Disk
 

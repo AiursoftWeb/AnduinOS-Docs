@@ -301,7 +301,7 @@ sudo apt-get install crowdsec
 
     You can change this port by editing the `/etc/crowdsec/crowdsec.yaml` file.
 
-CrowdSec is a senario-based security tool. You can list all the scenarios by running:
+CrowdSec is a scenario-based security tool. You can list all the scenarios by running:
 
 ```bash title="List all CrowdSec scenarios"
 sudo cscli scenarios list

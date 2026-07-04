@@ -14,7 +14,7 @@ In some cases, for example:
 
 You may need to build your own Kernel.
 
-!!! warning "You don't have to build because you can download it from Caonnical."
+!!! warning "You don't have to build because you can download it from Canonical."
 
     You don't have to build your own Kernel because Canonical provides the latest Kernel for Ubuntu. You can install the latest Kernel using the following command.
 
@@ -37,7 +37,7 @@ Here are 5 simple steps to build your own Kernel:
 
 First, you need to get the Kernel source code. You can get the Kernel source code from the [https://www.kernel.org/](https://www.kernel.org/) website.
 
-![kerele.org](./kernel-org.png)
+![kernel.org](./kernel-org.png)
 
 ### Option 1: Download the Kernel source code from the website
 
@@ -68,9 +68,9 @@ sudo apt install -y git
 git clone https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 ```
 
-!!! warning "The latest Tovralds' Kernel may not be able to build!"
+!!! warning "The latest Torvalds' Kernel may not be able to build!"
 
-    The latest tovralds Kernel may not be stable. It is better to download a stable version of the Kernel.
+    The latest Torvalds Kernel may not be stable. It is better to download a stable version of the Kernel.
 
 ## Step 2 - Install the required tools
 
@@ -162,7 +162,7 @@ Comment out those lines.
 #CONFIG_SYSTEM_REVOCATION_KEYS="debian/canonical-revoked-certs.pem"
 ```
 
-And press `ECS` and `:wq` to save the file.
+And press `Esc` and `:wq` to save the file.
 
 !!! note "It's optional to disable some features for best performance"
 

@@ -4,7 +4,7 @@
 
 ## Use for C\C++
 
-By defualt, your C program `#include` will import files under `/usr/include`. And your C++ program `#include` will import files under `/usr/include/c++/version`.
+By default, your C program `#include` will import files under `/usr/include`. And your C++ program `#include` will import files under `/usr/include/c++/version`.
 
 For example, if I want to build a program which should call curl, I need to install `libcurl4-openssl-dev`.
 
@@ -191,7 +191,7 @@ anduin@host:$ cat /etc/apt/sources.list.d/google-earth-pro.list
 deb [arch=amd64] http://dl.google.com/linux/earth/deb/ stable main
 ```
 
-You can add thrird-party repositories to `/etc/apt/sources.list.d/` and run `apt update` to download the latest package list from the third-party repositories.
+You can add third-party repositories to `/etc/apt/sources.list.d/` and run `apt update` to download the latest package list from the third-party repositories.
 
 `apt update` takes no arguments.
 

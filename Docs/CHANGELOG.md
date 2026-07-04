@@ -110,7 +110,7 @@ AnduinOS 2.0.0 is built upon the incredible work of the open-source community. F
 * Changed the default apt source to `https://ubuntu.mirror.letscloud.io/ubuntu/` for Brazil build.
 * Added `gstreamer1.0-plugins-base`, `gstreamer1.0-plugins-good`, `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly` and `libavcodec-extra` out of box for better video codec support.
 * The repair will download AnduinOS iso under the `Download` folder instead of `/tmp` folder.
-* The repair script will reject reparing `dracut` based system because there is a high risky to break the initrd.
+* The repair script will reject repairing `dracut` based system because there is a high risk to break the initrd.
 * Added an error prompt when the `do_anduinos_upgrade` script failed to connect to the server.
 * Bump the `the-sof-bin` to 2025.12 version to support more modern Intel audio devices and kernel versions.
 
@@ -155,7 +155,7 @@ AnduinOS 2.0.0 is built upon the incredible work of the open-source community. F
 * Changed the default apt source to `https://ubuntu.mirror.letscloud.io/ubuntu/` for Brazil build.
 * Added `gstreamer1.0-plugins-base`, `gstreamer1.0-plugins-good`, `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly` and `libavcodec-extra` out of box for better video codec support.
 * The repair will download AnduinOS iso under the `Download` folder instead of `/tmp` folder.
-* The repair script will reject reparing `dracut` based system because there is a high risky to break the initrd.
+* The repair script will reject repairing `dracut` based system because there is a high risk to break the initrd.
 * Added an error prompt when the `do_anduinos_upgrade` script failed to connect to the server.
 * Bump the `the-sof-bin` to 2025.12 version to support more modern Intel audio devices and kernel versions.
 
@@ -315,7 +315,7 @@ AnduinOS 2.0.0 is built upon the incredible work of the open-source community. F
 * Changed the default apt source to `https://ubuntu.mirror.letscloud.io/ubuntu/` for Brazil build.
 * Added `gstreamer1.0-plugins-base`, `gstreamer1.0-plugins-good`, `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly` and `libavcodec-extra` out of box for better video codec support.
 * The repair will download AnduinOS iso under the `Download` folder instead of `/tmp` folder.
-* The repair script will reject reparing `dracut` based system because there is a high risky to break the initrd.
+* The repair script will reject repairing `dracut` based system because there is a high risk to break the initrd.
 * Added an error prompt when the `do_anduinos_upgrade` script failed to connect to the server.
 
 ## v1.1.11
@@ -542,7 +542,7 @@ AnduinOS 2.0.0 is built upon the incredible work of the open-source community. F
   * Default document font: `Ubuntu Mono 13`
   * Default monospace font: `Monospace 11`
   * Default gnome-text-editor font: `Ubuntu Mono 13`
-* Nolonger install `info` to reduce the size of the ISO file.
+* No longer install `info` to reduce the size of the ISO file.
 * Added `alsa-utils`, `firmware-sof-signed` to support audio control.
 * Hide network stat icon on taskbar.
 * Hide power button on taskbar.
@@ -556,13 +556,13 @@ AnduinOS 2.0.0 is built upon the incredible work of the open-source community. F
 
 ## v0.1.4-beta
 
-* Scrolling on taskbar nolonger switch workspace.
+* Scrolling on taskbar no longer switch workspace.
 * Added a new shortcut `<Super> + G` to start screen recording.
 * Added a new shortcut `<Super> + F11` to toggle full screen.
 * Added a new shortcut `<Super> + BackSpace` to toggle the zoom feature.
 * Added a new shortcut `<Super> + M` to minimize the current window.
 * Added `cups` and `system-config-printer` packages to support printing.
-* The theme switcher gnome plugin will nolonger switch user's wallpaper. Set AnduinOS wallpaper as default.
+* The theme switcher gnome plugin will no longer switch user's wallpaper. Set AnduinOS wallpaper as default.
 * Patch arcmenu for localization "关机" "重启" "新增" "从开始菜单取消固定" "固定到任务栏"
 
 ## v0.1.3-beta
@@ -646,11 +646,11 @@ AnduinOS 2.0.0 is built upon the incredible work of the open-source community. F
 
 ## v0.0.5-alpha-jammy
 
-* First open terminal nolonger shows the `sudo` hint.
+* First open terminal no longer shows the `sudo` hint.
 * By default install with `ubuntu-session`, `yaru-theme-sound` and `yaru-theme-gnome-shell`
-* Nolonger install `MissionCenter` since it's an app image and may increase the size of the ISO file.
+* No longer install `MissionCenter` since it's an app image and may increase the size of the ISO file.
 * Install `gnome-system-monitor` and `gnome-sound-recorder` by default.
-* `Ctrl + Shift + ECS` will open `gnome-system-monitor` instead of `MissionCenter`.
+* `Ctrl + Shift + Esc` will open `gnome-system-monitor` instead of `MissionCenter`.
 * Fixed an issue that `Super + Left` and `Super + Right` may not work.
 * Patch Chinese localization for `shotwell.desktop`.
 * Reset arcmenu (start menu) icons to default for better localization.
@@ -662,11 +662,11 @@ AnduinOS 2.0.0 is built upon the incredible work of the open-source community. F
 * Fixed an issue that after system boot, gnome may show overview.
 * Fixed an issue that `Super + D` may not work.
 * Changed keyboard shortcut to make `Super + N` to open notification center.
-* Nolonger patch `/etc/fonts/local.conf`. Leave font configuration as default.
+* No longer patch `/etc/fonts/local.conf`. Leave font configuration as default.
 * Removed `qtwayland5` package to reduce the size of the image.
-* ISO file nolonger has the `Install` folder.
-* OS pretty name nolonger has the word `based on Ubuntu Jammy`.
-* Grub menu nolonger has the `Check Disk for defects` option.
+* ISO file no longer has the `Install` folder.
+* OS pretty name no longer has the word `based on Ubuntu Jammy`.
+* Grub menu no longer has the `Check Disk for defects` option.
 
 ## v0.0.3-alpha-jammy
 
