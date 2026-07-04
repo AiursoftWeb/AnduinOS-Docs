@@ -12,7 +12,7 @@ flatpak install flathub com.wps.Office
 
 !!! warning "This package is global version"
 
-    This package is global version, if you want to ues Chinese version, see [WPS Office CN](#wps-office-cn)
+    This package is global version, if you want to use Chinese version, see [WPS Office CN](#wps-office-cn)
 
 ## System install (manual)
 

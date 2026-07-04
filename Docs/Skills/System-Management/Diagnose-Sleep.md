@@ -296,4 +296,4 @@ execute NEW_INIT. PID must be 1. NEW_ROOT musst be a mountpoint.
 No init found. Try passing init= bootarg.
 ```
 
-A: This is a common error message when the system fails to find the initramfs or the init process. If this happend after you call `sudo systemctl hibernate`, it might because you didn't have swap partition or swap file. You can create a swap file by following the [official documentation](https://help.ubuntu.com/community/SwapFaq). Or simply disable hibernate by running `sudo systemctl mask hibernate.target`.
+A: This is a common error message when the system fails to find the initramfs or the init process. If this happened after you call `sudo systemctl hibernate`, it might be because you didn't have a swap partition or swap file. You can create a swap file by following the [official documentation](https://help.ubuntu.com/community/SwapFaq). Or simply disable hibernate by running `sudo systemctl mask hibernate.target`.

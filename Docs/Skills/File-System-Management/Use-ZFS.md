@@ -269,7 +269,7 @@ ZFS also supports the use of separate caching devices, such as solid-state drive
 
 Using separate caching devices can significantly improve performance in situations where system memory is limited or the workload is particularly read-intensive. However, using caching devices may also increase the cost of the storage system, so the benefits and costs need to be considered before implementing them.
 
-For exmaple, to use two Samsung NVME solid-state drives as ZFS cache devices, which can significantly improve read and write performance:
+For example, to use two Samsung NVME solid-state drives as ZFS cache devices, which can significantly improve read and write performance:
 
 Firstly, you need to allocate these two NVME solid-state drives to ZFS Intent Log (ZIL) and Level 2 Adaptive Replacement Cache (L2ARC) respectively.
 

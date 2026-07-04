@@ -6,7 +6,7 @@
 
 lsd is the next gen ls command. [source code](https://github.com/lsd-rs/lsd)
 
-You must have [Nerd Fonts](https://www.nerdfonts.com/) installed to ues lsd perfectly. But don't worry, the nerd fonts has already installed in AnduinOS by default. If your logo did't showup correctly in some ui, checkout your font settings.
+You must have [Nerd Fonts](https://www.nerdfonts.com/) installed to use lsd perfectly. But don't worry, the nerd fonts has already installed in AnduinOS by default. If your logo didn't show up correctly in some ui, check out your font settings.
 
 Install lsd to AnduinOS:
 

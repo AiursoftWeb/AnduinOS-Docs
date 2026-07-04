@@ -90,7 +90,7 @@ Host *
     ControlPersist 10m
 ```
 
-## 7. Git Commith with SSH Key Signing
+## 7. Git Commit with SSH Key Signing
 
 You can utilize your existing SSH Resident Key to sign Git commits. This eliminates the need for GPG software while maintaining hardware-level security.
 

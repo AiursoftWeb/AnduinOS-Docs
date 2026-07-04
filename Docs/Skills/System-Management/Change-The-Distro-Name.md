@@ -1,6 +1,6 @@
 # Change AnduinOS's distro name to other Linux distro names
 
-In some cases, for exmaple, some software may only support specific Linux distributions, you may need to change AnduinOS's distro name to other Linux distro names. In this guide, we will show you how to change AnduinOS's distro name to other Linux distro names.
+In some cases, for example, some software may only support specific Linux distributions, you may need to change AnduinOS's distro name to other Linux distro names. In this guide, we will show you how to change AnduinOS's distro name to other Linux distro names.
 
 For example, if you want to change AnduinOS to Ubuntu without reinstalling the system, you can follow these steps:
 
