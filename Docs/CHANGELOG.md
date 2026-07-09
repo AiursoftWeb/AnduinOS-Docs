@@ -15,6 +15,16 @@ sudo apt update
 sudo apt upgrade
 ```
 
+## v2.0.1 (Under development)
+
+* Added a new optional package (not pre-installed): `anduinos-why-ai`. It works as a unix-style CLI tool with LLM capabilities to answer questions completely offline — no internet connection required. It uses a local LLM based on `Gemma 4 E2B Q4_K_M`.
+* Added a new pre-installed app: `anduinos-swapcontrol-gtk`. It provides a GUI to control swap, Zswap, and Zram configuration. Zram is now enabled by default with 50% of RAM using the LZ4 algorithm. The default swappiness is changed to 100. [Learn more](./Skills/System-Management/Swap-Control-Strategy.md).
+* Cleaned up leftover Ubuntu default messages under `/etc/update-motd.d/`. The login MOTD now shows AnduinOS information only.
+* Added a new mode: **Separated** taskbar layout in AnduinOS Appearance Settings.
+* Added a new switch: **Show Activities button** in AnduinOS Appearance Settings.
+* ArcMenu: The second "Show All Apps" button is now hidden when using Classic mode.
+* Improved `anduinos-ufwall-gtk` localization and updated its icon.
+
 ## v2.0.0 - The Declarative Revolution
 
 AnduinOS v2.0.0 marks a fundamental, ground-up rewrite of our entire operating system. Listening to community feedback regarding maintainability and package management, we have completely reimagined how AnduinOS is built, distributed, and maintained.
