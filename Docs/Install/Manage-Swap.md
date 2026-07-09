@@ -1,79 +1,57 @@
 # Manage Swap
 
-Swap is a space on a disk that is used when the amount of physical RAM memory is full. When a Linux system runs out of RAM, inactive pages are moved from the RAM to the swap space.
+Swap is space that the kernel uses when physical RAM is full — inactive memory pages are moved to swap so that active applications can stay in RAM.
 
-If your system is running out of memory, you can create a swap file to increase the available memory.
+AnduinOS ships with **Zram enabled by default**: a compressed swap device that lives in RAM itself, using the fast LZ4 algorithm. On a fresh install you already have working swap — no manual setup is needed.
 
-However, for some systems, like distributed database systems, it is recommended to disable swap to avoid random performance issues.
+## Manage swap with the GUI
 
-!!! tip "Adjusting swap doesn't require a reboot"
+The recommended way to configure swap on AnduinOS is the **Swap Control** application. *(Added in AnduinOS 2.0.1)* It provides a graphical interface for:
 
-    You can adjust the swap space without rebooting the system.
+* Enabling or disabling the on-disk swap file
+* Adjusting the swappiness value
+* Configuring Zram size and compression algorithm
+* Switching between Zram and Zswap
 
-!!! note "Swap file vs Swap Partition"
+Launch it from the application menu or run:
 
-    A swap file is a file that is used as a swap space, while a swap partition is a dedicated partition that is used as a swap space.
-
-    A swap file is easier to create and manage than a swap partition, while a swap partition usually has better performance than a swap file.
-
-## Check if swap is enabled
-
-To check if swap is enabled, run the following command:
-
-```bash title="Check if swap is enabled"
-sudo swapon --show
+```bash
+swapcontrol-gtk
 ```
 
-Also you can use the `free` command to check the overall memory usage and swap usage:
+All changes are applied immediately and survive reboots.
 
-```bash title="Check swap usage"
+## Check your current swap
+
+```bash title="See active swap devices"
+swapon --show
+```
+
+```bash title="Memory and swap overview"
 free -h
 ```
 
-## Create a swap file
+If you see `/dev/zram0` in the output, Zram is active. If you also see `/swapfile`, you have an on-disk swap file as a secondary fallback.
 
-To create a swap file, run the following commands:
+## When to disable swap
 
-```bash title="Create a swap file"
-sudo fallocate -l 8G /swapfile # You can change the size and the name of the swap file
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile
-```
+For most workloads, you should keep swap enabled — the Zram default is designed to improve desktop responsiveness. However, some scenarios call for disabling it:
 
-To activate the swap file, run the following command:
+* **Distributed databases** (e.g. Cassandra, Elasticsearch nodes) where the database engine manages its own memory and OS swap causes unpredictable latency
+* **Kubernetes nodes** where the kubelet requires swap to be off
+* **Embedded systems** with severe storage constraints
 
-```bash title="Activate the swap file"
-sudo swapon /swapfile
-```
+To disable all swap immediately:
 
-To make the swap file permanent, add the following line to the `/etc/fstab` file:
-
-```bash title="Add the swap file to /etc/fstab"
-echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
-```
-
-## Disable swap
-
-To disable the swap, run the following command:
-
-```bash title="Disable swap"
-sudo swapoff -v /swapfile
-```
-
-To remove the swap file, run the following command:
-
-```bash title="Remove the swap file"
-sudo rm /swapfile
-```
-
-Don't forget to remove the swap file from the `/etc/fstab` file.
-
-## Totally disable swap
-
-To totally disable swap, you can directly run the following command:
-
-```bash title="Totally disable swap"
+```bash title="Disable all swap"
 sudo swapoff -a
 ```
 
-And that will disable all swap spaces.
+!!! warning "This is temporary"
+    Swap devices will return at the next reboot unless you also disable them permanently. Use the **Swap Control** GUI to make permanent changes, or disable the relevant systemd service (`anduinos-zram.service` for Zram).
+
+---
+
+!!! tip "Want to understand the architecture?"
+
+    For a deep dive into Zram, the five-layer swappiness priority system, manual tuning via `sysctl.d`, and what happens when swap-related packages are removed, see the **[Swap Control Strategy](../../Skills/System-Management/Swap-Control-Strategy.md)** article.
