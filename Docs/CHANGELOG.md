@@ -24,6 +24,10 @@ sudo apt upgrade
 * Added a new switch: **Show Activities button** in AnduinOS Appearance Settings.
 * ArcMenu: The second "Show All Apps" button is now hidden when using Classic mode.
 * Improved `anduinos-ufwall-gtk` localization and updated its icon.
+* Added an `Audit` page for `anduinos-ufwall-gtk` to inspect network traffic.
+* Added a package `anduinos-why-placeholder` to provide a placeholder for `anduinos-why-ai`. (Please note: This package is only a light-weight placeholder and does not include the actual LLM model.)
+* Added a new app `AnduinOS Exe launcher` and associated `.exe` file association to run Windows executables via Bottles (Wine + Proton) seamlessly. (Please note: It's only a light-weight wrapper and does not include Wine or Proton itself.)
+* Fixed `Amberol` Japanese localization issue.
 
 ## v2.0.0 - The Declarative Revolution
 
