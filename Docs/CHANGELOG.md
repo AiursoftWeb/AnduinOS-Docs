@@ -22,6 +22,7 @@ sudo apt upgrade
 * Cleaned up leftover Ubuntu default messages under `/etc/update-motd.d/`. The login MOTD now shows AnduinOS information only.
 * Added a new mode: **Separated** taskbar layout in AnduinOS Appearance Settings.
 * Added a new switch: **Show Activities button** in AnduinOS Appearance Settings.
+* Added a new `anduinos-oobe` app to provide Out-of-box-experience and helping users setting up basic features.
 * ArcMenu: The second "Show All Apps" button is now hidden when using Classic mode.
 * Improved `anduinos-ufwall-gtk` localization and updated its icon.
 * Added an `Audit` page for `anduinos-ufwall-gtk` to inspect network traffic.
