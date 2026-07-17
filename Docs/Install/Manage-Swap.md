@@ -6,20 +6,32 @@ AnduinOS ships with **Zram enabled by default**: a compressed swap device that l
 
 ## Manage swap with the GUI
 
-The recommended way to configure swap on AnduinOS is the **Swap Control** application. *(Added in AnduinOS 2.0.1)* It provides a graphical interface for:
+The recommended way to configure swap on AnduinOS is the **Swap Control** application. *(Added in AnduinOS 2.0.1)* It provides a comprehensive graphical interface for your virtual memory.
 
-* Enabling or disabling the on-disk swap file
-* Adjusting the swappiness value
-* Configuring Zram size and compression algorithm
-* Switching between Zram and Zswap
+1. Open your application menu and search for **Swap Control**.
+2. Alternatively, launch it from the terminal:
 
-Launch it from the application menu or run:
-
-```bash
+```bash title="Launch Swap Control GUI"
 swapcontrol-gtk
 ```
 
-All changes are applied immediately and survive reboots.
+### Dashboard (Memory Overview)
+
+The Dashboard provides a real-time overview of your system's memory pressure, showing exactly how much RAM is occupied by cache versus active applications, and the status of your compression subsystem.
+
+![Swap Control Dashboard](./swap-gtk-1.png)
+
+### Zram & Zswap Configuration
+
+Navigate to the **Zram** and **Swap** tabs to precisely tune your setup:
+* **Zram Devices**: Configure the size and compression algorithm (like `lz4` or `zstd`) for your in-memory swap.
+* **Disk Swap**: Enable or disable the physical swap file.
+* **Swappiness**: Adjust how aggressively the kernel swaps out memory (default is 100 to fully utilize Zram).
+
+![Swap Control Zram Tab](./swap-gtk-2.png)
+![Swap Control Disk Swap Tab](./swap-gtk-3.png)
+
+All changes made in the graphical interface are applied immediately and survive reboots.
 
 ## Check your current swap
 
@@ -52,6 +64,17 @@ sudo swapoff -a
 
 ---
 
-!!! tip "Want to understand the architecture?"
+## Architecture at a Glance
 
-    For a deep dive into Zram, the five-layer swappiness priority system, manual tuning via `sysctl.d`, and what happens when swap-related packages are removed, see the **[Swap Control Strategy](../Skills/System-Management/Swap-Control-Strategy.md)** article.
+The **Swap Control** GUI is a declarative configuration editor. It does not execute complex system commands directly; instead, it safely writes your choices to standard configuration files (`/etc/default/anduinos-zram` and `/etc/default/anduinos-zswap`) and restarts the backend systemd services. 
+
+On a fresh installation, these configuration files are completely empty, and the system seamlessly falls back to the highly optimized **AnduinOS Factory Defaults**:
+
+* **Zram**: Enabled at **50%** of total physical RAM.
+* **Compression**: Fast **LZ4** algorithm.
+* **Zswap**: Disabled (to prevent redundant compression).
+* **Swappiness (`vm.swappiness`)**: **100** (Prefers compressing idle memory into fast Zram rather than dropping useful file cache).
+* **Page Cluster (`vm.page-cluster`)**: **0** (Disables swap read-ahead, which is unnecessary for zero-latency RAM).
+
+!!! tip "Want to understand the architecture?"
+    For a deep dive into the declarative backend, the five-layer swappiness priority system, manual tuning via `sysctl.d`, and what happens when packages are removed, see the **[Swap Control Strategy](../Skills/System-Management/Swap-Control-Strategy.md)** advanced article.
