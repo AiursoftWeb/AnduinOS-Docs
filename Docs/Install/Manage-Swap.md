@@ -54,4 +54,4 @@ sudo swapoff -a
 
 !!! tip "Want to understand the architecture?"
 
-    For a deep dive into Zram, the five-layer swappiness priority system, manual tuning via `sysctl.d`, and what happens when swap-related packages are removed, see the **[Swap Control Strategy](../../Skills/System-Management/Swap-Control-Strategy.md)** article.
+    For a deep dive into Zram, the five-layer swappiness priority system, manual tuning via `sysctl.d`, and what happens when swap-related packages are removed, see the **[Swap Control Strategy](../Skills/System-Management/Swap-Control-Strategy.md)** article.
