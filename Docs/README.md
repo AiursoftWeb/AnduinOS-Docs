@@ -18,7 +18,7 @@ AnduinOS is a modern Linux distribution built and maintained by **[AIURSOFT LIMI
 
 ## How to install AnduinOS?
 
-To install AnduinOS, follow the instructions in the [Installation Guide](./Install/./System-Requirements.md).
+To install AnduinOS, follow the instructions in the [Installation Guide](https://www.anduinos.com/).
 
 ## What needs to be done after installing AnduinOS?
 

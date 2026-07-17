@@ -110,7 +110,7 @@ nav:
     - License: https://gitlab.aiursoft.com/anduin/anduinos/-/blob/1.2/LICENSE
   - Install:
     - Installing AnduinOS:
-      - System Requirements: Install/System-Requirements.md
+      - System Requirements: https://www.anduinos.com/
       - Download AnduinOS: Install/Download-AnduinOS.md
       - Burn a USB stick: Install/Burn-A-USB-Stick.md
       - Burn AnduinOS ToGo: Install/Burn-AnduinOS-ToGo.md
