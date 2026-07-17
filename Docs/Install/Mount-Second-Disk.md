@@ -1,7 +1,5 @@
 # Mount your second disk
 
-# Mount your second disk
-
 If you have a second disk in your computer, you can mount it to use as a dedicated storage drive (for games, media, or backups). 
 
 ## (Recommended) Mount via the Disks App

@@ -1,109 +1,65 @@
 # Switch to your language
 
-In case you installed AnduinOS with a language that you are not familiar with, you can switch to your preferred language by following the instructions below.
+If you installed AnduinOS in English but prefer to use a different language (like Japanese or Chinese), you can easily switch your system language, regional formats, and input methods.
 
-## Step 1: Install language pack
+## (Recommended) Change Language via Settings
 
-For example, if you want to switch to the Japanese language, you can install the Japanese language pack by running the following command:
+AnduinOS handles language packs and input methods automatically through the graphical settings. You do not need to manually install packages from the terminal.
 
-```bash title="Install Japanese language pack"
-sudo apt install language-pack-ja language-pack-gnome-ja
-```
+### Step 1: Install Language Packs
+1. Open your application menu and launch **Settings**.
+2. Navigate to **Region & Language** on the left sidebar.
 
-If I want to switch to Simplified Chinese, I can install the Chinese language pack by running the following command:
+![Settings Region & Language](./settings-region-language.png)
 
-```bash title="Install Chinese language pack"
+3. Click **Manage Installed Languages**. This will open the Language Support window.
+4. Click **Install / Remove Languages...**, check your desired language (e.g., Chinese or Japanese), and click Apply. The system will automatically download all necessary translations, fonts, and dictionaries.
+
+![Language Support App](./language-support-app.png)
+
+### Step 2: Switch the UI Language
+1. Go back to the **Region & Language** settings panel.
+2. Under "Your Account", click **Language** and select your newly installed language from the list.
+3. (Optional) Click **Formats** to change how dates, numbers, and currencies are displayed to match your region.
+4. A prompt will appear asking you to **Restart Session**. Log out and log back in for the new language to take effect.
+
+### Step 3: Add an Input Method (Keyboard)
+If you need to type in a language with complex characters (like Chinese Pinyin or Japanese Romaji), you need to add an input source.
+
+1. Open **Settings** and navigate to **Keyboard**.
+2. Under "Input Sources", click **Add Input Source**.
+3. Search for your language. For example, search for **Chinese (Rime)** or **Japanese (Anthy)**.
+   *(Note: AnduinOS pre-installs the excellent Rime engine for Chinese users).*
+
+![Settings Keyboard Input Sources](./settings-keyboard-input.png)
+
+You can now use the <kbd>Super</kbd> + <kbd>Space</kbd> shortcut to toggle between English and your new input method.
+
+---
+
+## (Alternative) Command Line Setup
+
+If you prefer managing your system via the terminal, you can configure your locale and install language packs using standard commands.
+
+!!! warning "Do not edit `~/.pam_environment`"
+    Older guides may tell you to edit `~/.pam_environment`. This feature has been permanently removed from modern Linux systems for security reasons. Use `localectl` instead.
+
+### 1. Install Language Packs
+```bash title="Install Chinese language packs"
+sudo apt update
 sudo apt install language-pack-zh-hans language-pack-gnome-zh-hans
 ```
 
-## Step 2: Set the language
-
-After installing the language pack, you can set the language by running the following command:
-
-```bash title="Set Japanese language"
-sudo update-locale LANG=ja_JP.UTF-8
+### 2. Set System Locale
+Use the `localectl` command, which safely writes to the system configuration:
+```bash title="Set locale to Simplified Chinese"
+localectl set-locale LANG=zh_CN.UTF-8
 ```
+*You must log out and log back in for the locale change to take effect.*
 
-If you want to switch to Simplified Chinese, you can set the language by running the following command:
-
-```bash title="Set Chinese language"
-sudo update-locale LANG=zh_CN.UTF-8
-```
-
-You can also manually edit the `/etc/default/locale` file and set the `LANG` variable to your preferred language.
-
-For example, if you want to switch to the Japanese language, you can set the `LANG` variable to `ja_JP.UTF-8`.
-
-```bash title="Edit /etc/default/locale to set Language"
-sudo nano /etc/default/locale
-```
-
-You need to log out and log back in for the changes to take effect.
-
-## Step 3: Edit pam configuration for current user
-
-If your language is not set correctly, you may need to edit the PAM configuration for the current user.
-
-You may also need to edit the PAM configuration to set the correct language. You can do this by editing the `~/.pam_environment` file and adding the following lines:
-
-```bash title="~/.pam_environment to set Japanese"
-LANG=ja_JP.UTF-8
-LANGUAGE=ja_JP:ja
-LC_MESSAGES=ja_JP.UTF-8
-```
-
-For example, if I want to set to Chinese, I can set the `LANG` variable to `zh_CN.UTF-8`.
-
-```bash title="~/.pam_environment to set Chinese"
-LANG=zh_CN.UTF-8
-LANGUAGE=zh_CN:zh
-LC_MESSAGES=zh_CN.UTF-8
-```
-
-## Step 4: Install correct input method
-
-If you are using a non-English language, you may need to install the correct input method to type in your language.
-
-For example, if you are using the Japanese language, you can install the `ibus-anthy` input method by running the following command:
-
-```bash title="Install Japanese input method anthy"
-sudo apt install ibus-anthy
-```
-
-If you are using the Chinese language, you can install the `ibus-rime` input method by running the following command:
-
-```bash title="Install Chinese input method rime"
-sudo apt install ibus-rime
-```
-
-Log out and log back in for the changes to take effect.
-
-You can then configure the input method by going to `Settings -> Keyboard -> Input Sources` and adding the input method for your language.
-
-## Step 5: Switch timezone
-
-You may also want to switch the timezone to your local timezone. You can do this by going to `Settings -> Date & Time` and selecting your local timezone.
-
-Or if you want to switch the timezone using the command line, you can run the following command:
-
-```bash title="Switch to Japanese timezone"
-sudo timedatectl set-timezone Asia/Tokyo
-```
-
-If you want to switch to the Chinese timezone, you can run the following command:
-
-```bash title="Switch to Chinese timezone"
+### 3. Switch Timezone
+If your system clock is incorrect, you can change your timezone from the command line:
+```bash title="Set timezone to Shanghai"
 sudo timedatectl set-timezone Asia/Shanghai
 ```
-
-To view available timezones, you can run the following command:
-
-```bash title="List available timezones"
-ls /usr/share/zoneinfo -R
-```
-
-And you can manually edit the `/etc/timezone` file and set the timezone to your preferred timezone.
-
-## Step 6: Switch apt source
-
-You may also want to switch the apt source to a mirror that is closer to your location. You can follow the instructions in the [Select best apt source](./Select-Best-Apt-Source.md) guide to switch the apt source.
+*(To view all available timezones, use `timedatectl list-timezones`).*
