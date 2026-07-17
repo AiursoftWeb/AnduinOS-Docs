@@ -6,7 +6,7 @@ To get the latest update, you can use the following command:
 sudo do_anduinos_upgrade
 ```
 
-Please note: `do_anduinos_upgrade` will only update in a forked version of AnduinOS. Please read more about versions upgrade [here](./VERSIONS.md).
+Please note: `do_anduinos_upgrade` will only update in a forked version of AnduinOS. Please read more about versions upgrade [here](https://www.anduinos.com/HistoryBuilds.html).
 
 Please note: `do-anduinos-autorepair` command is added in v1.1.11, v1.3.8 and v1.4.1 to help users to fix common system issues. This command will download latest AnduinOS ISO and try to repair the system by comparing the system files with the ISO image.
 

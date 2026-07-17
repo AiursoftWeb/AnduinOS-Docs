@@ -10,7 +10,7 @@ This is the official repository for AnduinOS documentation.
 
 AnduinOS is available in two version branches: LTS and Standard. The LTS version is recommended for most users, while the Standard version is recommended for developers and tech enthusiasts.
 
-To view current version release schedules, see the [AnduinOS Version Release Schedule](./VERSIONS.md).
+To view current version release schedules, see the [AnduinOS Version Release Schedule](https://www.anduinos.com/HistoryBuilds.html).
 
 ## What is AnduinOS?
 
