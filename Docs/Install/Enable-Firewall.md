@@ -12,9 +12,43 @@ The primary reason for keeping the firewall off by default is to prevent a frust
 
 This "clean slate" approach also aligns perfectly with modern computing practices. In cloud environments like AWS or Google Cloud, network security is typically managed at a higher level by "Security Groups," making a host-based firewall redundant and an extra layer of complexity. Similarly, for users who automate deployments with tools like Ansible, starting with a predictable, disabled firewall makes scripting easier and more reliable. UFW remains a powerful and simple tool, ready for you to enable with a single command (`sudo ufw enable`) as soon as you open your first network port to the world.
 
-## How to Enable the Firewall
+## (Recommended) Enable Firewall via Welcome Center
 
-To enable the firewall on AnduinOS, simply run the following command in your terminal:
+For most users, the easiest way to manage your firewall without touching the command line is through the **AnduinOS Welcome Center**:
+
+1. Open **Welcome Center** (AnduinOS OOBE) from your application menu.
+2. Navigate to the **Security & Privacy** page.
+3. Locate the **Network Firewall (UFW)** card and toggle it **On**.
+
+The Welcome Center will securely enable the firewall in the background.
+
+## (Recommended) Advanced Configuration via Firewall App
+
+While the Welcome Center provides a convenient on/off switch, you will often need to create specific rules (such as allowing SSH, or opening a port for a web server). For this, AnduinOS includes a dedicated, user-friendly graphical application called **Firewall** (based on `ufwall-gtk`).
+
+1. Open your application menu and search for **Firewall**.
+   *(If it's not installed, you can easily install it via the App Store or terminal: `sudo apt install anduinos-ufwall-gtk`)*.
+2. Enter your password to unlock the interface.
+3. Turn the **Status** toggle to **ON**.
+
+![AnduinOS Firewall Main Interface](./ufwall-gtk-main.png)
+
+4. To safely allow SSH or other services:
+   - Navigate to the **Rules** tab.
+
+![AnduinOS Firewall Rules Tab](./ufwall-gtk-rules.png)
+
+   - Click the **+** button at the bottom.
+   - Choose **Preconfigured** or **Simple** to easily allow services like SSH, HTTP, etc.
+   - Click **Add**.
+
+![AnduinOS Firewall Add Rule Dialog](./ufwall-gtk-add-rule.png)
+
+This is the safest and most intuitive way to ensure you don't accidentally lock yourself out!
+
+## (Alternative) Command Line Installation
+
+To enable the firewall on AnduinOS using the terminal, simply run the following command:
 
 ```bash title="Enable Firewall"
 sudo ufw enable
