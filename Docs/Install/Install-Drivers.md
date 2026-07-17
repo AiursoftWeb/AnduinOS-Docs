@@ -6,20 +6,18 @@ After installing AnduinOS, hopefully all devices are functioning properly. Howev
 
     Some drivers are not open source and may have licensing restrictions. Please make sure you have the right to use these drivers before installing them.
 
-## Automatic installation
+## (Recommended) Using AnduinOS Welcome Center
 
-To install drivers automatically, open the terminal and run the following command:
+The easiest way to install missing hardware drivers (such as NVIDIA Graphics and Xbox Controllers) is via the built-in **AnduinOS Welcome Center**. The Welcome Center automatically detects your hardware and securely configures necessary drivers with proper module signing.
 
-```bash title="Install drivers automatically"
-sudo apt update
-sudo ubuntu-drivers install
-```
+1. Open **Welcome Center** (AnduinOS OOBE) from your application menu.
+2. Navigate through the setup to find dedicated pages for Graphics and Controllers.
 
-This command will install the recommended drivers for your system. After the installation is complete, reboot your system.
+For more detailed guides on specific drivers, see the sections below.
 
 ## Nvidia Graphics Driver
 
-To install the Nvidia graphics driver, please follow document [here](./Install-Nvidia-Drivers.md).
+To install the Nvidia graphics driver, please follow the detailed [NVIDIA Drivers Installation Guide](./Install-Nvidia-Drivers.md).
 
 ## Intel Graphics Driver
 
@@ -66,21 +64,34 @@ You can use the NPU to run some AI models, like `DeepSeek R1`. For more details 
 
 ## Xbox Controller Driver
 
-By default, AnduinOS supports Xbox controllers. However you may encounter issues with the latest Xbox controllers, such as the Xbox Series X controller.
+By default, AnduinOS supports Xbox controllers. However, you may encounter issues with the latest Xbox controllers, such as the Xbox Series X controller (e.g., incorrect `LT` or `RT` triggers response). In this case, you need to install the advanced `xpadneo` driver.
 
-The issue may be like when you press `LT` or `RT`, the controller will not respond correctly. In this case, you need to install the `xpadneo` driver.
+### (Recommended) Using AnduinOS Welcome Center
 
-To read more about the `xpadneo` driver, please refer to the [xpadneo GitHub repository](https://github.com/atar-axis/xpadneo).
+The easiest and safest way to install this driver—especially if you have **Secure Boot enabled**—is via the built-in Welcome Center, which automatically configures module signing for you:
 
-You can install the `xpadneo` driver by running the following commands:
+1. Open **Welcome Center** (AnduinOS OOBE) from your application menu.
+2. Navigate to the **Xbox Controller Support** page.
+3. Click **Install Xbox Driver**.
+4. Once completed, reboot your system. If you previously paired your controller, remove it from Bluetooth settings and re-pair it.
 
-```bash title="Install xpadneo driver"
-git clone https://github.com/atar-axis/xpadneo.git
-cd xpadneo
-sudo ./install.sh
+![Xbox Controller Support via Welcome Center](anduinos-oobe-xbox.png)
+
+### (Alternative) Command Line Installation
+
+If you prefer to install via the command line, you can install the `anduinos-xbox-controller-driver` package directly. 
+
+!!! warning "Secure Boot Requirements"
+    If you have Secure Boot enabled, ensure you have enrolled the AnduinOS system MOK (either via Welcome Center or MokManager). Ubuntu/AnduinOS configures DKMS automatically to sign modules using your system's MOK during the installation.
+
+Run the following commands to install the driver:
+
+```bash title="Install Xbox controller driver via APT"
+sudo apt update
+sudo apt install -y anduinos-xbox-controller-driver
 ```
 
-And the reboot your system. If you have previously connected the Xbox controller, you need to remove it from the Bluetooth devices and re-pair it.
+After installation, reboot your system. If you have previously connected the Xbox controller, you need to remove it from your Bluetooth devices and re-pair it.
 
 ## Build the Kernel
 

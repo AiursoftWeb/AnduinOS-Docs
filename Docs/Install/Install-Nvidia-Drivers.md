@@ -12,9 +12,21 @@ This guide provides a comprehensive approach to installing proprietary NVIDIA dr
 - Internet connection to download drivers and dependencies.
 - Backup your system or important data before proceeding with driver installations.
 
-## Automatic Installation (Recommended for Most Users)
+## (Recommended) Using AnduinOS Welcome Center
 
-For most users, letting **Ubuntu (and thus AnduinOS)** automatically detect and install the recommended NVIDIA drivers is the simplest and quickest method:
+For most users, the easiest way to install the recommended NVIDIA drivers is via the built-in **AnduinOS Welcome Center**:
+
+1. Open **Welcome Center** (AnduinOS OOBE) from your application menu.
+2. Navigate to the **Unleash Your Graphics Hardware** (NVIDIA) page.
+3. Click the **One-Click NVIDIA Driver Install** button.
+4. The system will automatically detect your NVIDIA GPU, download, and install the recommended proprietary driver.
+5. **Reboot** your system to apply the changes.
+
+![One-Click NVIDIA Driver Install via Welcome Center](anduinos-oobe-nvidia.png)
+
+## (Alternative) Automatic CLI Installation
+
+If you prefer using the terminal, you can let the system automatically detect and install the recommended driver using the command line:
 
 ```bash
 sudo apt update
@@ -29,17 +41,19 @@ sudo ubuntu-drivers install
 
     The automatically installed driver might **not** be the latest available from NVIDIA. If you require newer drivers—for example, to support newer GPU models or software features—you should proceed with the **Manual Installation** instructions.
 
-!!! warning "Nvidia drivers may have a lot of bugs..."
+!!! warning "Known Issues and Stability"
 
-    The NVIDIA drivers may have a lot of bugs. If you encounter any issues, please report them to the [NVIDIA developer forum](https://forums.developer.nvidia.com/c/linux/). You can also check the [NVIDIA driver release notes](https://www.nvidia.com/en-us/drivers/unix/) for known issues and fixes.
+    NVIDIA proprietary drivers can sometimes introduce regressions or stability issues, especially with Wayland or very recent kernels. If you encounter issues, please check the [NVIDIA driver release notes](https://www.nvidia.com/en-us/drivers/unix/) or report them to the [NVIDIA Developer Forum](https://forums.developer.nvidia.com/c/linux/).
 
-    To mitigate, it is recommended to use an older version of the NVIDIA driver. And use Xorg instead of Wayland.
+    If you experience visual glitches or crashes, you can try:
+    - Falling back to an older, more stable driver version.
+    - Switching your display server from Wayland to Xorg on the login screen.
 
-    To view available NVIDIA driver versions, you can use the following command:
+    To list all available NVIDIA driver versions for your hardware, use:
 
-   ```bash title="List available NVIDIA driver versions"
-   ubuntu-drivers list --gpgpu
-   ```
+    ```bash title="List available NVIDIA driver versions"
+    ubuntu-drivers list --gpgpu
+    ```
 
 ---
 
@@ -57,7 +71,7 @@ sudo apt update
 This PPA contains the latest NVIDIA drivers. After adding the PPA, you can install the driver using:
 
 ```bash title="Install NVIDIA driver from PPA"
-sudo apt install nvidia-graphics-drivers-575 # Replace '575' with the desired driver version
+sudo apt install nvidia-driver-550 # Replace '550' with the desired driver version
 ```
 
 Then reboot your system:
@@ -113,28 +127,28 @@ This ensures no leftover packages interfere with the new installation.
 
 ---
 
-### Step 3: (Optional) Signing Keys for Secure Boot
+### Step 3: (Optional) Prepare Keys for Secure Boot
 
 Secure Boot ensures your system only loads drivers or kernel modules signed by a trusted key. If **Secure Boot is enabled** in your BIOS/UEFI, you **must** sign the NVIDIA driver module. If Secure Boot is **disabled**, you can skip this step—but it is **strongly recommended** to keep Secure Boot enabled.
 
-1. **Generate a private key and a self-signed certificate**:
+**Good news for AnduinOS users:** AnduinOS automatically generates a Machine Owner Key (MOK) for you during system installation, located at `/var/lib/shim-signed/mok/`. You DO NOT need to generate a new one!
+
+1. **Verify if your key is already enrolled**:
+
+   If you already completed the First Boot setup (Welcome Center) and enrolled the Secure Boot certificate, you are good to go. You can verify it by running:
 
    ```bash
-   mkdir ~/my-keys
-   cd ~/my-keys
-   openssl req -new -newkey rsa:2048 -days 36500 -nodes -keyout MOK.key -out MOK.csr
-   openssl x509 -req -in MOK.csr -signkey MOK.key -out MOK.crt
-   openssl x509 -in MOK.crt -outform DER -out MOK.der
+   sudo mokutil --test-key /var/lib/shim-signed/mok/MOK.der
    ```
 
-   - `MOK.key` is your **private key**. 
-   - `MOK.crt` is your **public certificate**.
-   - `MOK.der` is your certificate in DER format for enrollment.
+   If it says `is already enrolled`, you can skip to **Step 4**.
 
-2. **Enroll your key using `mokutil`**:
+2. **Enroll your key (if not already enrolled)**:
+
+   If the key is not enrolled, you can easily enroll it via the Welcome Center's **Security** tab, or manually using:
 
    ```bash
-   sudo mokutil --import MOK.der
+   sudo mokutil --import /var/lib/shim-signed/mok/MOK.der
    ```
 
    You will be prompted to create a password. **Remember this password**, as you will use it after the reboot.
@@ -145,16 +159,10 @@ Secure Boot ensures your system only loads drivers or kernel modules signed by a
    sudo reboot
    ```
 
-   - During the boot, **MokManager** appears.
+   - During the boot, **MokManager** appears (a blue screen).
    - Select **"Enroll MOK"**, then **"Continue"**.
    - Enter the password you set previously.
    - Confirm to enroll the key and reboot again.
-
-4. **Verify your key is enrolled**:
-
-   ```bash
-   sudo mokutil --list-enrolled
-   ```
 
    The output should list your certificate. If it is listed, Secure Boot should now trust modules signed with your private key.
 
@@ -266,14 +274,12 @@ sudo systemctl set-default graphical.target
      - **Recommended** to install if you run software such as Steam, Wine, or certain games requiring 32-bit libraries.
      - **Not necessary** if you only run 64-bit applications.
    - **Signing the module (if Secure Boot is enabled)**:
-     - Provide the **absolute path** to your **private key**: e.g., `/home/anduin/my-keys/MOK.key`.
-     - Do **not** use `~/my-keys/MOK.key` (relative paths may cause errors).
-     - You must also have your corresponding `.crt` in the same directory for verification.
+     - The installer will ask if you want to sign the kernel module. Select **Yes**.
+     - Provide the **absolute path** to your **private key**: `/var/lib/shim-signed/mok/MOK.priv`
+     - Provide the **absolute path** to your **public certificate**: `/var/lib/shim-signed/mok/MOK.der`
 
 !!! warning "Provide the Correct Key"
 
-    - **`.key`** = private key  
-    - **`.crt`** = public certificate  
     Installing the driver will automatically sign the kernel module with your private key if configured correctly.
 
 ---
@@ -324,19 +330,23 @@ Depending on your system, you may be running **Xorg** or **Wayland**. In many ca
    - You can select between **Xorg** and **Wayland** at the login screen (Gear icon or session dropdown).
    - Some distributions default to Wayland; if you experience issues, try switching to Xorg.
 
-3. **Adjust your resolution** (example using `xrandr`):
+3. **Adjust your resolution** (For Xorg users):
+
+   If you are on Xorg, you can use `xrandr` to list available modes:
 
    ```bash
    xrandr
    ```
 
-   This lists available modes. To set a specific resolution and refresh rate:
+   To set a specific resolution and refresh rate:
 
    ```bash
    xrandr --output HDMI-0 --mode 3840x2160 --rate 144
    ```
 
    Replace `HDMI-0` with the correct output device name (it can be `DP-0`, `DVI-D-0`, etc.).
+
+   *(Note: If you are using **Wayland**, `xrandr` cannot change your resolution. Please use the system's Display Settings GUI instead).*
 
 ---
 
@@ -378,13 +388,13 @@ Secure Boot is a UEFI feature that prevents untrusted (unsigned) code from runni
 
 The simplest solution is to **reboot, enter your PC's BIOS/UEFI setup, and set Secure Boot to "Disabled"**. This is the easiest fix and has minimal security impact for most users.
 
-The "correct" solution is to enroll the driver's key (MOK). During driver installation (both `apt` and `.run`), you should be prompted to create a MOK password. After you set it, you *must* reboot. A blue "MOK management" screen will appear. Select "Enroll MOK," "Continue," and enter the password you just created. This "authorizes" the driver for Secure Boot.
+The "correct" solution is to enroll the AnduinOS system MOK. Simply open the **AnduinOS Welcome Center**, navigate to the **Security** tab, and click to enroll the Secure Boot certificate. You will set a password, reboot, and enter it in the blue "MOK management" screen (MokManager). This securely authorizes the NVIDIA driver to load under Secure Boot.
 
 ### 4. Updates break the driver
 
 This is related to point 2. If you installed your driver using the official `.run` file from NVIDIA's website, that driver is compiled *only* for your current kernel. **You must re-run the installer file every time AnduinOS updates its kernel.**
 
-To avoid this, we strongly recommend installing drivers from the AnduinOS/Ubuntu repositories (e.g., `sudo apt install nvidia-driver-550`). These packages use **DKMS** (Dynamic Kernel Module Support).
+To avoid this, we strongly recommend installing drivers via the **Welcome Center** or using the APT repositories (e.g., `sudo apt install nvidia-driver-550`). These methods use **DKMS** (Dynamic Kernel Module Support).
 
 DKMS automatically rebuilds the NVIDIA module every time your kernel is updated, which prevents this problem from happening. It's the "set it and forget it" solution.
 
