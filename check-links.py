@@ -33,6 +33,9 @@ def extract_yml_image_refs(yml_path: Path, base: Path = None) -> set[str]:
     for m in re.finditer(r'(?:logo|favicon|icon|image|src)\s*:\s*(.+)', text):
         val = m.group(1).strip().strip('"').strip("'")
         if val and not val.startswith(("http://", "https://")):
+            # MkDocs Material uses icon: material/something, which isn't a file
+            if not any(val.lower().endswith(ext) for ext in IMG_EXTS):
+                continue
             target = (base / val).resolve()
             images.add(str(target))
     return images
@@ -128,10 +131,20 @@ def main():
                 for s in sources:
                     print(f"      - {s}")
                 broken += 1
+    
+    # Check broken images
+    for target, sources in sorted(all_refd_images.items()):
+        if not Path(target).exists():
+            print(f"\n  ✗ (Image) {Path(target).name}")
+            print(f"    Referenced by:")
+            for s in sources:
+                print(f"      - {s}")
+            broken += 1
+            
     if broken == 0:
-        print("  ✓ No broken internal links found.")
+        print("  ✓ No broken internal links or images found.")
     else:
-        print(f"\n  Total: {broken} broken link(s)")
+        print(f"\n  Total: {broken} broken link(s)/image(s)")
 
     # --- Unused images ---
     unused = 0
@@ -149,11 +162,60 @@ def main():
     else:
         print(f"\n  Total: {unused} unused image(s)")
 
-    # --- Links that reference directories (ambiguous) ---
-    # (Skipping for brevity — mkdocs resolves /index.md, etc.)
+    # --- Orphaned Markdown Files ---
+    orphans = 0
+    print("\n" + "=" * 60)
+    print("ORPHANED MARKDOWN FILES (Not in properdocs.yml)")
+    print("=" * 60)
+    
+    # Parse properdocs.yml for linked md files
+    yml_text = ""
+    for yml in yml_files:
+        yml_text += yml.read_text(encoding="utf-8")
+    
+    # Also include files linked from other md files
+    all_refd_md_paths = {Path(p) for p in all_refd_links}
+    
+    for md in sorted(md_files):
+        rel_md = str(md.relative_to(DOCS_DIR))
+        # Skip README.md and index.md
+        if md.name.lower() in ["readme.md", "index.md"]:
+            continue
+        
+        # Check if mentioned in properdocs.yml or linked directly
+        if rel_md not in yml_text and md not in all_refd_md_paths:
+            print(f"  ✗ {rel_md}")
+            orphans += 1
+            
+    if orphans == 0:
+        print("  ✓ No orphaned markdown files found.")
+    else:
+        print(f"\n  Total: {orphans} orphaned markdown file(s)")
+        
+    # --- Empty or Meaningless Documents ---
+    empty_docs = 0
+    print("\n" + "=" * 60)
+    print("EMPTY OR STUB DOCUMENTS")
+    print("=" * 60)
+    
+    for md in sorted(md_files):
+        text = md.read_text(encoding="utf-8").strip()
+        # Strip out headers and empty lines
+        lines = [line.strip() for line in text.splitlines() if line.strip() and not line.startswith("#")]
+        
+        # If file is too small or has less than 2 actual lines of content
+        if len(text) < 30 or len(lines) < 2:
+            rel_md = str(md.relative_to(DOCS_DIR))
+            print(f"  ✗ {rel_md} (Too short/stub: {len(text)} bytes)")
+            empty_docs += 1
+            
+    if empty_docs == 0:
+        print("  ✓ No empty documents found.")
+    else:
+        print(f"\n  Total: {empty_docs} empty document(s)")
 
     print()
-    return 0 if (broken + unused) == 0 else 1
+    return 0 if (broken + unused + orphans + empty_docs) == 0 else 1
 
 if __name__ == "__main__":
     sys.exit(main())
