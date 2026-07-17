@@ -23,4 +23,4 @@ That's it! You can now run sudo commands without entering your password.
 Instead of completely disabling passwords (which is risky), we highly recommend configuring Linux to accept a physical touch on a YubiKey as authentication. This offers **password-less convenience** with **hardware-level security**.
 
 Check out our dedicated guide in the Skills section: 
-👉 [Use YubiKey to Authenticate Sudo and Login](../Skills/Secret-Management/Use-Yubikey-To-Login.md)
+👉 [Use YubiKey to Authenticate Sudo and Login](../Skills/Secret-Management/Use-Yubikey-For-PAM-Auth.md)

@@ -119,4 +119,4 @@ To test the configuration, reboot your system. When prompted for the disk passwo
 
 To enhance your system's security further, you can also configure your Linux desktop login to use the same YubiKey for authentication. This allows you to log in by simply touching your YubiKey, providing both convenience and strong security.
 
-You can read more about this setup [here](./Use-Yubikey-To-Login.md).
+You can read more about this setup [here](./Use-Yubikey-For-PAM-Auth.md).

@@ -170,7 +170,7 @@ nav:
       - Run Windows Apps with Wine: Skills/Sandboxing/Run-Windows-Apps.md
     - Secret Management:
       - Use Yubikey to unlock LUKS: Skills/Secret-Management/Use-Yubikey-To-Unlock-LUKS.md
-      - Use Yubikey to login: Skills/Secret-Management/Use-Yubikey-To-Login.md
+      - Use Yubikey to login: Skills/Secret-Management/Use-Yubikey-For-PAM-Auth.md
       - Manage SSH Keys: Skills/Secret-Management/Manage-SSH-Keys.md
       - Manage SSH Keys with Yubikey: Skills/Secret-Management/Manage-SSH-Keys-with-Yubikey.md
     - Developing:
