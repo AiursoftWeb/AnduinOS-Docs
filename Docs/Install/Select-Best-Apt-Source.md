@@ -1,8 +1,21 @@
 # Select best apt source
 
-By default, AnduinOS may not selected the best APT source for you. You need to set the best APT source for your system to speed up the installation process.
+By default, AnduinOS may not have selected the most optimal APT source for your region. You can easily test and apply the best APT mirror for your system to speed up software installation and updates.
 
-To select the best APT source for your system, run the following command in the terminal:
+## (Recommended) Using AnduinOS Welcome Center
+
+The easiest way to find and configure the fastest APT mirror is via the built-in **AnduinOS Welcome Center**:
+
+1. Open **Welcome Center** (AnduinOS OOBE) from your application menu.
+2. In the OOBE setup wizard or the settings interface, navigate to the **Keep Your System Up to Date** page.
+3. Click the **Find Fastest Mirror** button.
+4. The system will automatically test a comprehensive list of mirrors and apply the fastest one for you.
+
+![Find Fastest Mirror via Welcome Center](anduinos-oobe-find-fastest-mirror.png)
+
+## (Advanced) Using the Command Line
+
+If you prefer to configure the mirror via the command line or are on a headless system, you can run the following script in the terminal. The script will automatically test available mirrors, find the fastest one for your region, and update your APT source list accordingly.
 
 ```bash title="Select best apt source"
 # Check current APT source format status
