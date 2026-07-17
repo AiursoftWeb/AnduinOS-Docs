@@ -143,6 +143,7 @@ nav:
     - Introduction: Skills/Introduction.md
     - System Management:
       - Swap Control Strategy: Skills/System-Management/Swap-Control-Strategy.md
+      - Advanced Power Management: Skills/System-Management/Advanced-Power-Management.md
       - Diagnose Sleep: Skills/System-Management/Diagnose-Sleep.md
       - Check system layout: Skills/System-Management/Check-System-Layout.md
       - Change the Distro Name: Skills/System-Management/Change-The-Distro-Name.md

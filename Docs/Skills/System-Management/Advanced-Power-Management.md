@@ -131,7 +131,7 @@ sudo systemctl unmask sleep.target suspend.target hibernate.target hybrid-sleep.
 
 This command will allow the system to sleep when the computer is inactive while connected to AC power.
 
-To further diagnose sleep issues, you can refer to the [Diagnose Sleep](../Skills/System-Management/Diagnose-Sleep.md) guide.
+To further diagnose sleep issues, you can refer to the [Diagnose Sleep](./Diagnose-Sleep.md) guide.
 
 ## Configure auto sleep settings
 

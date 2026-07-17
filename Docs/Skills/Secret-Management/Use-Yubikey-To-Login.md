@@ -65,7 +65,32 @@ This will revert the changes and allow you to log in with your password again.
 
 ## Use Yubikey to authenticate sudo commands
 
-To use your YubiKey for authenticating `sudo` commands, you need to modify the PAM configuration for `sudo`. Read the instructions [here](../../Install/Allow-Sudo-Without-Password.md)
+If you want to use your YubiKey for authenticating `sudo` commands (giving you passwordless convenience with hardware security), you can modify the PAM configuration for `sudo`.
+
+!!! danger "NOPASSWD conflicts with YubiKey PAM"
+    If you have `NOPASSWD:ALL` set in `/etc/sudoers.d/`, sudo **completely skips** the PAM authentication stack — your YubiKey will never be asked for. The two settings are mutually exclusive. Ensure you do not have NOPASSWD enabled if you want to use YubiKey.
+
+Run this script to configure sudo to accept your registered YubiKey:
+
+```bash title="Step 3: Configure sudo PAM for YubiKey"
+# Check if already configured
+if grep -q "pam_u2f.so" /etc/pam.d/sudo; then
+    echo "⚠️  Sudo PAM is already configured for YubiKey."
+else
+    # Backup original config
+    sudo cp /etc/pam.d/sudo /etc/pam.d/sudo.bak
+
+    # Insert the auth rule at line 2 (right after include common-auth)
+    sudo sed -i '2i auth       sufficient   pam_u2f.so cue' /etc/pam.d/sudo
+    echo "✅ PAM configured."
+fi
+
+# Test: clear sudo cache and verify YubiKey is required
+echo ""
+echo "👉 Testing — touch your YubiKey when LED flashes..."
+sudo -k
+sudo ls 2>&1 && echo "✅ YubiKey sudo authentication works!" || echo "❌ Test failed"
+```
 
 ## Query which keys are trusted by your system
 
