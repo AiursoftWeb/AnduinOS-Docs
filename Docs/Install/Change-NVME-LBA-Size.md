@@ -52,7 +52,7 @@ LBA Format  0 : Metadata Size: 0   bytes - Data Size: 512 bytes - Relative Perfo
 LBA Format  1 : Metadata Size: 0   bytes - Data Size: 4096 bytes - Relative Performance: 0x1 Better 
 ```
 
-For some disks, it may show that not better format is available. It's only suggested to continue if you see a better format available.
+For some disks, it may show that no better format is available. It's only suggested to continue if you see a better format available.
 
 In the example above, the drive has two LBA formats available. We want the 4K format, usually shown as `lbaf=1`.
 
@@ -81,42 +81,9 @@ sudo nvme format /dev/nvme0n1 --lbaf=1 --ses=0
 
 ---
 
-## 4. Recreate Partitions and Filesystems (Using `fdisk`)
+## 4. Verify the Result
 
-After formatting, the drive is blank and needs partitioning and a filesystem. Here’s how to do it with `fdisk`:
-
-1. **Open fdisk on the device**:
-
-```bash
-sudo fdisk /dev/nvme0n1
-```
-
-2. **Create a new GPT partition table**:
-    - Press `g` to create a new GPT partition table.
-
-3. **Create a new partition**:
-    - Press `n` to add a new partition.
-    - Accept default values (or adjust if you want a smaller partition).
-
-4. **(Optional) Review partition layout**:
-    - Press `p` to print the current partition table.
-
-5. **Write the partition changes**:
-    - Press `w` to write and exit `fdisk`.
-
-6. **Create a filesystem** on the newly created partition (example: ext4):
-
-    ```bash
-    sudo mkfs.ext4 /dev/nvme0n1p1
-    ```
-
-Your disk now has a single ext4 partition aligned and ready for use.
-
----
-
-## 5. Verify the Result
-
-Verify that your NVMe now uses a 4K LBA format:
+Before proceeding with the installation, verify that your NVMe now uses a 4K LBA format:
 
 ```bash
 nvme id-ns /dev/nvme0n1 --human-readable
@@ -128,7 +95,19 @@ Look for the active LBA Format:
 LBA Format  1 : Metadata Size: 0 bytes - Data Size: 4096 bytes ...
 ```
 
-If you see **4096 bytes** as the data size, then the drive is using 4K blocks.
+If you see **4096 bytes** as the data size, then the drive is using 4K blocks successfully.
+
+---
+
+## 5. Proceed with AnduinOS Installation
+
+Since you are running this in the Live environment before installing AnduinOS, **you do not need to manually partition or format the drive.**
+
+1. Close the terminal.
+2. Launch the **AnduinOS Installer** from the desktop.
+3. Proceed through the setup steps. When you reach the disk partitioning screen, select **Erase Disk** and choose your NVMe drive.
+
+The installer will automatically create a new GPT partition table, set up the EFI partition, and format the system partitions perfectly utilizing your newly configured 4K block size.
 
 ---
 
@@ -136,8 +115,7 @@ If you see **4096 bytes** as the data size, then the drive is using 4K blocks.
 
 - **Backup** all important data beforehand.
 - Use `nvme format` with the correct `--lbaf` option to switch to a 4K LBA format.
-- Re-partition the drive using `fdisk`, selecting GPT and creating at least one partition.
-- Format the partition with a suitable filesystem (e.g., ext4, xfs, etc.).
 - Confirm with `nvme id-ns` that the LBA format is set to 4096 bytes.
+- Launch the AnduinOS installer and select **Erase Disk** to let it handle partitioning automatically.
 
-You now have your NVMe device configured to 4K LBA, which can provide better performance for many workloads.
+You now have your NVMe device configured to 4K LBA, which will provide optimal performance and longevity for your AnduinOS system.

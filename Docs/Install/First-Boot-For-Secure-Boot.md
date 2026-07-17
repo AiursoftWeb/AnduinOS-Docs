@@ -1,52 +1,83 @@
-# Before installation - Turn on Secure Boot
+# Secure Boot Guide
 
-!!! warning "Turn on Secure Boot!"
+AnduinOS fully supports Secure Boot, allowing you to safely run third-party drivers (such as the AnduinOS Xbox controller driver) by utilizing MOK (Machine Owner Key) enrollment.
 
-    AnduinOS supports Secure boot well. During the installation, it is very recommended to turn on Secure Boot to ensure the security of your system. If you have already installed AnduinOS without Secure Boot, you can turn on Secure Boot at any time. However, you may need to sign the kernel modules manually if you have installed third-party kernel modules.
+To ensure your system remains secure, we highly recommend keeping Secure Boot enabled. This guide covers the entire Secure Boot lifecycle: from BIOS setup to first boot.
 
-To turn on Secure Boot, you need to enter BIOS settings first. The key to enter BIOS settings varies depending on the manufacturer of your computer. Common keys include `F2`, `F10`, `Volume up + Power` or `Del`. You can usually see the key to enter BIOS settings on the boot screen when you start your computer.
+!!! warning "What happens if I skip this certificate enrollment?"
+    If Secure Boot is enabled in your BIOS but you fail to enroll the AnduinOS MOK certificate, the Linux kernel will **strictly refuse** to load any third-party or proprietary drivers. This means:
+    - **NVIDIA Graphics Drivers** will fail to load, resulting in poor graphical performance or screen tearing.
+    - **AnduinOS Xbox Controller Driver** will be blocked, causing controllers to not vibrate or function properly.
+    - **VirtualBox / VMware** kernel modules will refuse to run.
+    Therefore, enrolling this certificate is a mandatory step for a fully functional desktop experience.
 
-Boot your computer, press `F2` or the key to enter BIOS settings, and then find the Secure Boot option in the BIOS settings. Enable Secure Boot and save the changes. Set the Secure Boot certificate to `Windows`. After that, you can boot your computer from the AnduinOS USB drive and install AnduinOS.
+## 1. Before Installation: Enable Secure Boot in BIOS
 
-## Set the Password for Secure Boot during installation
+To turn on Secure Boot, you need to enter your computer's BIOS/UEFI settings.
 
-During the installation process, you will be asked to set a password for Secure Boot. This password is required to enroll the AnduinOS Secure Boot key during the first boot.
+1. Power on your computer and repeatedly press your BIOS key (commonly `F2`, `F10`, `Del`, or `Volume Up + Power`).
+2. Navigate to the **Security** or **Boot** tab and find the **Secure Boot** option.
+3. **Enable** Secure Boot. If asked for a certificate type, set it to **Windows UEFI mode** or **Standard**.
+4. Save the changes and reboot from your AnduinOS USB drive to start the installation.
 
-In the installation process, you will see the following screen to set the password for Secure Boot:
+## 2. During Installation: Set the Secure Boot Password
+
+While installing AnduinOS, when you reach the "Updates and Other Software" step, the installer will detect that Secure Boot is enabled and ask you to configure a Secure Boot password.
 
 ![Ubiquity Set Secure Boot Key Password](./set-secure-boot-password.png)
 
-Enter a password and confirm it. This password will be used to enroll the AnduinOS Secure Boot key during the first boot.
+1. Enter a strong password and confirm it. 
+2. **Memorize this password!** It is required to enroll the AnduinOS Secure Boot key during your first boot.
 
-!!! note "The password for Secure Boot is not the same as the user password."
+!!! note "This is not your user password"
+    This password is a temporary, one-time-use password strictly for enrolling the MOK key on first boot. Do **not** leak it, as it allows authorizing third-party kernel modules.
 
-    After setting the password, you can continue the installation process as usual. The password is used to enroll the AnduinOS Secure Boot key during the first boot.
+## 3. First Boot: Trust the AnduinOS Key
 
-    Do NOT leak the password to others! Or they will be able to enroll the AnduinOS Secure Boot key on your computer. This may cause security risks like running malicious kernel modules.
+When you restart your computer after the installation completes, before loading the desktop, you will be greeted by a blue **MOKManager** screen. This is a one-time operation.
 
-## Trust the AnduinOS Secure Boot key during first boot
-
-When you boot AnduinOS for the first time with Secure Boot enabled, you will see a blue screen asking you to trust the AnduinOS Secure Boot key. This is a one-time operation to ensure that the AnduinOS kernel and kernel modules are signed by a trusted key.
-
-You must select the `Enroll MOK` option and follow the on-screen instructions to enroll the AnduinOS Secure Boot key.
+1. Press any key to enter the MOK management menu.
+2. Select **Enroll MOK** and follow the on-screen prompts.
 
 ![Mok Manager Select enroll the key](./moq-manager-enroll.png)
 
-You will be asked to enter the password for the MOK (Machine Owner Key) and reboot your computer.
-
-The password was set during the installation process.
+3. When prompted, select **Continue** and then **Yes** to confirm you want to enroll the key.
 
 ![Make sure to select your key and enroll it in Mok Manager](./sure-enroll-mok-key.png)
 
-After that, your system will trust the signed AnduinOS kernel and kernel modules. And you can run custom kernel modules with Secure Boot enabled.
+4. **Enter the password** you created during the installation process (Note: your keyboard layout will be the standard US layout here).
+5. Select **Reboot**.
 
-## Verify Secure Boot status
+After rebooting, your system will trust the signed AnduinOS kernel and all included third-party modules.
 
-To verify that Secure Boot is enabled, you can boot AnduinOS on your computer and run the following command in the terminal:
+### Troubleshooting: Forgot the Password or Skipped the Blue Screen?
+
+If you accidentally missed the blue screen during the first boot, or if you completely forgot the password you set during installation, don't panic! You can safely "buy a late ticket" and trigger the enrollment again using the built-in system wizard.
+
+1. Open your applications menu and launch the **Welcome to AnduinOS** wizard (`anduinos-oobe`).
+2. Navigate to the **Secure Boot Configuration** page.
+3. The wizard will detect that your certificate is missing and show a warning. Click the **Create & Enroll Certificate** button.
+4. The system will automatically generate a new key and ask you to reboot.
+5. Upon reboot, the blue MOKManager screen will appear again. Follow the same steps (`Enroll MOK` → `Continue` → `Yes`), but this time, **enter the default password `123456`** as prompted by the wizard.
+
+## 4. Verify Secure Boot Status
+
+Once you have booted into the AnduinOS desktop, you can easily verify that Secure Boot is active.
+
+### Method 1: Graphical Verification (Recommended)
+
+Open the **Welcome to AnduinOS** (`anduinos-oobe`) wizard from your applications menu and navigate to the **Secure Boot Configuration** page. 
+
+If everything was set up correctly, you will see a screen showing "System Trust Established" with green checkmarks across all security layers:
+
+![OOBE Secure Boot Verification](./oobe-secure-boot.png)
+
+### Method 2: Command Line Verification
+
+Alternatively, you can open a terminal and run:
 
 ```bash title="Check Secure Boot status"
-$ sudo mokutil --sb-state
-SecureBoot enabled
+sudo mokutil --sb-state
 ```
 
-You should see `SecureBoot enabled` in the output, which means Secure Boot is enabled on your computer.
+You should see `SecureBoot enabled` in the output. Your system is now fully secure and ready to use!

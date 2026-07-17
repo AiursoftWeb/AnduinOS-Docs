@@ -118,7 +118,7 @@ nav:
       - Install AnduinOS from USB: Install/Install-AnduinOS-From-USB.md
       - Dual Boot With Windows: Install/Dual-Boot-With-Windows.md
     - Setting Up AnduinOS:
-      - First Boot for Secure Boot: Install/First-Boot-For-Secure-Boot.md
+      - Secure Boot Guide: Install/First-Boot-For-Secure-Boot.md
       - Select best apt source: Install/Select-Best-Apt-Source.md
       - Install Drivers: Install/Install-Drivers.md
       - Install NVIDIA Driver: Install/Install-Nvidia-Drivers.md
