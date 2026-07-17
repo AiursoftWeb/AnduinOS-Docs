@@ -1,46 +1,39 @@
 # Update your system
 
-After AnduinOS is installed, it is essential to keep your system up-to-date to ensure that you have the latest security patches, bug fixes, and new features. This guide will show you how to update your system using the command line.
+Keeping your system up-to-date is essential for receiving the latest security patches, bug fixes, and new features. AnduinOS is designed to make this process seamless, safe, and mostly automatic.
 
-To update your system's packages, you can use the `apt` package manager. `apt` is a command-line tool that allows you to install, update, and remove packages on your system.
+## Automatic Security Updates (Silent & Safe)
 
-```bash title="Update your package list"
+By default, AnduinOS is configured to protect you automatically. The system runs a background service (`unattended-upgrades`) that periodically checks for critical security patches.
+
+If a severe security vulnerability is fixed in the upstream repositories, AnduinOS will automatically download and install the patch in the background while you work. You do not need to intervene, and you will not be interrupted by pop-ups for these essential fixes.
+
+## Managing Updates via App Store (Recommended)
+
+For regular feature updates and application upgrades, the safest and easiest method is using the built-in **App Store** (GNOME Software).
+
+1. Open your application menu and launch **App Store**.
+2. Navigate to the **Updates** tab.
+3. Click **Download** if updates are available.
+4. Once downloaded, click **Restart & Update**.
+
+![App Store Updates Tab](./app-store-updates.png)
+
+### Why "Restart & Update"? (Offline Updates)
+You might wonder why the system needs to restart to apply updates. AnduinOS uses a modern mechanism called **Offline Updates**. 
+
+![Restart & Install Prompt](./app-store-restart.png)
+
+If you update core libraries while applications (like your browser or the desktop itself) are running, those apps can instantly crash because the files they rely on were replaced underneath them. 
+When you click "Restart & Update", the system reboots into a minimal, safe environment where no user apps are running. It applies the updates cleanly, and then automatically restarts back to your desktop. This ensures rock-solid system stability.
+
+## (Alternative) Command Line Updates
+
+If you are an advanced user or managing a server without a graphical interface, you can update your system using the standard `apt` package manager.
+
+```bash title="Update your package list and upgrade"
 sudo apt update
 sudo apt upgrade
 ```
 
-That's it! We recommend you to run those commands regularly to keep your system up-to-date.
-
-??? Tip "Should those commands be run automatically?"
-
-    Automatic updates can save time and ensure you get security updates as soon as possible. They keep your packages clean and new, reducing the pain of large, infrequent upgrades. Historically, running `apt upgrade` has been very safe, with few reported issues. Additionally, automatic updates are common in other operating systems like Microsoft Windows.
-
-    However, automatic updates are not recommended for most Linux users due to several reasons:
-
-    - **Investigation**: Auto-updates can mask real problems, making it difficult to reproduce issues and their dependency trees during troubleshooting.
-    - **AirGap Stability**: Some systems require extreme stability and cannot tolerate changes, such as flight control systems.
-    - **Upgrade Risks**: New versions may introduce bugs or breaking changes, causing business interruptions.
-    - **Rebooting Issues**: Updates often require reboots, which can be problematic for systems that have difficulty restarting or need to maintain synchronized caches.
-
-    Automatic updates are advisable only if:
-
-    - The system can tolerate availability degradation.
-    - The system is stateless and rebooting won't affect its operation.
-    - The system has a perfect backup or snapshot configuration.
-    - The system is always connected to the Internet.
-    - The system needs the latest functional updates.
-
-    Consider these factors carefully before enabling automatic updates.
-
-!!! info "How to enable automatic updates?"
-
-    If you want to enable automatic updates, you can use the following script to set up unattended upgrades on your system.
-
-    ```bash title="Setup automatic updates"
-    echo "
-    sudo apt update
-    sudo DEBIAN_FRONTEND=noninteractive apt upgrade -y
-    sudo apt --purge autoremove -y" | sudo tee /usr/local/bin/update.sh
-    sudo chmod +x /usr/local/bin/update.sh
-    (crontab -l ; echo "0 2 * * 0 /usr/local/bin/update.sh") | crontab -
-    ```
+*Note: While `apt upgrade` is fast, be aware that updating graphical components while you are actively using them may cause temporary visual glitches or require you to log out and log back in to fully apply the changes.*
