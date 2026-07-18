@@ -1,0 +1,9 @@
+image: python:3.11-slim
+
+stages:
+  - lint
+
+lint-docs:
+  stage: lint
+  script:
+    - python3 check-links.py
