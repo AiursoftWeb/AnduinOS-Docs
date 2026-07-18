@@ -9,11 +9,13 @@ We strongly recommend learning and using these shortcuts to improve your product
 ## System
 
 * Lock the screen: `Windows + L`
-* Open the system menu: `Windows`
+* Open the system menu (Overview): `Windows`
+* Open Task Manager (System Monitor): `Ctrl + Shift + Esc`
 * Toggle display network state on taskbar: `Windows + U`
 * View clipboard history: `Windows + V` (Since 1.3)
 * Toggle action center: `Windows + A`
 * Toggle notification center: `Windows + N`
+* Open Emoji and Characters picker: `Windows + ;`
 
 ## Applications
 
@@ -22,19 +24,17 @@ We strongly recommend learning and using these shortcuts to improve your product
 * Open the settings: `Windows + I`
 * Open the search: `Windows + S`
 
-## Screenshots
+## Screenshots & Screen Recording
 
+These are the featured shortcuts in the AnduinOS Welcome Center that help you capture inspiration instantly.
+
+* Take a screenshot of a selected area (Snipping Tool): `Windows + Shift + S` or just `Print`
 * Take a screenshot of the entire screen: `Shift + Print`
 * Take a screenshot of current window: `Alt + Print`
-* Take a screenshot of a selected area: `Windows + Shift + S` or just `Print`
-
-## Screen recording
-
 * Start a screen recording: `Windows + G`
 
 !!! note
-
-    To stop the screen recording, click the stop button `⬛` in the bottom right corner of the taskbar.
+    To stop the screen recording, click the stop button `⬛` in the bottom right corner of the taskbar (or in the top right status area).
 
 ## Workspace
 
@@ -43,14 +43,14 @@ We strongly recommend learning and using these shortcuts to improve your product
 
 ## Window management
 
-* Hide all windows: `Windows + D`
+* Show desktop (Hide all windows): `Windows + D`
+* Close current window: `Alt + F4`
+* Snap window to the left half: `Windows + ←`
+* Snap window to the right half: `Windows + →`
 * Maximize window: `Windows + ↑`
 * Restore window: `Windows + ↓`
-* Move window to the left half of the screen: `Windows + ←`
-* Move window to the right half of the screen: `Windows + →`
 * Minimize window: `Windows + M`
-* Overview all windows: `Windows + Tab`
-* Switch between windows: `Alt + Tab`
+* Switch between windows/apps: `Windows + Tab` or `Alt + Tab`
 * Fullscreen for the current window: `Windows + F11` (Some apps may natively support `F11` for fullscreen)
 
 ## Accessibility
