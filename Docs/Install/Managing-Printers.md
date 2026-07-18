@@ -1,53 +1,47 @@
 # Managing Printers
 
-To manage printers, you need to install your printer under the same network as your computer.
+In the past, setting up a printer on Linux was a nightmare of finding the right drivers. Today, AnduinOS supports **Driverless Printing** (via IPP Everywhere and Apple AirPrint) out of the box. 
 
-## Install CUPS
+The CUPS printing system is **pre-installed**, meaning most modern printers will work the moment you plug them in via USB or connect them to the same Wi-Fi network.
 
-CUPS is the printing system used by all modern Linux distributions. To install CUPS, run the following command:
+## 1. Prepare your Printer
 
-```bash
-sudo apt update
-sudo apt install cups system-config-printer printer-driver-all
-```
+Make sure your printer is turned on and connected to the same local network as your computer (or plugged in via USB).
 
-## Allow printer discovery
+If your printer is connected to Wi-Fi but AnduinOS cannot find it, you may need to log into your printer's admin panel (via its IP address on your phone or computer) and ensure that **AirPrint**, **IPP**, or **Mopria** services are enabled.
 
-To allow your printer to be discovered by CUPS, you need to adjust the printer settings. The settings may vary depending on the printer model. You can find the settings in the printer's manual.
-
-* AirPrint: AirPrint is a protocol that allows Apple devices to discover and print to printers on the same network. To enable AirPrint, you need to enable the Bonjour service on your printer.
-* IPP: IPP (Internet Printing Protocol) is a protocol that allows you to print to a printer over the internet. To enable IPP, you need to enable the IPP service on your printer.
-* LPD: LPD (Line Printer Daemon) is a protocol that allows you to print to a printer over the internet. To enable LPD, you need to enable the LPD service on your printer.
-* SMB: SMB (Server Message Block) is a protocol that allows you to print to a printer over the internet. To enable SMB, you need to enable the SMB service on your printer.
-* SNMP: SNMP (Simple Network Management Protocol) is a protocol that allows you to monitor and manage network devices. To enable SNMP, you need to enable the SNMP service on your printer.
-
-For example, to enable AirPrint on an Xiaomi printer, you need to go to the printer's settings and enable the AirPrint service.
+For example, on a Xiaomi network printer, you must explicitly enable the AirPrint service in its settings:
 
 ![Xiaomi Printer Settings](./printer.png)
 
-## Adding a printer from the Gnome settings
+## 2. Add the Printer via Settings
 
-To add a printer, open the Gnome settings and go to the `Printers` section. Click on the `Add Printer` button and follow the on-screen instructions to add your printer.
+You do not need to use the terminal or archaic web interfaces to add a printer.
 
-## Adding a printer from the CUPS web interface
+1. Open your application menu and launch **Settings**.
+2. Navigate to the **Printers** tab.
+3. Click the **Add Printer...** button.
+4. AnduinOS will scan your local network and USB ports. Once your printer appears in the list, simply click on it.
 
-To add a printer, you need to open the CUPS web interface. Open your web browser and go to `http://localhost:631`. Click on the `Administration` tab and then click on the `Add Printer` button. Follow the on-screen instructions to add your printer.
+The system will automatically configure it using driverless protocols. You are now ready to print!
 
-It may ask you to enter your username and password. Enter your Linux username and password to authenticate.
+---
 
-## Adding HP printer
+## Troubleshooting
 
-If you have an HP printer, you can use the `hp-setup` command to add your printer. To install the HP printer driver, you need to install the `hplip` package. You can do this by running the following command:
+### Legacy HP Printers
 
-```bash
+Modern HP printers work flawlessly via the driverless method above. However, if you have a very old HP printer (e.g., from 10+ years ago) that relies on proprietary USB drivers, you can install the HP Linux Imaging and Printing (HPLIP) tool:
+
+```bash title="Install HPLIP for Legacy HP Printers"
 sudo apt update
-sudo apt install hplip pyqt5-dev-tools pyqt5-dev
-```
-
-And to add your printer, run the following command:
-
-```bash
+sudo apt install hplip
 hp-setup
 ```
 
-This command will guide you through the process of adding your HP printer. It will automatically detect your printer and install the necessary drivers.
+*(Follow the interactive terminal prompts to configure your old printer).*
+
+### Advanced CUPS Web Interface
+
+If the GNOME Settings GUI fails to add your printer, or you need to configure advanced print server rules, you can access the underlying CUPS admin panel.
+Open your web browser and navigate to: `http://localhost:631/admin`. You can log in using your normal AnduinOS username and password.
