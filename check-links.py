@@ -44,47 +44,71 @@ def find_all_md_files(root: Path) -> list[Path]:
     """Return all .md files under root."""
     return list(root.rglob("*.md"))
 
-def extract_references(md_path: Path) -> tuple[set[str], set[str]]:
+def extract_references(md_path: Path) -> tuple[set[str], set[str], set[str]]:
     """
     Parse a markdown file and return:
       - local_links: set of local paths referenced in []() or []() links
       - local_images: set of local image paths referenced in ![]() or <img src="">
-    Excludes external URLs (http/https).
+      - images_missing_alt: set of image paths (local or remote) missing alt text
+    Excludes external URLs (http/https) from local sets, but checks alt text for them.
     """
     text = md_path.read_text(encoding="utf-8")
     base = md_path.parent
 
     local_links = set()
     local_images = set()
+    images_missing_alt = set()
 
     # Pattern 1: [text](url)  and  ![alt](url)
-    for m in re.finditer(r'!?\[.*?\]\(([^\)]+)\)', text):
-        url = m.group(1).strip()
+    for m in re.finditer(r'(!?)\[(.*?)\]\(([^\)]+)\)', text):
+        is_image = m.group(1) == "!"
+        alt_text = m.group(2).strip()
+        url = m.group(3).strip()
+        
         # Skip external URLs
         if url.startswith(("http://", "https://", "mailto:", "#")):
+            if is_image and not alt_text:
+                images_missing_alt.add(url)
             continue
+            
         # Strip anchor and query
-        url = url.split("#")[0].split("?")[0]
-        if not url:
+        clean_url = url.split("#")[0].split("?")[0]
+        if not clean_url:
             continue
-        target = (base / url).resolve()
-        if m.group(0).startswith("!"):
+        target = (base / clean_url).resolve()
+        
+        if is_image:
             local_images.add(str(target))
+            if not alt_text:
+                images_missing_alt.add(str(target))
         else:
             local_links.add(str(target))
 
-    # Pattern 2: <img src="...">
-    for m in re.finditer(r'<img[^>]+src=["\']([^"\']+)["\']', text, re.IGNORECASE):
-        url = m.group(1).strip()
-        if url.startswith(("http://", "https://")):
-            continue
-        url = url.split("?")[0]
-        if not url:
-            continue
-        target = (base / url).resolve()
-        local_images.add(str(target))
+    # Pattern 2: <img ...>
+    for m in re.finditer(r'<img\s+([^>]+)>', text, re.IGNORECASE):
+        attrs = m.group(1)
+        src_match = re.search(r'src=["\']([^"\']+)["\']', attrs, re.IGNORECASE)
+        alt_match = re.search(r'alt=["\']([^"\']*)["\']', attrs, re.IGNORECASE)
+        
+        if src_match:
+            url = src_match.group(1).strip()
+            has_alt = alt_match is not None and bool(alt_match.group(1).strip())
+            
+            if url.startswith(("http://", "https://")):
+                if not has_alt:
+                    images_missing_alt.add(url)
+                continue
+                
+            clean_url = url.split("?")[0]
+            if not clean_url:
+                continue
+                
+            target = (base / clean_url).resolve()
+            local_images.add(str(target))
+            if not has_alt:
+                images_missing_alt.add(str(target))
 
-    return local_links, local_images
+    return local_links, local_images, images_missing_alt
 
 def main():
     md_files = find_all_md_files(DOCS_DIR)
@@ -92,17 +116,20 @@ def main():
 
     all_refd_links: dict[str, list[str]] = defaultdict(list)   # target → [source files]
     all_refd_images: dict[str, list[str]] = defaultdict(list)
+    all_missing_alt: dict[str, list[str]] = defaultdict(list)
 
     print(f"Scanning {len(md_files)} .md files and {len(all_images_on_disk)} images...\n")
 
     # Scan .md files
     for md in md_files:
-        local_links, local_images = extract_references(md)
+        local_links, local_images, images_missing_alt = extract_references(md)
         rel_md = str(md.relative_to(DOCS_DIR))
         for link in local_links:
             all_refd_links[link].append(rel_md)
         for img in local_images:
             all_refd_images[img].append(rel_md)
+        for img in images_missing_alt:
+            all_missing_alt[img].append(rel_md)
 
     # Scan .yml config files (for logo, favicon, etc.)
     # Include both Docs/ subdir and repo root (properdocs.yml lives there)
@@ -213,9 +240,43 @@ def main():
         print("  ✓ No empty documents found.")
     else:
         print(f"\n  Total: {empty_docs} empty document(s)")
+        
+    # --- Missing Alt Text ---
+    missing_alt_count = 0
+    print("\n" + "=" * 60)
+    print("IMAGES MISSING ALT TEXT (Accessibility)")
+    print("=" * 60)
+    for img, sources in sorted(all_missing_alt.items()):
+        img_name = Path(img).name if not img.startswith("http") else img
+        print(f"\n  ✗ {img_name}")
+        print(f"    Referenced by:")
+        for s in sources:
+            print(f"      - {s}")
+        missing_alt_count += 1
+        
+    if missing_alt_count == 0:
+        print("  ✓ All images have alt text.")
+    else:
+        print(f"\n  Total: {missing_alt_count} image(s) missing alt text")
+
+    # --- Corrupted Images (0 Bytes) ---
+    corrupted_images = 0
+    print("\n" + "=" * 60)
+    print("CORRUPTED IMAGES (0 Bytes)")
+    print("=" * 60)
+    for img in sorted(all_images_on_disk):
+        if img.stat().st_size == 0:
+            rel = img.relative_to(DOCS_DIR)
+            print(f"  ✗ {rel}")
+            corrupted_images += 1
+            
+    if corrupted_images == 0:
+        print("  ✓ No corrupted (0 byte) images found.")
+    else:
+        print(f"\n  Total: {corrupted_images} corrupted image(s)")
 
     print()
-    return 0 if (broken + unused + orphans + empty_docs) == 0 else 1
+    return 0 if (broken + unused + orphans + empty_docs + missing_alt_count + corrupted_images) == 0 else 1
 
 if __name__ == "__main__":
     sys.exit(main())
