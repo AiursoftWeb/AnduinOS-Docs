@@ -17,18 +17,14 @@ sudo apt upgrade
 
 ## v2.0.1 (Under development)
 
-* Added a new optional package (not pre-installed): `anduinos-why-ai`. It works as a unix-style CLI tool with LLM capabilities to answer questions completely offline — no internet connection required. It uses a local LLM based on `Gemma 4 E2B Q4_K_M`.
-* Added a new pre-installed app: `anduinos-swapcontrol-gtk`. It provides a GUI to control swap, Zswap, and Zram configuration. Zram is now enabled by default with 50% of RAM using the LZ4 algorithm. The default swappiness is changed to 100. [Learn more](./Skills/System-Management/Swap-Control-Strategy.md).
-* Cleaned up leftover Ubuntu default messages under `/etc/update-motd.d/`. The login MOTD now shows AnduinOS information only.
-* Added a new mode: **Separated** taskbar layout in AnduinOS Appearance Settings.
-* Added a new switch: **Show Activities button** in AnduinOS Appearance Settings.
-* Added a new `anduinos-oobe` app to provide Out-of-box-experience and helping users setting up basic features.
-* ArcMenu: The second "Show All Apps" button is now hidden when using Classic mode.
-* Improved `anduinos-ufwall-gtk` localization and updated its icon.
-* Added an `Audit` page for `anduinos-ufwall-gtk` to inspect network traffic.
-* Added a package `anduinos-why-placeholder` to provide a placeholder for `anduinos-why-ai`. (Please note: This package is only a light-weight placeholder and does not include the actual LLM model.)
-* Added a new app `AnduinOS Exe launcher` and associated `.exe` file association to run Windows executables via Bottles (Wine + Proton) seamlessly. (Please note: It's only a light-weight wrapper and does not include Wine or Proton itself.)
-* Fixed `Amberol` Japanese localization issue.
+* **Offline LLM Integration:** Added `anduinos-why-ai`, a new optional package (not pre-installed). It works as a UNIX-style CLI tool to answer questions completely offline — no internet connection required. It uses a local LLM based on `Gemma 4 E2B Q4_K_M`. A lightweight `anduinos-why-placeholder` is provided for seamless system integration without pre-bundling the heavy model.
+* **Graphical Memory Management:** Added a new pre-installed app, `anduinos-swapcontrol-gtk`, giving users full GUI control over Swap, Zswap, and Zram configurations. For optimal performance out-of-the-box, Zram is now enabled by default (50% of RAM via LZ4) and default swappiness is optimized to 100. [Learn more](./Skills/System-Management/Swap-Control-Strategy.md).
+* **Out-Of-Box Experience (OOBE):** Added the new `anduinos-oobe` first-boot wizard. This graphical tool helps users comfortably set up basic features and securely enroll Secure Boot certificates.
+* **Network Traffic Auditing:** Added an **Audit** page to `anduinos-ufwall-gtk` for intuitive, real-time network traffic inspection. Improved the firewall GUI localization and refreshed its icon.
+* **Windows App Integration:** Introduced `AnduinOS Exe Launcher` and `.exe` file associations. This lightweight wrapper seamlessly runs Windows executables via Bottles (Wine + Proton) without bundling them into the system, keeping the OS clean.
+* **Xbox Controller Support:** Added the `anduinos-xbox-controller-driver` package. This kernel-space driver is strictly opt-in (not pre-installed), and the new OOBE wizard provides a graphical guide to help users install it and sign it for Secure Boot if they choose to use an Xbox controller.
+* **Desktop & Appearance Polishing:** Added a new **Separated** taskbar layout and a **Show Activities button** toggle in AnduinOS Appearance Settings, giving users more control over their desktop layout.
+* **Core Cleanups & Fixes:** Cleaned up leftover Ubuntu promotional messages from `/etc/update-motd.d/` (the login MOTD now shows pure AnduinOS information). Hidden the redundant "Show All Apps" button in ArcMenu's Classic mode, and fixed `Amberol` Japanese localization issues.
 
 ## v2.0.0 - The Declarative Revolution
 
