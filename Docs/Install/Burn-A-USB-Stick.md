@@ -27,7 +27,7 @@ You can install Impression easily via Flatpak:
 
 [Get Impression on Flathub](https://flathub.org/en/apps/io.gitlab.adhami3310.Impression){ .md-button .md-button--primary }
 
-![Impression App](impression.png)
+![Impression App](images/impression.png)
 
 ### Alternative: Using the command line (`dd`)
 

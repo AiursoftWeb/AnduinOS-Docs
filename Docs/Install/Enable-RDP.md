@@ -19,7 +19,7 @@ AnduinOS comes with `gnome-remote-desktop` pre-installed, meaning you do not nee
 
 You will need to set a username and password for the remote connection within this menu. (Note: This credential only applies to the remote desktop connection, not your main user account).
 
-![setup-rdp](./setup_rdp.png)
+![setup-rdp](images/setup_rdp.png)
 
 *(Note: If you are using the AnduinOS Firewall, remember to allow RDP (port 3389) before connecting remotely. See our [Firewall Guide](./Enable-Firewall.md) for details.)*
 

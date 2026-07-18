@@ -36,4 +36,4 @@ For power users or headless setups, you can interact with the `fwupd` daemon dir
    ```
    *(Note: If a firmware update requires a reboot, the terminal will prompt you to restart your machine).*
 
-![AnduinOS Upgrade Firmware](./fw.png)
+![AnduinOS Upgrade Firmware](images/fw.png)

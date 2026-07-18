@@ -37,7 +37,7 @@ Here are 5 simple steps to build your own Kernel:
 
 First, you need to get the Kernel source code. You can get the Kernel source code from the [https://www.kernel.org/](https://www.kernel.org/) website.
 
-![kernel.org](./kernel-org.png)
+![kernel.org](images/kernel-org.png)
 
 ### Option 1: Download the Kernel source code from the website
 
@@ -257,7 +257,7 @@ After rebooting, you can check the Kernel version using the following command:
 uname -r
 ```
 
-![uname -r](./after-built.png)
+![uname -r](images/after-built.png)
 
 ## Step 6 - Sign the Kernel (Optional, only for Secure Boot)
 

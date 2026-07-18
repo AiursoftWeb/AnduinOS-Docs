@@ -10,12 +10,12 @@ AnduinOS handles language packs and input methods automatically through the grap
 1. Open your application menu and launch **Settings**.
 2. Navigate to **Region & Language** on the left sidebar.
 
-![Settings Region & Language](./settings-region-language.png)
+![Settings Region & Language](images/settings-region-language.png)
 
 3. Click **Manage Installed Languages**. This will open the Language Support window.
 4. Click **Install / Remove Languages...**, check your desired language (e.g., Chinese or Japanese), and click Apply. The system will automatically download all necessary translations, fonts, and dictionaries.
 
-![Language Support App](./language-support-app.png)
+![Language Support App](images/language-support-app.png)
 
 ### Step 2: Switch the UI Language
 1. Go back to the **Region & Language** settings panel.
@@ -31,7 +31,7 @@ If you need to type in a language with complex characters (like Chinese Pinyin o
 3. Search for your language. For example, search for **Chinese (Rime)** or **Japanese (Anthy)**.
    *(Note: AnduinOS pre-installs the excellent Rime engine for Chinese users).*
 
-![Settings Keyboard Input Sources](./settings-keyboard-input.png)
+![Settings Keyboard Input Sources](images/settings-keyboard-input.png)
 
 You can now use the <kbd>Super</kbd> + <kbd>Space</kbd> shortcut to toggle between English and your new input method.
 

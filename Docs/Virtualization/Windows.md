@@ -591,7 +591,7 @@ sudo lstopo
 
 It may output a graph like this:
 
-![numa isolate 10-19 cores](./numa.png)
+![numa isolate 10-19 cores](images/numa.png)
 
 And as the topology shows, the logical CPU cores `10-19` are in physical core `5-9`. You can isolate the CPU cores by editing the domain XML:
 
@@ -684,7 +684,7 @@ During the first boot, you need to install Windows on the virtual machine. You c
 
 Due to lack of VirtIO drivers, you may not see the disk during the installation process. You can load the VirtIO drivers by clicking on the `Load driver` button and selecting the VirtIO drivers CD-ROM. Select the corelative driver for your OS and architecture.
 
-![Select VirtIO driver](./select_drivers.jpg)
+![Select VirtIO driver](images/select_drivers.jpg)
 
 !!! note "What if the virtual machine's screen is always blank?"
 

@@ -12,7 +12,7 @@ If your printer is connected to Wi-Fi but AnduinOS cannot find it, you may need 
 
 For example, on a Xiaomi network printer, you must explicitly enable the AirPrint service in its settings:
 
-![Xiaomi Printer Settings](./printer.png)
+![Xiaomi Printer Settings](images/printer.png)
 
 ## 2. Add the Printer via Settings
 

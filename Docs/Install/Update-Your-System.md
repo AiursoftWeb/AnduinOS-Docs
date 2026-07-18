@@ -17,12 +17,12 @@ For regular feature updates and application upgrades, the safest and easiest met
 3. Click **Download** if updates are available.
 4. Once downloaded, click **Restart & Update**.
 
-![App Store Updates Tab](./app-store-updates.png)
+![App Store Updates Tab](images/app-store-updates.png)
 
 ### Why "Restart & Update"? (Offline Updates)
 You might wonder why the system needs to restart to apply updates. AnduinOS uses a modern mechanism called **Offline Updates**. 
 
-![Restart & Install Prompt](./app-store-restart.png)
+![Restart & Install Prompt](images/app-store-restart.png)
 
 If you update core libraries while applications (like your browser or the desktop itself) are running, those apps can instantly crash because the files they rely on were replaced underneath them. 
 When you click "Restart & Update", the system reboots into a minimal, safe environment where no user apps are running. It applies the updates cleanly, and then automatically restarts back to your desktop. This ensures rock-solid system stability.

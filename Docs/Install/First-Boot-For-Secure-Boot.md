@@ -24,7 +24,7 @@ To turn on Secure Boot, you need to enter your computer's BIOS/UEFI settings.
 
 While installing AnduinOS, when you reach the "Updates and Other Software" step, the installer will detect that Secure Boot is enabled and ask you to configure a Secure Boot password.
 
-![Ubiquity Set Secure Boot Key Password](./set-secure-boot-password.png)
+![Ubiquity Set Secure Boot Key Password](images/set-secure-boot-password.png)
 
 1. Enter a strong password and confirm it. 
 2. **Memorize this password!** It is required to enroll the AnduinOS Secure Boot key during your first boot.
@@ -39,11 +39,11 @@ When you restart your computer after the installation completes, before loading 
 1. Press any key to enter the MOK management menu.
 2. Select **Enroll MOK** and follow the on-screen prompts.
 
-![Mok Manager Select enroll the key](./moq-manager-enroll.png)
+![Mok Manager Select enroll the key](images/moq-manager-enroll.png)
 
 3. When prompted, select **Continue** and then **Yes** to confirm you want to enroll the key.
 
-![Make sure to select your key and enroll it in Mok Manager](./sure-enroll-mok-key.png)
+![Make sure to select your key and enroll it in Mok Manager](images/sure-enroll-mok-key.png)
 
 4. **Enter the password** you created during the installation process (Note: your keyboard layout will be the standard US layout here).
 5. Select **Reboot**.
@@ -70,7 +70,7 @@ Open the **Welcome to AnduinOS** (`anduinos-oobe`) wizard from your applications
 
 If everything was set up correctly, you will see a screen showing "System Trust Established" with green checkmarks across all security layers:
 
-![OOBE Secure Boot Verification](./oobe-secure-boot.png)
+![OOBE Secure Boot Verification](images/oobe-secure-boot.png)
 
 ### Method 2: Command Line Verification
 

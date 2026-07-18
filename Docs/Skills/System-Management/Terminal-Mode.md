@@ -4,7 +4,7 @@ Terminal mode is a feature that allows you to interact with the system using a c
 
 For example, if you need to install Nvidia drivers, host as a server, or running a benchmark tool which requires minimal resources, you can use terminal mode to interact with the system.
 
-![terminal](./terminal.jpg)
+![terminal](images/terminal.jpg)
 
 ## Enter Terminal Mode via TTY
 

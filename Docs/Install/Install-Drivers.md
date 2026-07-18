@@ -75,7 +75,7 @@ The easiest and safest way to install this driver—especially if you have **Sec
 3. Click **Install Xbox Driver**.
 4. Once completed, reboot your system. If you previously paired your controller, remove it from Bluetooth settings and re-pair it.
 
-![Xbox Controller Support via Welcome Center](anduinos-oobe-xbox.png)
+![Xbox Controller Support via Welcome Center](images/anduinos-oobe-xbox.png)
 
 ### (Alternative) Command Line Installation
 

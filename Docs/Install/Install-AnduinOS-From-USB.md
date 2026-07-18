@@ -19,7 +19,7 @@ The key to enter the boot devices menu varies depending on the manufacturer of y
 
 The graphical installer will guide you through the setup:
 
-![running-installer](./run_installer.png)
+![running-installer](images/run_installer.png)
 
 1. **Select Language**: Choose the language you want to use during the installation process.
 2. **Select Keyboard Layout**: Choose your keyboard layout.

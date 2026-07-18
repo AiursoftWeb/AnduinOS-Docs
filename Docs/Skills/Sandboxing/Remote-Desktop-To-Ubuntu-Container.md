@@ -1,6 +1,6 @@
 # Run Ubuntu Desktop in a Docker Container
 
-![Run Ubuntu GUI Container in AnduinOS](./u_in_a.png)
+![Run Ubuntu GUI Container in AnduinOS](images/u_in_a.png)
 
 In some cases, you don't want to setup a complicated Linux Desktop environment on your local machine, with virtualization or dual-boot. You can use Docker to run a Linux Desktop environment in a container. This is a **simple** way to try out Linux Desktop environment without installing it on your local machine.
 

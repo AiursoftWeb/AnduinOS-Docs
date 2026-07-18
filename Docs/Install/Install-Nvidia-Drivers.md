@@ -22,7 +22,7 @@ For most users, the easiest way to install the recommended NVIDIA drivers is via
 4. The system will automatically detect your NVIDIA GPU, download, and install the recommended proprietary driver.
 5. **Reboot** your system to apply the changes.
 
-![One-Click NVIDIA Driver Install via Welcome Center](anduinos-oobe-nvidia.png)
+![One-Click NVIDIA Driver Install via Welcome Center](images/anduinos-oobe-nvidia.png)
 
 ## (Alternative) Automatic CLI Installation
 

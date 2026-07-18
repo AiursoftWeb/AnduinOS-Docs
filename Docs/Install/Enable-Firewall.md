@@ -31,18 +31,18 @@ While the Welcome Center provides a convenient on/off switch, you will often nee
 2. Enter your password to unlock the interface.
 3. Turn the **Status** toggle to **ON**.
 
-![AnduinOS Firewall Main Interface](./ufwall-gtk-main.png)
+![AnduinOS Firewall Main Interface](images/ufwall-gtk-main.png)
 
 4. To safely allow SSH or other services:
    - Navigate to the **Rules** tab.
 
-![AnduinOS Firewall Rules Tab](./ufwall-gtk-rules.png)
+![AnduinOS Firewall Rules Tab](images/ufwall-gtk-rules.png)
 
    - Click the **+** button at the bottom.
    - Choose **Preconfigured** or **Simple** to easily allow services like SSH, HTTP, etc.
    - Click **Add**.
 
-![AnduinOS Firewall Add Rule Dialog](./ufwall-gtk-add-rule.png)
+![AnduinOS Firewall Add Rule Dialog](images/ufwall-gtk-add-rule.png)
 
 This is the safest and most intuitive way to ensure you don't accidentally lock yourself out!
 

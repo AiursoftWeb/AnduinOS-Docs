@@ -15,7 +15,7 @@ You can easily adjust these settings using the graphical interface.
    * **Screen Blank:** Set how long the screen should wait before turning off (e.g., 5 minutes, 15 minutes, or *Never*).
    * **Automatic Suspend:** Configure whether the system should go to sleep when idle (and set different rules for when plugged in vs. on battery).
 
-![Power Settings](./power-settings.png)
+![Power Settings](images/power-settings.png)
 
 ## Adjust Auto Lock Settings
 

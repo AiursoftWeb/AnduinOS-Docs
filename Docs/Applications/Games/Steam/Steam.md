@@ -44,11 +44,11 @@ To enable Proton for a game on Steam, you can follow these steps:
 6. Select the version of Proton you want to use from the dropdown menu.
 7. Click `Close` to save your changes.
 
-![proton](./proton.png)
+![proton](images/proton.png)
 
 Then just click `Install` and `Run` to launch the game. Steam will automatically use Proton to run the game.
 
-![black_myth_wukong_running_on_linux](./black_myth.png)
+![black_myth_wukong_running_on_linux](images/black_myth.png)
 
 ### Troubleshooting: Proton Games Failing to Launch
 

@@ -19,7 +19,7 @@ swapcontrol-gtk
 
 The Dashboard provides a real-time overview of your system's memory pressure, showing exactly how much RAM is occupied by cache versus active applications, and the status of your compression subsystem.
 
-![Swap Control Dashboard](./swap-gtk-1.png)
+![Swap Control Dashboard](images/swap-gtk-1.png)
 
 ### Zram & Zswap Configuration
 
@@ -28,8 +28,8 @@ Navigate to the **Zram** and **Swap** tabs to precisely tune your setup:
 * **Disk Swap**: Enable or disable the physical swap file.
 * **Swappiness**: Adjust how aggressively the kernel swaps out memory (default is 100 to fully utilize Zram).
 
-![Swap Control Zram Tab](./swap-gtk-2.png)
-![Swap Control Disk Swap Tab](./swap-gtk-3.png)
+![Swap Control Zram Tab](images/swap-gtk-2.png)
+![Swap Control Disk Swap Tab](images/swap-gtk-3.png)
 
 All changes made in the graphical interface are applied immediately and survive reboots.
 

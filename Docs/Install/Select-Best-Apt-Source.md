@@ -11,7 +11,7 @@ The easiest way to find and configure the fastest APT mirror is via the built-in
 3. Click the **Find Fastest Mirror** button.
 4. The system will automatically test a comprehensive list of mirrors and apply the fastest one for you.
 
-![Find Fastest Mirror via Welcome Center](anduinos-oobe-find-fastest-mirror.png)
+![Find Fastest Mirror via Welcome Center](images/anduinos-oobe-find-fastest-mirror.png)
 
 ## (Advanced) Using the Command Line
 

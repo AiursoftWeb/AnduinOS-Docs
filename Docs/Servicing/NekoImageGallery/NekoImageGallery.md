@@ -155,11 +155,11 @@ You can upload photos to NekoImageGallery through the web portal.
 
 To get started, visit http://localhost:5000. Click the `Settings` button located at the top right corner. Enable the `Use admin portal` option by toggling the switch, and then enter the admin token you previously set, as shown below:
 
-![settings](settings.png)
+![settings](images/settings.png)
 
 Next, click the `Upload` button at the top right corner. Select the images you wish to upload, and then click `Upload`. Your images will be uploaded to the server and queued for indexing. Once the images are indexed, they will appear in the search results.
 
-![upload](upload.png)
+![upload](images/upload.png)
 
 You can checkout the [official documentation](https://github.com/hv0905/NekoImageGallery?tab=readme-ov-file#upload-images-to-nekoimagegallery) for more information.
 

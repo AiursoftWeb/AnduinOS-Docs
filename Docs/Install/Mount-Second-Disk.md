@@ -16,7 +16,7 @@ The safest and most user-friendly way to format and mount a new disk in AnduinOS
    - Select the newly created partition block.
    - Click the **Gear icon** (⚙️) below the partition map and select **Edit Mount Options...**
 
-![Disks Edit Mount Options](./disks-edit-mount-options.png)
+![Disks Edit Mount Options](images/disks-edit-mount-options.png)
 
    - Toggle **User Session Defaults** to the **OFF** position.
    - Set your desired **Mount Point** (e.g., `/mnt/disk2` or `/opt/data`).

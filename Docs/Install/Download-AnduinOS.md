@@ -18,7 +18,7 @@ To verify the ISO file, you can use the `sha256sum` command on Linux or macOS, o
 sha256sum ./AnduinOS.iso
 ```
 
-![Verify ISO sha256 checksum](verify-iso.png)
+![Verify ISO sha256 checksum](images/verify-iso.png)
 
 Please compare the output of the `sha256sum` command with the checksum provided on the releases page (File ends with `.sha256`). If the checksums match, the ISO file is valid and has not been tampered with.
 
