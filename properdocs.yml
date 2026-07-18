@@ -4,7 +4,7 @@ site_description: The official documentation for AnduinOS.
 # Repository
 repo_name: AiursoftWeb/anduinos-docs
 repo_url: https://github.com/AiursoftWeb/AnduinOS-Docs
-edit_uri: ""
+edit_uri: "edit/master/Docs/"
 
 use_directory_urls: true
 docs_dir: Docs
