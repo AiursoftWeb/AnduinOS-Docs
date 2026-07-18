@@ -112,27 +112,27 @@ nav:
     - Installing AnduinOS:
       - System Requirements: https://www.anduinos.com/
       - Download AnduinOS: Install/Download-AnduinOS.md
-      - Burn a USB stick: Install/Burn-A-USB-Stick.md
+      - Burn a USB Stick: Install/Burn-A-USB-Stick.md
       - Burn AnduinOS ToGo: Install/Burn-AnduinOS-ToGo.md
-      - Change NVME LBA size: Install/Change-NVME-LBA-Size.md
+      - Change NVMe LBA Size: Install/Change-NVME-LBA-Size.md
       - Install AnduinOS from USB: Install/Install-AnduinOS-From-USB.md
-      - Dual Boot With Windows: Install/Dual-Boot-With-Windows.md
+      - Dual Boot with Windows: Install/Dual-Boot-With-Windows.md
     - Setting Up AnduinOS:
       - Secure Boot Guide: Install/First-Boot-For-Secure-Boot.md
-      - Select best apt source: Install/Select-Best-Apt-Source.md
+      - Switch to Your Language: Install/Switch-To-Your-Language.md
+      - Select Best APT Source: Install/Select-Best-Apt-Source.md
+      - Update Your System: Install/Update-Your-System.md
+      - Update Firmware: Install/Upgrade-Firmware.md
       - Install Drivers: Install/Install-Drivers.md
-      - Install NVIDIA Driver: Install/Install-Nvidia-Drivers.md
-      - Enable Firewall: Install/Enable-Firewall.md
+      - Install NVIDIA Drivers: Install/Install-Nvidia-Drivers.md
+      - Mount Second Disk: Install/Mount-Second-Disk.md
       - Manage Swap: Install/Manage-Swap.md
-      - Mount second disk: Install/Mount-Second-Disk.md
-      - Update your system: Install/Update-Your-System.md
-      - Switch To Your Language: Install/Switch-To-Your-Language.md
-      - Update firmware: Install/Upgrade-Firmware.md
       - Configure Power Settings: Install/Configure-Power-Settings.md
-      - Allow sudo without password: Install/Allow-Sudo-Without-Password.md
+      - Add Printers: Install/Managing-Printers.md
+      - Allow Sudo Without Password: Install/Allow-Sudo-Without-Password.md
+      - Enable Firewall: Install/Enable-Firewall.md
       - Enable SSH: Install/Enable-SSH.md
       - Enable RDP: Install/Enable-RDP.md
-      - Add Printers: Install/Managing-Printers.md
     - Learning AnduinOS:
       - Keyboard Shortcuts: Install/Keyboard-Shortcuts.md
     - Personalizing AnduinOS:
