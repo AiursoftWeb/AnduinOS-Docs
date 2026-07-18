@@ -18,6 +18,8 @@ You can seamlessly sync your files, contacts, and calendar with cloud providers 
 
 For comprehensive backups (including automatic scheduling and encryption), we recommend **Deja Dup**.
 
+![Deja Dup Backups](images/deja-dup-backups.png)
+
 1. Open **Software** and search for `Deja Dup` (or click "Get Deja Dup" in the Welcome Center).
 2. Install and launch the **Backups** app.
 3. Follow the setup wizard to:
