@@ -115,8 +115,8 @@ nav:
       - Burn a USB Stick: Install/Burn-A-USB-Stick.md
       - Burn AnduinOS ToGo: Install/Burn-AnduinOS-ToGo.md
       - Change NVMe LBA Size: Install/Change-NVME-LBA-Size.md
-      - Install AnduinOS from USB: Install/Install-AnduinOS-From-USB.md
       - Dual Boot with Windows: Install/Dual-Boot-With-Windows.md
+      - Install AnduinOS from USB: Install/Install-AnduinOS-From-USB.md
     - Setting Up AnduinOS:
       - Secure Boot Guide: Install/First-Boot-For-Secure-Boot.md
       - Switch to Your Language: Install/Switch-To-Your-Language.md
@@ -135,8 +135,8 @@ nav:
       - Enable RDP: Install/Enable-RDP.md
     - Learning AnduinOS:
       - Keyboard Shortcuts: Install/Keyboard-Shortcuts.md
-    - Personalizing AnduinOS:
-      - Setup Wallpaper Slideshow: Install/Setup-Wallpaper--Slideshow.md
+      - Touchpad Gestures: Install/Touchpad-Gestures.md
+      - Installing Applications: Install/Installing-Applications.md
     - Maintaining AnduinOS:
       - Setup Backup: Install/Backup-And-Restore.md
   - Skills:
