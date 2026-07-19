@@ -81,3 +81,7 @@ sudo mokutil --sb-state
 ```
 
 You should see `SecureBoot enabled` in the output. Your system is now fully secure and ready to use!
+
+!!! note "How does this work under the hood?"
+
+    For a deeper dive into the signing architecture — how UEFI, Shim, the kernel, DKMS, and the OOBE state machine all fit together — see the [Secure Boot Signing Architecture](./Secure-Boot-Signing-Architecture.md) reference.

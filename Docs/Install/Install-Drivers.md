@@ -93,6 +93,10 @@ sudo apt install -y anduinos-xbox-controller-driver
 
 After installation, reboot your system. If you have previously connected the Xbox controller, you need to remove it from your Bluetooth devices and re-pair it.
 
+!!! note "How does driver signing work?"
+
+    If you have Secure Boot enabled and want to understand how module signing, DKMS, and the OOBE repair buttons work, see the [Secure Boot Signing Architecture](./Secure-Boot-Signing-Architecture.md) reference.
+
 ## Build the Kernel
 
 In case you bought very latest hardware, you may need to build the kernel from source to get the latest drivers. Please refer to the [Kernel Compilation](../Skills/Developing/Build-Your-Own-Kernel.md) guide for more information.

@@ -24,6 +24,10 @@ For most users, the easiest way to install the recommended NVIDIA drivers is via
 
 ![One-Click NVIDIA Driver Install via Welcome Center](images/anduinos-oobe-nvidia.png)
 
+!!! note "How does module signing work under the hood?"
+
+    For a detailed explanation of how the MOK certificate, DKMS, and the OOBE state machine work together — and why NVIDIA drivers automatically benefit from the AnduinOS Secure Boot infrastructure — see the [Secure Boot Signing Architecture](./Secure-Boot-Signing-Architecture.md) reference.
+
 ## (Alternative) Automatic CLI Installation
 
 If you prefer using the terminal, you can let the system automatically detect and install the recommended driver using the command line:
