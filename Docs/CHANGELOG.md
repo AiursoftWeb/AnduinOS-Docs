@@ -25,6 +25,7 @@ sudo apt upgrade
 * **Xbox Controller Support:** Added the `anduinos-xbox-controller-driver` package. This kernel-space driver is strictly opt-in (not pre-installed), and the new OOBE wizard provides a graphical guide to help users install it and sign it for Secure Boot if they choose to use an Xbox controller.
 * **Desktop & Appearance Polishing:** Added a new **Separated** taskbar layout and a **Show Activities button** toggle in AnduinOS Appearance Settings, giving users more control over their desktop layout.
 * **Core Cleanups & Fixes:** Cleaned up leftover Ubuntu promotional messages from `/etc/update-motd.d/` (the login MOTD now shows pure AnduinOS information). Hidden the redundant "Show All Apps" button in ArcMenu's Classic mode, and fixed `Amberol` Japanese localization issues.
+* **New Architecture: ARM64** Add ARM64 support for AnduinOS. The official website provides ARM64 builds of AnduinOS 2.0.1. Tested on: QEMU, Microsoft Windows Devkit 2023(project volterra). Only supports devices with UEFI.
 
 ## v2.0.0 - The Declarative Revolution
 
