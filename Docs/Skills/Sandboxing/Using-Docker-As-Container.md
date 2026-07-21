@@ -11,12 +11,12 @@ To install Docker on AnduinOS, please follow the instructions [here](../../Appli
 
     | Package | Purpose |
     |---|---|
-    | `qemu-user-static` | Enables cross-architecture emulation via the kernel's `binfmt_misc` |
+    | `qemu-user-binfmt` | Enables cross-architecture emulation via the kernel's `binfmt_misc` |
     | `docker-buildx` | BuildKit-backed builder — required for multi-architecture image builds |
     | `docker-compose-v2` | Compose v2 plugin (`docker compose`) for multi-container application management |
 
     ```bash
-    sudo apt install -y qemu-user-static docker-buildx docker-compose-v2
+    sudo apt install -y qemu-user-binfmt docker-buildx docker-compose-v2
     ```
 
 ## Build an Image from a Dockerfile
@@ -314,7 +314,14 @@ get_docker_secret() {
   secret_id=$1
   service_name="secret-reader-$secret_id"
   sudo docker service create --name "$service_name" --secret "$secret_id" alpine sh -c "cat /run/secrets/$secret_id && sleep 10"
-  sleep 2
+  # Wait for the service task to reach "running" state before fetching logs
+  for _ in $(seq 1 10); do
+    state=$(sudo docker service ps "$service_name" --format '{{.CurrentState}}' --no-trunc 2>/dev/null | head -1)
+    case "$state" in
+      *Running*) break ;;
+    esac
+    sleep 1
+  done
   sudo docker service logs "$service_name"
   sudo docker service rm "$service_name"
 }
@@ -385,21 +392,21 @@ RUN dbus-uuidgen > /var/lib/dbus/machine-id
 
 # Install the app
 RUN wget -O- https://deepin-wine.i-m.dev/setup.sh | sh
-RUN sudo apt install -y com.qq.weixin.deepin
+RUN apt install -y com.qq.weixin.deepin
 
 ENTRYPOINT ["/opt/apps/com.qq.weixin.deepin/files/run.sh"]
 
 # To build, run:
-# sudo docker build -t nautilus .
+# sudo docker build -t wechat .
 
 # To run, run:
 # xhost +local:docker
-# sudo docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/dri nautilus
+# sudo docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/dri wechat
 ```
 
 **Explanation:**
 
-- **Base Image**: Uses an Ubuntu-based image from a custom registry.
+- **Base Image**: Uses the official `ubuntu:26.04` image from Docker Hub.
 - **Locales**: Sets up locale configurations.
 - **Timezone**: Installs and configures `tzdata`.
 - **Dependencies**: Installs packages required for GUI applications.
@@ -412,14 +419,14 @@ ENTRYPOINT ["/opt/apps/com.qq.weixin.deepin/files/run.sh"]
 - **Build the Image**:
 
   ```bash
-  sudo docker build -t nautilus .
+  sudo docker build -t wechat .
   ```
 
 - **Run the Container**:
 
   ```bash
   xhost +local:docker
-  sudo docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/dri nautilus
+  sudo docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/dri wechat
   ```
 
 **When to use:**
@@ -438,10 +445,10 @@ Use this Dockerfile when you need to run GUI applications inside a Docker contai
 To cross-compile for ARM on a regular x86 machine you need **QEMU user-mode emulation** and the **buildx plugin**:
 
 ```bash
-sudo apt install -y qemu-user-static docker-buildx
+sudo apt install -y qemu-user-binfmt docker-buildx
 ```
 
-`qemu-user-static` registers itself with the Linux kernel's `binfmt_misc` subsystem. From that point on, the kernel silently hands any foreign binary (e.g., an ARM64 executable) to the right QEMU translator instead of refusing to run it — which is how an x86 host can execute ARM container layers.
+`qemu-user-binfmt` registers itself with the Linux kernel's `binfmt_misc` subsystem. From that point on, the kernel silently hands any foreign binary (e.g., an ARM64 executable) to the right QEMU translator instead of refusing to run it — which is how an x86 host can execute ARM container layers.
 
 ### 2. Create and Bootstrap a Builder
 
@@ -508,7 +515,7 @@ docker buildx build \
 When `buildx` builds the ARM64 variant on your x86 machine:
 
 1. The kernel intercepts every ARM binary encountered during the `RUN` steps.
-2. It transparently forwards them to `qemu-aarch64-static` (registered by `qemu-user-static`).
+2. It transparently forwards them to `qemu-aarch64-static` (registered by `qemu-user-binfmt`).
 3. QEMU translates ARM instructions to x86 on the fly and returns the results.
 
 The container never knows it is not running on real ARM hardware. The trade-off is speed — cross-compiled `RUN` steps are slower than native. Actual compile artefacts (the final binaries) are correct native ARM64 code.

@@ -17,12 +17,12 @@ sudo apt install -y docker.io
 
     | Package | Purpose |
     |---|---|
-    | `qemu-user-static` | Enables cross-architecture emulation via the kernel's `binfmt_misc` |
+    | `qemu-user-binfmt` | Enables cross-architecture emulation via the kernel's `binfmt_misc` |
     | `docker-buildx` | BuildKit-backed builder — required for multi-architecture image builds |
     | `docker-compose-v2` | Compose v2 plugin (`docker compose`) for multi-container application management |
 
     ```bash
-    sudo apt install -y qemu-user-static docker-buildx docker-compose-v2
+    sudo apt install -y qemu-user-binfmt docker-buildx docker-compose-v2
     ```
 
     See the [Docker tips handbook](../../../Skills/Sandboxing/Using-Docker-As-Container.md#build-multi-architecture-images-with-docker-buildx) for usage details.
