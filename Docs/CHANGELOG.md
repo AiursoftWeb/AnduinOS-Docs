@@ -15,7 +15,7 @@ sudo apt update
 sudo apt upgrade
 ```
 
-## v2.0.1 (Under development)
+## v2.0.1
 
 * **Offline LLM Integration:** Added `anduinos-why-ai`, a new optional package (not pre-installed). It works as a UNIX-style CLI tool to answer questions completely offline — no internet connection required. It uses a local LLM based on `Gemma 4 E2B Q4_K_M`. A lightweight `anduinos-why-placeholder` is provided for seamless system integration without pre-bundling the heavy model.
 * **Graphical Memory Management:** Added a new pre-installed app, `anduinos-swapcontrol-gtk`, giving users full GUI control over Swap, Zswap, and Zram configurations. For optimal performance out-of-the-box, Zram is now enabled by default (50% of RAM via LZ4) and default swappiness is optimized to 100. [Learn more](./Skills/System-Management/Swap-Control-Strategy.md).
