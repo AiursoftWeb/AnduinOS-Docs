@@ -197,6 +197,7 @@ nav:
         - PowerShell: Applications/Development/PowerShell/PowerShell.md
         - Golang: Applications/Development/Golang/Golang.md
         - Ollama: Applications/Development/Ollama/Ollama.md
+        - Why AI: Applications/Development/Why-AI/Why-AI.md
         - Podman: Applications/Development/Podman/Podman.md
 
       - Database Tools:
