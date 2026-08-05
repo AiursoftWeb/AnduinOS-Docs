@@ -15,6 +15,23 @@ sudo apt update
 sudo apt upgrade
 ```
 
+## v2.0.2 (Under Development)
+
+* **New Native Installer:** Replaced the legacy Ubiquity installation path with a new GTK4 installer featuring an unprivileged interface, a restricted privileged executor, clear installation review, live progress, automatic mirror selection and opt-in third-party drivers.
+* **Btrfs by Default:** New installations now use Btrfs by default with separate subvolumes for the system, home directories, logs, recovery points, containers, and virtual machine images, while unencrypted Ext4 remains available as a classic alternative.
+* **Smarter Swap Layout:** The installer now creates a dynamically sized disk Swap partition while preserving at least 20 GiB for the system and retaining the existing high-priority, LZ4-compressed Zram configuration.
+* **Waypoint Recovery:** Added `anduinos-waypoint-gtk`, a new graphical application for creating, scheduling, retaining, protecting, exporting, and restoring Btrfs system snapshots and recovery points.
+* **Improved Swap Control:** Updated `anduinos-swapcontrol-gtk` to distinguish installer-managed Swap partitions from the legacy `/swapfile`, improve hibernation readiness checks, and perform safer transactional Swap file changes.
+* **YubiKey Security Center:** Added a new graphical security center for configuring YubiKey-backed GDM login, sudo authentication, passwordless sudo safeguards, resident SSH credentials, and Git SSH commit signing.
+* **New Driver Center:** Added `anduinos-driver-center` for managing graphics, audio, printing, Xbox controller, DKMS, and Secure Boot driver health from one restricted graphical interface. Removed the original `software-properties-gtk`.
+* **Bash Command Suggestions:** Added a fast, fully offline Bash ghost-text suggestion system with Right Arrow acceptance, local command and history learning, typed completion for common developer tools, and no changes to native Enter or Tab behavior.
+* **Lower Desktop Latency:** Added the `preempt=full` kernel parameter to Resolute desktop installations to enable full dynamic preemption on the Ubuntu generic kernel.
+* **Improved First-Boot Networking:** OOBE now detects incomplete connectivity, provides Wi-Fi and Ethernet setup before online-only steps, supports an explicit offline path. Added graphical mDNS controls to OOBE and the firewall application.
+* **AnduinOS Apps in the Store:** Added AppStream metadata, icons, screenshots, and package validation so AnduinOS applications can be discovered and managed through the graphical software store.
+* **Desktop and Theme Improvements:** Added a Desktop Icons switch to AnduinOS Appearance, synchronized Flatpak light and dark themes with GNOME, reorganized system applications, and made ArcMenu open with pinned and frequent applications.
+* **Safer Chinese Input Packaging:** Reworked `anduinos-rime` to use independent layered system defaults without replacing Ubuntu-owned Rime or Language Selector files, while preserving user customizations during upgrades.
+* **Hardened Offline AI Package:** Pinned the bundled Gemma model to an immutable revision and SHA-256 checksum, added complete model licensing and attribution, and updated the local inference runtime integration.
+
 ## v2.0.1
 
 * **Offline LLM Integration:** Added `anduinos-why-ai`, a new optional package (not pre-installed). It works as a UNIX-style CLI tool to answer questions completely offline — no internet connection required. It uses a local LLM based on `Gemma 4 E2B Q4_K_M`. A lightweight `anduinos-why-placeholder` is provided for seamless system integration without pre-bundling the heavy model. [Learn more](./Applications/Development/Why-AI/Why-AI.md).
