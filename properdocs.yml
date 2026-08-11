@@ -5,10 +5,14 @@ nav:
   - Home:
     - Documentation: README.md
     - Versions table: https://www.anduinos.com/HistoryBuilds.html
-    - Change Log: CHANGELOG.md
     - News & Updates: https://news.anduinos.com/
-    # COMMON GPT-v3 license URL
     - License: https://github.com/AiursoftWeb/AnduinOS-2/blob/master/LICENSE
+    - Release Notes:
+      - Overview: CHANGELOG.md
+      - AnduinOS 2.0.2: Release-Notes/2.0.2.md
+      - AnduinOS 2.0.1: Release-Notes/2.0.1.md
+      - AnduinOS 2.0.0: Release-Notes/2.0.0.md
+      - AnduinOS 1.x: Release-Notes/1.x.md
   - Install:
     - Installing AnduinOS:
       - System Requirements: https://www.anduinos.com/
