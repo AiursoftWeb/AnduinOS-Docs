@@ -1,28 +1,30 @@
 # Manage SSH Keys
 
-SSH Keys are a secure way to authenticate to a server. They are a pair of cryptographic keys that can be used to authenticate to an SSH server as an alternative to password-based logins. One key is private and the other is public. When you generate an SSH key pair, you will get a private key and a public key. The private key is kept on the computer you log in from, while the public key is stored on the .ssh/authorized_keys file on all the servers you want to log in to.
+SSH Keys are a secure way to authenticate to a server. They are a pair of cryptographic keys that can be used to authenticate to an SSH server as an alternative to password-based logins. One key is private and the other is public. When you generate an SSH key pair, you will get a private key and a public key. The private key is kept on the computer you log in from, while the public key is stored in `~/.ssh/authorized_keys` on each server you want to access.
+
+If the destination is an AnduinOS desktop, [enable its SSH listener](../../Install/Enable-SSH.md) before copying the key.
 
 ## Generate SSH Key Pair
 
-To generate an SSH key pair, you can use the `ssh-keygen` command.
+To generate a modern Ed25519 SSH key pair, use `ssh-keygen`:
 
 ```bash
-ssh-keygen
+ssh-keygen -t ed25519
 ```
 
-After running the command, you will be prompted to enter a file in which to save the key. You can press Enter to save it in the default location (`~/.ssh/id_rsa`), or specify a different location. You will also be prompted to enter a passphrase to secure the private key. You can press Enter to leave it empty, or enter a passphrase.
+After running the command, you will be prompted to enter a file in which to save the key. Press Enter to use the default location (`~/.ssh/id_ed25519`). You will also be prompted for a passphrase. A passphrase protects the private key if the file is copied or stolen and is strongly recommended.
 
-Once the key pair is generated, you will have two files: `id_rsa` (private key) and `id_rsa.pub` (public key). The public key can be shared with others, while the private key should be kept secure.
+The generated `id_ed25519` file is private and must not be shared. The `id_ed25519.pub` file is public and can be copied to servers and Git hosting providers.
 
 ## Copy SSH Key to Server
 
-To add your SSH key to the SSH agent, you can use the `ssh-copy-id` command.
+To authorize your public key on a server, use `ssh-copy-id`:
 
 ```bash
-ssh-copy-id user@hostname
+ssh-copy-id -i ~/.ssh/id_ed25519.pub user@hostname
 ```
 
-Replace `user` with your username and `hostname` with the IP address or domain name of the server you want to copy the key to. You will be prompted to enter your password for the server. Once the key is copied, you can log in to the server without entering a password.
+Replace `user` with your username and `hostname` with the IP address or domain name of the server you want to copy the key to. You will be prompted to enter your password for the server. Once the key is copied, the server no longer needs the account password for that key; your local private-key passphrase may still be requested.
 
 After that, you can log in to the server using the following command:
 
@@ -39,7 +41,7 @@ To add your SSH key to your GitHub account, you can follow these steps:
 - Copy your public key to the clipboard.
 
 ```bash
-cat ~/.ssh/id_rsa.pub | xclip -selection clipboard
+xclip -selection clipboard < ~/.ssh/id_ed25519.pub
 ```
 
 - Go to your GitHub account settings.
@@ -58,10 +60,10 @@ ssh git@github.com
 
 ## Backup SSH Keys
 
-It is important to back up your SSH keys to prevent data loss. You can copy the `~/.ssh` directory to a secure location, such as an external drive or cloud storage.
+It is important to back up your SSH keys to prevent data loss. Copy the `~/.ssh` directory only to an encrypted backup or another location that protects private-key confidentiality.
 
 ```bash
-cp -r ~/.ssh /path/to/backup
+cp -a ~/.ssh /path/to/encrypted-backup/
 ```
 
 Make sure to keep the backup secure and up-to-date.
@@ -71,10 +73,10 @@ Make sure to keep the backup secure and up-to-date.
 If you need to restore your SSH keys from a backup, you can copy the `~/.ssh` directory back to your home directory.
 
 ```bash
-mkdir ~/.ssh
-cp -r /path/to/backup/.ssh/* ~/.ssh
-chmod 644 ~/.ssh/id_rsa.pub
-chmod 600 ~/.ssh/id_rsa
+install -d -m 700 ~/.ssh
+cp -a /path/to/encrypted-backup/.ssh/. ~/.ssh/
+chmod 600 ~/.ssh/id_ed25519
+chmod 644 ~/.ssh/id_ed25519.pub
 ```
 
 Make sure to set the correct permissions on the private key file.
@@ -141,52 +143,37 @@ cat ~/.ssh/id_ed25519_new.pub | ssh user@server_ip 'cat >> ~/.ssh/authorized_key
 ssh -i ~/.ssh/id_ed25519_new user@server_ip
 ```
 
-If login succeeds, you're safe to remove the old key.
+If login succeeds, keep this session open until the new key has also worked in a separate connection. Do not remove the old key yet.
 
-### 4. Make the New Key Default (Optional)
+### 4. Select the New Key by Default (Optional)
 
-```bash title="Rename the new key to default SSH key names"
-# Move away the old keys
-mv ~/.ssh/id_rsa ~/.ssh/id_rsa.old
-mv ~/.ssh/id_rsa.pub ~/.ssh/id_rsa.pub.old
-# Rename the new key to default names
-mv ~/.ssh/id_ed25519_new ~/.ssh/id_rsa
-mv ~/.ssh/id_ed25519_new.pub ~/.ssh/id_rsa.pub
-# chmod
-chmod 600 ~/.ssh/id_rsa
-chmod 644 ~/.ssh/id_rsa.pub
+Add the new identity to the relevant host entry in `~/.ssh/config` instead of renaming an Ed25519 key to an RSA filename:
+
+```text title="~/.ssh/config"
+Host server.example.com
+    User your-username
+    IdentityFile ~/.ssh/id_ed25519_new
+    IdentitiesOnly yes
 ```
-
-> This lets you use `ssh user@host` without `-i`.
 
 ### 5. Remove Old Keys from Remote Servers
 
-If you're sure the **new key is the last line**, run:
+Keep the verified new-key session open, connect to the server in a second terminal, and back up the authorization file:
 
-```bash title="Remove the old key from authorized_keys"
-ssh user@server_ip "tail -n 1 ~/.ssh/authorized_keys > ~/.ssh/authorized_keys.tmp && mv ~/.ssh/authorized_keys.tmp ~/.ssh/authorized_keys"
+```bash title="Back Up Authorized Keys on the Server"
+cp -a ~/.ssh/authorized_keys ~/.ssh/authorized_keys.bak
 ```
 
-Or, safer with a backup:
-
-```bash title="Backup and remove old key from authorized_keys"
-ssh user@server_ip "cp ~/.ssh/authorized_keys ~/.ssh/authorized_keys.bak && tail -n 1 ~/.ssh/authorized_keys > ~/.ssh/authorized_keys.tmp && mv ~/.ssh/authorized_keys.tmp ~/.ssh/authorized_keys"
-```
+Edit `~/.ssh/authorized_keys` on the server and remove only the exact line containing the old public key. Do not replace the file with its first or last line: it may contain independent recovery or administrator keys.
 
 ### 6. Test Final Login
 
 ```bash title="Final test to ensure the new key works"
-ssh user@server_ip
+ssh -i ~/.ssh/id_ed25519_new user@server_ip
 ```
 
 If it works, your new key is fully in use.
 
 ### 7. Clean Up (Optional)
 
-If everything works:
-
-```bash title="Remove the old private key from local machine"
-rm ~/.ssh/id_rsa.old
-```
-
-Or move it to a secure archive location.
+Move the old private key to a secure offline archive. Delete it only after the new key has worked in a separate session and every required server has been updated.

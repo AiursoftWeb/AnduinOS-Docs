@@ -28,8 +28,9 @@ The graphical installer will guide you through the setup:
 4. **Setup Disk**: Choose the disk where you want to install AnduinOS. You can also choose to encrypt the disk with LVM and LUKS2.
 5. **Location**: Choose your location to set the time zone, locale formats, and APT sources.
 6. **User Information**: Enter your name, username, and password for the new user account.
-7. **Installation**: The installation process will begin.
-8. **Complete**: Once finished, you will be prompted to restart your computer and remove the USB drive.
+7. **Advanced Options**: Optionally enable passwordless sudo, automatic desktop login, or [SSH password login](./Enable-SSH.md). All three options are disabled by default.
+8. **Installation**: Review the installation plan and begin installing AnduinOS.
+9. **Complete**: Once finished, you will be prompted to restart your computer and remove the USB drive.
 
 !!! info "Next Steps"
     If you enabled Secure Boot, you **must** complete the MOK enrollment on your first boot. Please follow the instructions in the [Secure Boot Guide](./First-Boot-For-Secure-Boot.md).
