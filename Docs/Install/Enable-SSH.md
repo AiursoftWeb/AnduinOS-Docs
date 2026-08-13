@@ -12,6 +12,8 @@ SSH provides remote terminal access to your computer. New installations of Andui
 2. Select **System** and then **Secure Shell**.
 3. Turn on **Secure Shell** and approve the authentication prompt if one appears.
 
+![Secure Shell enabled in GNOME Settings](images/gnome-settings-secure-shell.png)
+
 This switch manages the system SSH listener. Turning it off prevents new incoming SSH connections without uninstalling OpenSSH, terminating established sessions, or deleting the computer's SSH host keys.
 
 ### Upgraded Systems
