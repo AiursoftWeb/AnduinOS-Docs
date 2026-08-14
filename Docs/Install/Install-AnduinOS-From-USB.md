@@ -25,12 +25,18 @@ The graphical installer will guide you through the setup:
 2. **Select Keyboard Layout**: Choose your keyboard layout.
 3. **Updates and Other Software**: Choose whether you want to install updates and third-party software.
    * *Note: If Secure Boot is enabled, you will be asked to set a Secure Boot password here. Memorize this password! You will need it on your first boot to enroll third-party drivers.*
-4. **Setup Disk**: Choose the disk where you want to install AnduinOS. You can also choose to encrypt the disk with LVM and LUKS2.
+4. **Setup Disk**: Choose the disk where you want to install AnduinOS. Btrfs is the default filesystem for a new installation, and unencrypted Ext4 is available as a classic alternative.
 5. **Location**: Choose your location to set the time zone, locale formats, and APT sources.
-6. **User Information**: Enter your name, username, and password for the new user account.
-7. **Advanced Options**: Optionally enable passwordless sudo, automatic desktop login, or [SSH password login](./Enable-SSH.md). All three options are disabled by default.
+6. **User Information**: Enter your name, username, machine name, and a non-empty password for the new user account. The installer validates these values before it creates the installation plan.
+7. **Advanced Options**: Optionally enable [passwordless sudo](./Allow-Sudo-Without-Password.md), automatic desktop login, or [SSH password login](./Enable-SSH.md). These are independent choices, and all three are disabled by default.
 8. **Installation**: Review the installation plan and begin installing AnduinOS.
 9. **Complete**: Once finished, you will be prompted to restart your computer and remove the USB drive.
+
+!!! note "Machine Name Rules"
+    A machine name may contain ASCII letters, digits, and internal hyphens. It cannot begin or end with a hyphen and must be no longer than 63 characters. Uppercase input is accepted, but the installed hostname is stored in lowercase; for example, `TT-VIEW-71` becomes `tt-view-71`.
+
+!!! warning "Advanced Options Reduce Security"
+    Passwordless sudo removes password confirmation from administrative commands, automatic desktop login allows local access without entering the account password, and SSH password login exposes password authentication to the network when SSH is enabled. Enable only the options you need.
 
 !!! info "Next Steps"
     If you enabled Secure Boot, you **must** complete the MOK enrollment on your first boot. Please follow the instructions in the [Secure Boot Guide](./First-Boot-For-Secure-Boot.md).
