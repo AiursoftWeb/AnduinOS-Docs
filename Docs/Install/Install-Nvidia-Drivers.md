@@ -6,7 +6,7 @@ This guide provides a comprehensive approach to installing proprietary NVIDIA dr
 
 ## Prerequisites
 
-- **AnduinOS** (or any Ubuntu-based distribution).
+- **AnduinOS 2.0**.
 - A compatible NVIDIA GPU.
 - Basic knowledge of using the terminal.
 - Internet connection to download drivers and dependencies.
@@ -50,8 +50,11 @@ sudo ubuntu-drivers install
     NVIDIA proprietary drivers can sometimes introduce regressions or stability issues, especially with Wayland or very recent kernels. If you encounter issues, please check the [NVIDIA driver release notes](https://www.nvidia.com/en-us/drivers/unix/) or report them to the [NVIDIA Developer Forum](https://forums.developer.nvidia.com/c/linux/).
 
     If you experience visual glitches or crashes, you can try:
+
     - Falling back to an older, more stable driver version.
-    - Switching your display server from Wayland to Xorg on the login screen.
+    - Checking the release notes for known issues affecting your GPU, kernel, or Wayland session.
+
+    AnduinOS 2.0 is Wayland-only and does not provide an Xorg session as a fallback.
 
     To list all available NVIDIA driver versions for your hardware, use:
 
@@ -131,9 +134,9 @@ This ensures no leftover packages interfere with the new installation.
 
 ---
 
-### Step 3: (Optional) Prepare Keys for Secure Boot
+### Step 3: Prepare Keys for Secure Boot
 
-Secure Boot ensures your system only loads drivers or kernel modules signed by a trusted key. If **Secure Boot is enabled** in your BIOS/UEFI, you **must** sign the NVIDIA driver module. If Secure Boot is **disabled**, you can skip this step—but it is **strongly recommended** to keep Secure Boot enabled.
+Secure Boot ensures your system only loads drivers or kernel modules signed by a trusted key. Keep **Secure Boot enabled** in your BIOS/UEFI and sign the NVIDIA driver module with the AnduinOS Machine Owner Key (MOK).
 
 **Good news for AnduinOS users:** AnduinOS automatically generates a Machine Owner Key (MOK) for you during system installation, located at `/var/lib/shim-signed/mok/`. You DO NOT need to generate a new one!
 
@@ -149,7 +152,7 @@ Secure Boot ensures your system only loads drivers or kernel modules signed by a
 
 2. **Enroll your key (if not already enrolled)**:
 
-   If the key is not enrolled, you can easily enroll it via the Welcome Center's **Security** tab, or manually using:
+   If the key is not enrolled, open the Welcome Center's **Secure Boot Configuration** page and follow the displayed enrollment action. See the [Secure Boot Guide](./First-Boot-For-Secure-Boot.md) for the complete procedure. Advanced users can also queue the existing certificate for enrollment manually:
 
    ```bash
    sudo mokutil --import /var/lib/shim-signed/mok/MOK.der
@@ -168,7 +171,7 @@ Secure Boot ensures your system only loads drivers or kernel modules signed by a
    - Enter the password you set previously.
    - Confirm to enroll the key and reboot again.
 
-   The output should list your certificate. If it is listed, Secure Boot should now trust modules signed with your private key.
+   Run the `mokutil --test-key` command again. If it reports `is already enrolled`, Secure Boot now trusts modules signed with the corresponding private key.
 
 !!! note "Keep Your Keys Safe"
 
@@ -220,7 +223,7 @@ The open-source Nouveau driver can conflict with NVIDIA’s proprietary driver. 
    This ensures that you can compile the NVIDIA kernel module correctly.
 
 2. **Switch to a multi-user (text) target**:  
-   Before installing the driver, you must stop the display server (Xorg or Wayland). You can do this by changing the system’s runlevel/target:
+   Before installing the driver, you must stop the graphical Wayland session. You can do this by changing the system’s runlevel/target:
 
    ```bash
    sudo systemctl set-default multi-user.target
@@ -277,7 +280,7 @@ sudo systemctl set-default graphical.target
    - **32-bit Compatibility Libraries**: 
      - **Recommended** to install if you run software such as Steam, Wine, or certain games requiring 32-bit libraries.
      - **Not necessary** if you only run 64-bit applications.
-   - **Signing the module (if Secure Boot is enabled)**:
+   - **Signing the module**:
      - The installer will ask if you want to sign the kernel module. Select **Yes**.
      - Provide the **absolute path** to your **private key**: `/var/lib/shim-signed/mok/MOK.priv`
      - Provide the **absolute path** to your **public certificate**: `/var/lib/shim-signed/mok/MOK.der`
@@ -304,13 +307,13 @@ sudo systemctl set-default graphical.target
 
    If the driver is installed correctly, you should see a table showing your GPU, driver version, and other details.
 
-3. **Secure Boot Verification (if applicable)**:
+3. **Secure Boot Verification**:
 
    ```bash
    sudo mokutil --sb-state
    ```
 
-   - If it shows `SecureBoot enabled`, your driver should be signed and recognized by the system.
+   - If it shows `SecureBoot enabled`, Secure Boot is active. If `nvidia-smi` still fails, follow **Troubleshooting point 3** to verify the enrolled MOK and repair module signing.
 
 !!! note "Kernel Updates"
 
@@ -318,39 +321,21 @@ sudo systemctl set-default graphical.target
 
 ---
 
-### Step 8: Adjust Display Server and Resolution
+### Step 8: Configure Displays on Wayland
 
-Depending on your system, you may be running **Xorg** or **Wayland**. In many cases, **Xorg** provides better compatibility with NVIDIA’s proprietary drivers.
+AnduinOS 2.0 supports **Wayland only**. The login screen does not offer an option to select an Xorg session.
 
-1. **Check your current session type**:
+**Check your current session type**:
 
-   ```bash
-   echo $XDG_SESSION_TYPE
-   ```
+```bash
+echo $XDG_SESSION_TYPE
+```
 
-   - Returns `x11` (Xorg) or `wayland`.
+The expected result is `wayland`. Any other result is unexpected on AnduinOS 2.0. Confirm that you are running AnduinOS 2.0 and that your graphical session started normally before continuing with driver troubleshooting.
 
-2. **Switching display servers**:
-   - You can select between **Xorg** and **Wayland** at the login screen (Gear icon or session dropdown).
-   - Some distributions default to Wayland; if you experience issues, try switching to Xorg.
+**Adjust your display configuration**:
 
-3. **Adjust your resolution** (For Xorg users):
-
-   If you are on Xorg, you can use `xrandr` to list available modes:
-
-   ```bash
-   xrandr
-   ```
-
-   To set a specific resolution and refresh rate:
-
-   ```bash
-   xrandr --output HDMI-0 --mode 3840x2160 --rate 144
-   ```
-
-   Replace `HDMI-0` with the correct output device name (it can be `DP-0`, `DVI-D-0`, etc.).
-
-   *(Note: If you are using **Wayland**, `xrandr` cannot change your resolution. Please use the system's Display Settings GUI instead).*
+Open **Settings → Displays** to select the resolution, refresh rate, scale, orientation, and monitor arrangement. These system settings are the supported way to configure displays in the Wayland session.
 
 ---
 
@@ -382,17 +367,25 @@ Then, completely remove the broken driver by running `sudo apt-get purge '*nvidi
 
 This error means the system is running, but the NVIDIA driver isn't loaded. The most common cause is a **kernel update**. The NVIDIA driver is a kernel module that must be compiled for the *exact* kernel version you are running. When your kernel updates, the driver module (if not set up with DKMS) is left behind, causing a mismatch.
 
-Another common cause is **Secure Boot**, which blocks unsigned modules from loading. See **point 3** for this.
+Another common cause is a module signature that Secure Boot does not trust. See **point 3** for this.
 
 To fix a kernel mismatch, first ensure you have the headers for your current kernel: `sudo apt install linux-headers-$(uname -r)`. If you installed via `apt`, try `sudo dpkg-reconfigure nvidia-dkms-[version]` (e.g., `nvidia-dkms-550`) to force a recompile. If you used a `.run` file, you must re-run the installer.
 
 ### 3. Secure Boot issues
 
-Secure Boot is a UEFI feature that prevents untrusted (unsigned) code from running at boot. Since the NVIDIA driver is a third-party kernel module, Secure Boot will block it by default, leading to a "driver not loaded" error.
+Secure Boot is a UEFI feature that prevents untrusted code from running at boot. If the NVIDIA driver is installed but its kernel modules do not load, the modules may not be signed with the enrolled AnduinOS MOK, or the AnduinOS MOK may not yet be enrolled.
 
-The simplest solution is to **reboot, enter your PC's BIOS/UEFI setup, and set Secure Boot to "Disabled"**. This is the easiest fix and has minimal security impact for most users.
+Keep Secure Boot enabled. Open the **AnduinOS Welcome Center**, navigate to the **Secure Boot Configuration** page, and follow the displayed action to create and enroll the certificate or repair the signing configuration. Reboot when prompted. In the blue **MokManager** screen, complete the MOK enrollment using the password provided or requested by the Welcome Center, then boot back into AnduinOS.
 
-The "correct" solution is to enroll the AnduinOS system MOK. Simply open the **AnduinOS Welcome Center**, navigate to the **Security** tab, and click to enroll the Secure Boot certificate. You will set a password, reboot, and enter it in the blue "MOK management" screen (MokManager). This securely authorizes the NVIDIA driver to load under Secure Boot.
+After rebooting, verify the trust chain and driver in this order:
+
+```bash
+sudo mokutil --sb-state
+sudo mokutil --test-key /var/lib/shim-signed/mok/MOK.der
+nvidia-smi
+```
+
+The first command should report `SecureBoot enabled`, the second should report that the certificate is already enrolled, and `nvidia-smi` should display your GPU and driver details. If one of these checks fails, follow the [Secure Boot Guide](./First-Boot-For-Secure-Boot.md) for the enrollment and recovery procedure. For details about how the AnduinOS MOK, DKMS, and NVIDIA modules fit together, see [Secure Boot Signing Architecture](./Secure-Boot-Signing-Architecture.md).
 
 ### 4. Updates break the driver
 
