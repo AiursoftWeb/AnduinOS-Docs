@@ -1,41 +1,95 @@
 # Dual Boot AnduinOS with Windows
 
-Before you begin, ensure you have a backup of your important data. Dual booting can lead to data loss if not done correctly.
+Back up all important data and your BitLocker recovery key before changing
+partitions or EFI boot settings. Although AnduinOS supports installation
+alongside Windows, using a separate physical disk for AnduinOS is strongly
+recommended. It is the safest and simplest configuration.
+
+A same-disk installation requires more care. BitLocker and TPM measurements,
+Windows Fast Startup and hibernation, Secure Boot, Windows maintenance, and
+changes to EFI boot entries or boot order can all affect a dual-boot system.
+Windows and AnduinOS must also share one partition table, so a partitioning
+mistake can affect both systems.
 
 !!! tip "Secure Boot Support"
-    AnduinOS fully supports Secure Boot alongside Windows. If you plan to use it, please refer to our [Secure Boot Guide](./First-Boot-For-Secure-Boot.md) to understand the MOK enrollment process before installation.
+    AnduinOS supports Secure Boot alongside Windows. Read the
+    [Secure Boot Guide](./First-Boot-For-Secure-Boot.md) before installation
+    so that you understand the MOK enrollment process.
 
-## Two disks setup (Suggested)
+## Two physical disks (strongly recommended)
 
-If you have two separate physical disks, one for Windows and one for AnduinOS, follow these steps:
+Use one physical disk for Windows and a different physical disk for AnduinOS.
+This keeps their operating-system and data partitions independent. AnduinOS
+can create its own EFI System Partition on its target disk instead of placing
+both systems' boot files in the same partition.
 
-1. **Backup Data** and wipe all disks. Especially ensure the disk for AnduinOS is empty. You can do this by running:
+1. Back up your data and BitLocker recovery key.
+2. Install Windows on the first disk. Leave the intended AnduinOS disk unused.
+3. Fully shut down Windows. Do not restart from a hibernated or Fast Startup
+   state.
+4. Boot the AnduinOS installation media in UEFI mode.
+5. Select only the dedicated AnduinOS disk and choose **Erase Disk**. Carefully
+   verify its model, capacity, and device name before confirming—the selected
+   disk will be erased.
+6. After installation, select Windows or AnduinOS from GRUB or the firmware's
+   boot menu.
 
-```bash title="Wipe Disk"
-sudo wipefs -a /dev/sdX
+Even with separate disks, firmware boot order and TPM measurements are
+machine-wide. Windows may therefore request the BitLocker recovery key after
+some firmware or bootloader changes. Keep that key available.
+
+!!! warning "Install Windows first"
+    Installing Windows after AnduinOS can change EFI boot entries or make
+    Windows Boot Manager the first boot option. Installing Windows first
+    avoids that additional recovery work.
+
+## One physical disk
+
+The AnduinOS installer preserves existing partitions in this mode and uses
+only space that is **already unallocated**. It deliberately does not shrink or
+move the Windows filesystem.
+
+1. Back up all important data and the BitLocker recovery key.
+2. Finish pending Windows updates.
+3. Disable Windows Fast Startup and hibernation. From an Administrator command
+   prompt, you can disable hibernation with:
+
+```powershell title="Windows Administrator terminal"
+powercfg /h off
 ```
 
-Replace `/dev/sdX` with the actual disk identifier for the AnduinOS disk (e.g., `/dev/nvme1n1`, `/dev/sdb`).
+4. Suspend BitLocker protection before resizing partitions or changing the
+   boot configuration. Do not proceed unless you can recover the Windows disk
+   with its recovery key.
+5. Open **Disk Management** in Windows, right-click the Windows partition
+   (usually `C:`), and select **Shrink Volume**.
+6. Create at least 24 GiB of unallocated space; 40 GiB or more is recommended
+   for normal use. Leave the result as **Unallocated**. Do not create or format
+   a new Windows volume in that space.
+7. Fully shut down Windows, then boot the AnduinOS installation media in UEFI
+   mode.
+8. Select the Windows disk, choose **Advanced: Install Alongside**, and select
+   the prepared unallocated extent. Review every disk and partition shown on
+   the confirmation page before starting installation.
 
-2. **Install Windows**: Install Windows on the first disk as you normally would. Don't mount or format the second disk in Windows.
-3. **Install AnduinOS**: During the installation of AnduinOS, select the second disk as the installation target. Let AnduinOS take the entire disk (`Erase Disk`) and handle the partitioning automatically.
-4. **Bootloader**: AnduinOS will automatically install the GRUB bootloader, which will detect Windows and add it to your boot menu.
-5. **Enable BitLocker (Optional)**: If you want to use BitLocker on the Windows disk, you can safely enable it after the installation of AnduinOS.
+### If the storage lists are disabled
 
-!!! warning "Always install Windows first!"
-    The Windows installer tends to aggressively overwrite the bootloader of other operating systems. Therefore, it is crucial to install Windows first! If you install AnduinOS first, you may need to rescue and reinstall the GRUB bootloader manually after installing Windows.
+If **Unallocated space** displays `(None)`, the installer has not found a safe
+extent large enough for AnduinOS. The EFI System Partition list consequently
+remains unavailable as well.
 
-## Single disk setup
+Return to Windows Disk Management and confirm that the space is genuinely
+shown as **Unallocated**, rather than as a new partition or volume. Then fully
+shut down Windows, return to the installer, and select **Rescan and Reselect
+Disk**.
 
-If you only have one physical disk, you will need to share it between Windows and AnduinOS:
+The guided coexistence path also requires UEFI boot, a GPT disk, stable
+partition identities, and a supported storage layout. It will refuse to
+continue if a target partition is mounted or if the disk uses an unsupported
+mapper, array, or nested block-device layout. This refusal is intentional: the
+installer does not provide a force-continue option around storage safety
+checks.
 
-1. **Backup Data**: Ensure you have a full backup of all important data before proceeding. Modifying partitions is always risky.
-2. **Turn off Fast Startup**: In Windows, go to Control Panel > Power Options > Choose what the power buttons do > Change settings that are currently unavailable, and uncheck "Turn on fast startup (recommended)". This prevents Windows from locking the disk in hibernation mode.
-3. **Turn off BitLocker**: If you have BitLocker enabled, you must suspend or decrypt it before resizing partitions.
-4. **Prepare Free Space**:
-    - *If you already have Windows installed:* Open "Disk Management" in Windows, right-click your Windows partition (usually `C:`), and select "Shrink Volume". Shrink it to create **Unallocated Space** for AnduinOS (at least 32 GB is recommended).
-    - *If you are installing Windows from scratch:* During the Windows installation, leave enough unallocated space on the disk. Do not format the entire drive for Windows.
-5. **Install AnduinOS**: Boot from the AnduinOS installation media. During the installation, select the **Install alongside** or **Replace a partition** option and choose the unallocated space you prepared. The installer will automatically format it and set up your system.
-
-!!! warning "Always install Windows first!"
-    Just like in the two-disk setup, install Windows first to prevent it from overwriting the AnduinOS GRUB bootloader!
+If the lists remain unavailable, save the installer log and include it with a
+screenshot of the complete Windows Disk Management layout when requesting
+support.
