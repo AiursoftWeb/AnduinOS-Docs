@@ -12,6 +12,7 @@ Windows and AnduinOS must also share one partition table, so a partitioning
 mistake can affect both systems.
 
 !!! tip "Secure Boot Support"
+
     AnduinOS supports Secure Boot alongside Windows. Read the
     [Secure Boot Guide](./First-Boot-For-Secure-Boot.md) before installation
     so that you understand the MOK enrollment process.
@@ -39,6 +40,7 @@ machine-wide. Windows may therefore request the BitLocker recovery key after
 some firmware or bootloader changes. Keep that key available.
 
 !!! warning "Install Windows first"
+
     Installing Windows after AnduinOS can change EFI boot entries or make
     Windows Boot Manager the first boot option. Installing Windows first
     avoids that additional recovery work.

@@ -26,7 +26,7 @@ eval "$(zoxide init zsh)"
 
 Then you can use `z` to change directories.
 
-If you want to use `cd` as an alias to `z`, don't add alias, cause this will cause some issue. Just add a flag on zoxide init script like bellow:
+If you want to use `cd` as the command name for zoxide, do not create a shell alias. Pass the following flag to the zoxide initialization command instead:
 
 ```bash
 eval "$(zoxide init zsh --cmd cd)"

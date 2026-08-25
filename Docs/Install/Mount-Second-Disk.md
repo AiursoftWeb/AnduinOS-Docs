@@ -31,6 +31,7 @@ The Disks app will safely write to your system's configuration file (`/etc/fstab
 If you prefer the terminal or are managing a server, you can manually mount the disk.
 
 !!! warning "Use UUIDs, not device names!"
+
     Device names like `/dev/sdb` or `/dev/nvme1n1` can change after a reboot. Always use the disk's UUID in `/etc/fstab` to ensure your system boots safely.
 
 1. Find your disk and its UUID using `lsblk` and `blkid`:

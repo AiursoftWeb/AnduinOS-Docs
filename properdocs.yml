@@ -1,5 +1,22 @@
+site_name: AnduinOS Documentation
+site_description: Official documentation for AnduinOS.
+repo_name: AiursoftWeb/AnduinOS-Docs
+repo_url: https://github.com/AiursoftWeb/AnduinOS-Docs
 edit_uri: "edit/master/Docs/"
 docs_dir: Docs
+
+markdown_extensions:
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - abbr
+  - pymdownx.snippets
+  - pymdownx.tilde
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - attr_list
 
 nav:
   - Home:
@@ -24,7 +41,9 @@ nav:
       - Install AnduinOS from USB: Install/Install-AnduinOS-From-USB.md
     - Setting Up AnduinOS:
       - Secure Boot Guide: Install/First-Boot-For-Secure-Boot.md
+      - Secure Boot Architecture: Install/Secure-Boot-Signing-Architecture.md
       - Switch to Your Language: Install/Switch-To-Your-Language.md
+      - Type Chinese with Rime: Install/Use-Rime-Chinese-Input.md
       - Select Best APT Source: Install/Select-Best-Apt-Source.md
       - Update Your System: Install/Update-Your-System.md
       - Update Firmware: Install/Upgrade-Firmware.md
@@ -83,6 +102,15 @@ nav:
 
   - Applications:
     - Introduction: Applications/Introduction.md
+    - AnduinOS System Tools:
+      - Driver Center: Applications/System/Driver-Center/Driver-Center.md
+      - YubiKey Security Center: Applications/System/YubiKey-Security-Center/YubiKey-Security-Center.md
+      - Bash Command Suggestions: Applications/System/Bash-Command-Suggestions/Bash-Command-Suggestions.md
+      - Disk Snapshots Manager: Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md
+      - AnduinOS Appearance: Applications/System/AnduinOS-Appearance/AnduinOS-Appearance.md
+      - Virtual Memory Control: Applications/System/Virtual-Memory-Control/Virtual-Memory-Control.md
+      - Windows EXE Runner: Applications/System/Windows-EXE-Runner/Windows-EXE-Runner.md
+      - Welcome Center: Applications/System/Welcome-Center/Welcome-Center.md
     - By Type:
       - Web Browsers:
         - Google Chrome: Applications/Web-Browsers/Google-Chrome/Google-Chrome.md
@@ -248,5 +276,6 @@ nav:
 
   - Virtualization:
     - Windows: Virtualization/Windows.md
+    - VMware: Virtualization/VMware.md
     - Boot Physical Disk: Virtualization/Boot-Physical-Disk.md
     - ARM64 in QEMU: Virtualization/ARM64-In-QEMU.md

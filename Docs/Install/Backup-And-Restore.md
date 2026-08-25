@@ -2,9 +2,21 @@
 
 It is crucial to back up your data regularly to prevent data loss. AnduinOS supports both modern graphical tools for effortless backups and powerful command-line utilities for advanced users.
 
-## Graphical Interface (Recommended)
+## Local recovery with Disk Snapshots Manager
 
-The easiest way to safeguard your data is by using the tools recommended in the AnduinOS Welcome Center.
+New AnduinOS installations using Btrfs include **Disk Snapshots Manager**. It can roll the operating system back after a broken update and recover earlier versions of files from independent Personal Files snapshots.
+
+![System snapshots in Disk Snapshots Manager](../Applications/System/Disk-Snapshots-Manager/images/system-recovery.png)
+
+See the complete [Disk Snapshots Manager guide](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md) for system rollback, Personal Files history, automatic snapshots, retention, and disk-health checks.
+
+!!! warning "A local snapshot is not an independent backup"
+
+    Btrfs snapshots normally share the same physical disk as the current system. If that disk fails or the computer is lost, both the live files and snapshots may disappear. Use the methods below to keep another copy on external storage or a remote service.
+
+## Independent graphical backups
+
+Use an external disk or remote service for protection that survives failure of the system drive.
 
 ### 1. Cloud Sync via Online Accounts
 

@@ -16,9 +16,9 @@ nvidia-smi
 
 To install CUDA, download it here: [https://developer.nvidia.com/cuda-toolkit-archive](https://developer.nvidia.com/cuda-toolkit-archive).
 
-Don't forget, you also need to decide which version of CUDA to install. **Not all CUDA supports all driviers!**
+You also need to decide which version of CUDA to install. **Not every CUDA version supports every driver version.**
 
-First you need know the verison of the driver via `nvidia-smi`. And query the doc to know which CUDA it supports:
+First, use `nvidia-smi` to find the installed driver version. Then check which CUDA versions it supports:
 
 [https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html)
 

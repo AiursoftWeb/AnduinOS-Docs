@@ -1,87 +1,89 @@
 # Secure Boot Guide
 
-AnduinOS fully supports Secure Boot, allowing you to safely run third-party drivers (such as the AnduinOS Xbox controller driver) by utilizing MOK (Machine Owner Key) enrollment.
+AnduinOS supports UEFI Secure Boot while still allowing packaged third-party kernel modules, such as NVIDIA, VirtualBox, and the optional Xbox controller driver, to load.
 
-To ensure your system remains secure, we highly recommend keeping Secure Boot enabled. This guide covers the entire Secure Boot lifecycle: from BIOS setup to first boot.
+The installer creates a certificate owned by the newly installed computer. On the first restart, you confirm that certificate in the firmware-level MOKManager screen. This is a one-time physical-presence step; it does not disable Secure Boot.
 
-!!! warning "What happens if I skip this certificate enrollment?"
-    If Secure Boot is enabled in your BIOS but you fail to enroll the AnduinOS MOK certificate, the Linux kernel will **strictly refuse** to load any third-party or proprietary drivers. This means:
-    - **NVIDIA Graphics Drivers** will fail to load, resulting in poor graphical performance or screen tearing.
-    - **AnduinOS Xbox Controller Driver** will be blocked, causing controllers to not vibrate or function properly.
-    - **VirtualBox / VMware** kernel modules will refuse to run.
-    Therefore, enrolling this certificate is a mandatory step for a fully functional desktop experience.
+!!! important "The enrollment code is 123456"
 
-## 1. Before Installation: Enable Secure Boot in BIOS
+    AnduinOS 2.0.2 uses the one-time MOK enrollment code `123456`. You do not create this code in the installer, and it is not your user password or disk-encryption password.
 
-To turn on Secure Boot, you need to enter your computer's BIOS/UEFI settings.
+## Before installation
 
-1. Power on your computer and repeatedly press your BIOS key (commonly `F2`, `F10`, `Del`, or `Volume Up + Power`).
-2. Navigate to the **Security** or **Boot** tab and find the **Secure Boot** option.
-3. **Enable** Secure Boot. If asked for a certificate type, set it to **Windows UEFI mode** or **Standard**.
-4. Save the changes and reboot from your AnduinOS USB drive to start the installation.
+1. Open the computer's UEFI settings. The setup key is commonly `F2`, `F10`, `Del`, or a model-specific button.
+2. Find **Secure Boot** under the **Security** or **Boot** section.
+3. Enable Secure Boot. If the firmware asks for a mode, use **Standard** or **Windows UEFI mode**, not a custom-key mode.
+4. Save the settings and boot the AnduinOS USB drive in UEFI mode.
 
-## 2. During Installation: Set the Secure Boot Password
+The installer detects the running firmware state. When Secure Boot is enabled, it prepares the installed system before changing the firmware enrollment queue: it verifies the signed boot packages, creates a machine-local MOK certificate, signs relevant DKMS modules, validates the signatures, and then requests enrollment.
 
-While installing AnduinOS, when you reach the "Updates and Other Software" step, the installer will detect that Secure Boot is enabled and ask you to configure a Secure Boot password.
+When Secure Boot is disabled or unsupported, installation can continue without MOK enrollment. You will not be sent to MOKManager on the next boot.
 
-![Ubiquity Set Secure Boot Key Password](images/set-secure-boot-password.png)
+## First restart: enroll the certificate
 
-1. Enter a strong password and confirm it. 
-2. **Memorize this password!** It is required to enroll the AnduinOS Secure Boot key during your first boot.
+After an installation performed with Secure Boot enabled, the first restart opens a blue **MOKManager** screen before AnduinOS starts.
 
-!!! note "This is not your user password"
-    This password is a temporary, one-time-use password strictly for enrolling the MOK key on first boot. Do **not** leak it, as it allows authorizing third-party kernel modules.
+1. Select **Enroll MOK**.
 
-## 3. First Boot: Trust the AnduinOS Key
+![Select Enroll MOK in MOKManager](images/moq-manager-enroll.png)
 
-When you restart your computer after the installation completes, before loading the desktop, you will be greeted by a blue **MOKManager** screen. This is a one-time operation.
+2. Select **Continue**, then select **Yes** to confirm the certificate.
 
-1. Press any key to enter the MOK management menu.
-2. Select **Enroll MOK** and follow the on-screen prompts.
+![Confirm the MOK enrollment](images/sure-enroll-mok-key.png)
 
-![Mok Manager Select enroll the key](images/moq-manager-enroll.png)
+3. Enter `123456`. MOKManager normally uses a US keyboard layout.
+4. Select **Reboot**.
 
-3. When prompted, select **Continue** and then **Yes** to confirm you want to enroll the key.
+The following boot should enter the installed AnduinOS desktop with Secure Boot still enabled.
 
-![Make sure to select your key and enroll it in Mok Manager](images/sure-enroll-mok-key.png)
+!!! warning "Do not skip enrollment when you use third-party modules"
 
-4. **Enter the password** you created during the installation process (Note: your keyboard layout will be the standard US layout here).
-5. Select **Reboot**.
+    AnduinOS itself can usually boot before the local certificate is enrolled because the standard boot chain is already signed. However, the kernel will reject third-party modules that are not signed by a trusted key. NVIDIA, VirtualBox, the optional Xbox controller driver, and other DKMS-based features may therefore fail until enrollment is complete.
 
-After rebooting, your system will trust the signed AnduinOS kernel and all included third-party modules.
+## Verify the result in Driver Center
 
-### Troubleshooting: Forgot the Password or Skipped the Blue Screen?
+Open **Driver Center**, then select **Secure Boot**. A fully configured system displays **System Trust Established** and four green checks:
 
-If you accidentally missed the blue screen during the first boot, or if you completely forgot the password you set during installation, don't panic! You can safely "buy a late ticket" and trigger the enrollment again using the built-in system wizard.
+- Secure Boot is enabled.
+- The local MOK certificate exists.
+- The certificate is trusted by the motherboard.
+- Installed third-party kernel modules are signed correctly.
 
-1. Open your applications menu and launch the **Welcome to AnduinOS** wizard (`anduinos-oobe`).
-2. Navigate to the **Secure Boot Configuration** page.
-3. The wizard will detect that your certificate is missing and show a warning. Click the **Create & Enroll Certificate** button.
-4. The system will automatically generate a new key and ask you to reboot.
-5. Upon reboot, the blue MOKManager screen will appear again. Follow the same steps (`Enroll MOK` → `Continue` → `Yes`), but this time, **enter the default password `123456`** as prompted by the wizard.
+![Secure Boot status in Driver Center](../Applications/System/Driver-Center/images/driver-center-secure-boot.png)
 
-## 4. Verify Secure Boot Status
-
-Once you have booted into the AnduinOS desktop, you can easily verify that Secure Boot is active.
-
-### Method 1: Graphical Verification (Recommended)
-
-Open the **Welcome to AnduinOS** (`anduinos-oobe`) wizard from your applications menu and navigate to the **Secure Boot Configuration** page. 
-
-If everything was set up correctly, you will see a screen showing "System Trust Established" with green checkmarks across all security layers:
-
-![OOBE Secure Boot Verification](images/oobe-secure-boot.png)
-
-### Method 2: Command Line Verification
-
-Alternatively, you can open a terminal and run:
+You can also verify the firmware state from a terminal:
 
 ```bash title="Check Secure Boot status"
-sudo mokutil --sb-state
+mokutil --sb-state
 ```
 
-You should see `SecureBoot enabled` in the output. Your system is now fully secure and ready to use!
+The expected result is `SecureBoot enabled`.
 
-!!! note "How does this work under the hood?"
+## If enrollment was skipped or did not finish
 
-    For a deeper dive into the signing architecture — how UEFI, Shim, the kernel, DKMS, and the OOBE state machine all fit together — see the [Secure Boot Signing Architecture](./Secure-Boot-Signing-Architecture.md) reference.
+Open **Driver Center** and select **Secure Boot**. The page distinguishes between a missing certificate, an enrollment that is waiting for the next restart, and modules that need to be signed again.
+
+- If no local certificate exists, select **Create & Enroll Certificate**.
+- If enrollment is pending, select **Reboot & Configure Secure Boot**.
+- In MOKManager, follow **Enroll MOK** → **Continue** → **Yes** and enter `123456`.
+- After returning to AnduinOS, reopen Driver Center and confirm that all four checks are green.
+
+The Welcome to AnduinOS application uses the same Secure Boot component and can also guide first-boot enrollment. Driver Center is the normal place to inspect or repair the configuration later; both interfaces operate on the same machine-local certificate.
+
+## If Secure Boot is shown as disabled
+
+Driver Center cannot enable a motherboard setting from inside the operating system. Reopen the UEFI settings, enable Secure Boot, and boot AnduinOS again. If the firmware offers **Setup Mode**, **Custom Keys**, or **Restore Factory Keys**, consult the computer manufacturer's instructions before changing the key database.
+
+Enabling Secure Boot after AnduinOS has already been installed may require creating and enrolling the local certificate from Driver Center before third-party modules can load.
+
+## Command-line certificate check
+
+Advanced users can check whether the current machine certificate is enrolled:
+
+```bash title="Check the AnduinOS MOK certificate"
+sudo mokutil --test-key /var/lib/shim-signed/mok/MOK.der
+```
+
+The command should report that the certificate is already enrolled. Keep `/var/lib/shim-signed/mok/MOK.priv` private; it is the local signing key used for modules on this computer.
+
+For implementation details, see the [Secure Boot Signing Architecture](./Secure-Boot-Signing-Architecture.md).

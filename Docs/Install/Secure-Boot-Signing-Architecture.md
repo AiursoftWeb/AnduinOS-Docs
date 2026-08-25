@@ -1,206 +1,142 @@
 # Secure Boot Signing Architecture
 
-This document explains how AnduinOS handles Secure Boot module signing for third-party kernel drivers (NVIDIA, Xbox controller, IPU6 camera, etc.). It covers the full trust chain from UEFI firmware to kernel module, how Ubuntu provides the foundation, and what AnduinOS OOBE adds on top.
+This reference explains how AnduinOS 2.0.2 keeps UEFI Secure Boot enabled while allowing packaged third-party kernel modules, such as NVIDIA, VirtualBox, or the optional Xbox controller driver, to load.
 
 !!! note "For end users"
-    If you just want to set up Secure Boot and install drivers, follow the [Secure Boot Guide](./First-Boot-For-Secure-Boot.md) and let the **Welcome Center** (OOBE) handle everything automatically. This document is for those who want to understand how it works under the hood.
 
----
+    For normal setup and recovery, use [Driver Center](../Applications/System/Driver-Center/Driver-Center.md) and follow the [Secure Boot Guide](./First-Boot-For-Secure-Boot.md). The details below are intended for troubleshooting and development.
 
-## What Ubuntu Already Provides
-
-The vast majority of the Secure Boot infrastructure is built by Ubuntu. AnduinOS stands on their shoulders:
-
-| Component | Provided by | Role |
-|-----------|------------|------|
-| Shim (`shimx64.efi`) | Ubuntu / Microsoft-signed | Chain-loads GRUB, maintains MOK list |
-| Kernel (`vmlinuz`) | Ubuntu / Canonical-signed | Trusted by Shim via Canonical's key |
-| `update-secureboot-policy` | Ubuntu (`shim-signed`) | Generates MOK key pairs |
-| Ubiquity `copy_mok()` | Ubuntu (installer) | Copies MOK keys to target system during installation |
-| MOKManager blue screen | Shim | Firmware UI for enrolling keys at boot |
-| DKMS framework | Ubuntu (`dkms`) | Builds and signs kernel modules from source |
-| `ubuntu-drivers` | Ubuntu | Detects GPU, installs recommended driver |
-
-**Ubuntu already does the heavy lifting.** During a fresh installation with "Install third-party software" checked, Ubiquity generates a MOK key, the installer's `copy_mok()` function copies it to the installed system, and the user enrolls it on first reboot via the MOKManager blue screen. After that, `ubuntu-drivers install` triggers DKMS to build and sign NVIDIA modules.
-
----
-
-## The Full Trust Chain
-
-Understanding why a click in the Welcome Center convinces the motherboard hardware to trust a third-party driver requires tracing the complete chain:
+## The trust chain
 
 ```text
-┌─────────────────────────────────────────────────────────────────┐
-│  UEFI Firmware (Motherboard)                                    │
-│  Trusts: Microsoft Corporation UEFI CA                          │
-│  "I only boot code signed by keys I know."                     │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  shimx64.efi (Shim)                                             │
-│  Signed by: Microsoft → trusted by UEFI firmware               │
-│  Role: Chain-loads GRUB, maintains the MOK List                │
-│  "I trust binaries signed by Ubuntu AND keys the owner added." │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  GRUB → Linux Kernel (vmlinuz)                                  │
-│  Signed by: Canonical Ltd. → trusted by Shim                   │
-│  Kernel loads MOK keys into .machine → .secondary_trusted_keys │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  Kernel Module (.ko) — e.g. hid-xpadneo.ko, nvidia.ko           │
-│  Signed by: MOK.priv → checked against kernel keyring          │
-│  If MOK enrolled and module signed with it → LOAD ✓            │
-└─────────────────────────────────────────────────────────────────┘
+UEFI firmware
+  trusts the signed shim bootloader
+        ↓
+shim
+  verifies the signed boot chain and maintains the Machine Owner Key list
+        ↓
+Linux kernel
+  imports enrolled MOK certificates into its trusted keyrings
+        ↓
+third-party kernel module
+  loads when its signature matches an enrolled certificate
 ```
 
----
+The MOK certificate is enrolled in shim's machine-specific trust database. It is not normally added directly to the motherboard's platform-key database.
 
-## What AnduinOS OOBE Adds
+Ubuntu provides the signed shim, GRUB and kernel packages, `mokutil`, `update-secureboot-policy`, and the optional DKMS framework. AnduinOS adds a shared toolkit and an installer policy that make the certificate state, signing configuration, and repair flow consistent across the installer, Welcome Center, and Driver Center.
 
-Ubuntu's Secure Boot flow works perfectly in the ideal case. But when things go wrong — the user skipped the MOKManager blue screen, or a DKMS module was built before the signing config existed — Ubuntu offers terminal commands and Wiki pages. AnduinOS OOBE is a **graphical state inspector and recovery tool** that adds three things Ubuntu does not provide:
+## Fresh installation
 
-### 1. Five-layer health check
+The native AnduinOS installer probes the boot mode and Secure Boot state before it creates the installation plan.
 
-OOBE verifies every link in the chain, comparing what *should* be true against what *is* true:
+When Secure Boot is enabled, it:
 
-```bash title="Five-layer health check"
-mokutil --sb-state          → Is Secure Boot on?
-mokutil --test-key          → Is MOK enrolled in firmware?
-openssl x509 -serial        → What is the MOK certificate serial?
-modinfo | grep sig_key      → What key actually signed the module?
-String comparison           → Do the two serials match?
-```
+1. verifies the architecture-matched signed shim and GRUB packages;
+2. creates a new MOK private key and certificate inside the target system;
+3. writes the persistent DKMS signing paths;
+4. processes installed DKMS modules when DKMS is present and verifies their signer;
+5. queues the new certificate for MOK enrollment; and
+6. verifies that the enrollment request exists before installation completes.
 
-### 2. Explicit DKMS signing configuration
+The first restart enters MOKManager. The one-time enrollment code is `123456`.
 
-Ubuntu's DKMS (3.2.2+) can auto-detect MOK keys at `/var/lib/shim-signed/mok/MOK.priv`. However, in production testing, this fallback proved unreliable — modules were signed with a different auto-generated key despite the MOK key existing.
+When Secure Boot is disabled, unsupported, or not applicable to an AMD64 Legacy BIOS installation, the installer does not queue MOK enrollment. ARM64 installations use standards-based UEFI only.
 
-AnduinOS OOBE writes `/etc/dkms/framework.conf.d/anduinos-sb-sign.conf` to make the signing key explicit:
+## Shared AnduinOS toolkit
 
-```ini
+The `anduinos-secureboot-toolkit` package owns the common inspection and repair implementation used by Driver Center and Welcome Center. It distinguishes these states instead of reducing them to one green or red result:
+
+- Secure Boot enabled, disabled, unsupported, or unknown;
+- local MOK key pair present or missing;
+- certificate enrolled, pending enrollment, or not enrolled;
+- persistent DKMS signing configuration present or missing; and
+- installed DKMS modules signed correctly, signed by another key, or unsigned.
+
+The toolkit directly depends on the small Secure Boot inspection utilities. It does **not** depend on DKMS, a compiler, or `build-essential`; DKMS is only a suggestion. A computer without third-party source-built modules can therefore manage its MOK certificate without pulling in a development toolchain.
+
+When DKMS is already installed, repair targets only module/version pairs that `dkms status` reports as installed for the running kernel. It rebuilds those explicit targets with the configured key. It does not run an unconditional `dkms autoinstall` and does not install DKMS merely to perform certificate enrollment.
+
+## Persistent signing configuration
+
+The toolkit and installer write:
+
+```ini title="/etc/dkms/framework.conf.d/anduinos-sb-sign.conf"
 mok_signing_key="/var/lib/shim-signed/mok/MOK.priv"
 mok_certificate="/var/lib/shim-signed/mok/MOK.der"
 ```
 
-!!! note "No sign-file path needed"
-    The config contains only key locations. DKMS automatically finds the correct `scripts/sign-file` binary for each kernel version. This survives kernel upgrades without maintenance.
+DKMS selects the correct kernel `sign-file` implementation for each kernel version. Keeping only the key paths in this configuration allows later kernel and driver updates to use the same enrolled machine certificate.
 
-### 3. One-click repair buttons
+The key files are:
 
-"Create & Enroll Certificate" and "Fix & Reinstall Driver" are GUI wrappers around Ubuntu's CLI tools. The underlying commands:
+| Path | Purpose |
+|---|---|
+| `/var/lib/shim-signed/mok/MOK.priv` | Private module-signing key; must remain private to the machine |
+| `/var/lib/shim-signed/mok/MOK.der` | Public certificate queued or enrolled through MOKManager |
+| `/etc/dkms/framework.conf.d/anduinos-sb-sign.conf` | Persistent DKMS signing-key selection |
 
-```bash
-# Track A — Proactive: Secure Boot page
-update-secureboot-policy --new-key  # Generate MOK key
-mokutil --import MOK.der             # Queue for enrollment
-cat > anduinos-sb-sign.conf          # Configure DKMS
-dkms autoinstall                     # Rebuild & sign all modules
+The certificate may be inspected or shared for diagnosis. The `.priv` file must never be published or copied to another computer.
 
-# Track B — Reactive: Xbox page Fix & Reinstall
-cat > anduinos-sb-sign.conf          # Ensure DKMS config exists
-apt reinstall -y anduinos-xbox-controller-driver  # Rebuild with correct key
+## Driver Center recovery
+
+Driver Center's **Secure Boot** page uses the shared toolkit. Depending on the detected state, it can:
+
+- create the missing machine-local certificate;
+- queue an existing certificate for enrollment;
+- report that MOKManager enrollment is already pending;
+- restore the persistent DKMS signing configuration; or
+- rebuild explicitly installed DKMS modules whose signatures do not match.
+
+Certificate enrollment still requires a restart and physical confirmation in MOKManager. A graphical application running inside the operating system cannot silently add a new MOK.
+
+## Inspect the state
+
+Check whether signature enforcement is active:
+
+```bash title="Check Secure Boot"
+sudo mokutil --sb-state
 ```
 
----
+Check whether the AnduinOS certificate is enrolled:
 
-## The OOBE State Machine
-
-The Xbox controller page implements a three-row health check:
-
-| Row | What | Green | Yellow | Red |
-|-----|------|-------|--------|-----|
-| R1 | Driver installed? | Installed | — | Not installed |
-| R2 | Signature trusted? | Signed with current MOK | Signed but not enrolled / unknown cert | Not signed |
-| R3 | Module status | Loaded / standing by | — | Blocked by Secure Boot |
-
-### Button logic
-
-| State | Button | Action |
-|-------|--------|--------|
-| Not installed + SB on + no MOK | Install (grayed) | Guide to Secure Boot page |
-| Not installed + can install | Install (active) | Install driver package |
-| Installed + signature mismatch | **Fix & Reinstall** | Write config → reinstall → refresh |
-| Installed + all green | None | Pair/Test buttons visible |
-
----
-
-## Why NVIDIA Also Benefits
-
-The `anduinos-sb-sign.conf` is a **global DKMS configuration file.** It applies to every DKMS module on the system, not just the Xbox controller driver. When the user installs the NVIDIA proprietary driver, DKMS:
-
-1. Reads `anduinos-sb-sign.conf`
-2. Finds the MOK key paths
-3. Signs `nvidia.ko`, `nvidia-modeset.ko`, etc. with the same MOK key
-4. The kernel trusts these modules because the MOK certificate is already enrolled
-
-No additional configuration, no per-driver scripts, no pink-screen debconf prompt. The signing infrastructure is in place from the moment the user goes through the Secure Boot page.
-
----
-
-## Edge Cases
-
-### Missed the Blue Screen
-
-The user clicks "Create & Enroll Certificate," reboots, but MOKManager's 10-second timeout expires while they're making coffee.
-
-**Response:** On next boot, OOBE re-checks `mokutil --test-key`. Key not enrolled → yellow warnings remain → repair button available. No infinite loop — just a state machine that reflects reality.
-
-### Virtual Machines
-
-Virtual machines expose incomplete or emulated Secure Boot. Xbox driver testing is meaningless inside a VM.
-
-**Response:** `systemd-detect-virt` gates the Xbox page. In a VM, it never appears.
-
-### No NVIDIA GPU
-
-Machines without NVIDIA hardware should not see the driver page.
-
-**Response:** `lspci` checks for "NVIDIA". If not found, the page is skipped.
-
-### Secure Boot Disabled
-
-If Secure Boot is off, the entire signing chain is irrelevant.
-
-**Response:** The Secure Boot page is skipped. The Xbox page omits R2 (signature check). All green by default.
-
----
-
-## Key Files
-
-| File | Role |
-|------|------|
-| `/etc/dkms/framework.conf.d/anduinos-sb-sign.conf` | Global DKMS signing config (created by OOBE) |
-| `/var/lib/shim-signed/mok/MOK.priv` | MOK private key |
-| `/var/lib/shim-signed/mok/MOK.der` | MOK certificate (enrolled in UEFI firmware) |
-| `/usr/sbin/update-secureboot-policy` | Ubuntu shim-signed tool |
-| `/usr/bin/anduinos-oobe` | OOBE wizard (Secure Boot + Xbox pages) |
-
-## Verification Commands
-
-```bash
-# Is Secure Boot on?
-mokutil --sb-state
-
-# Is the MOK certificate enrolled?
+```bash title="Check the local MOK certificate"
 sudo mokutil --test-key /var/lib/shim-signed/mok/MOK.der
-
-# Is DKMS configured to use the MOK key?
-cat /etc/dkms/framework.conf.d/anduinos-sb-sign.conf
-
-# What key signed the current module?
-modinfo hid-xpadneo | grep -E "sig_key|signer"
-
-# Compare with MOK certificate serial
-openssl x509 -in /var/lib/shim-signed/mok/MOK.der -inform DER -noout -serial
-
-# Does the module load?
-sudo modprobe hid-xpadneo && lsmod | grep xpadneo
 ```
 
-All three rows green in the OOBE Xbox page is the confirmation that the entire trust chain — UEFI → Shim → Kernel → DKMS → Module — is intact.
+Check whether a request is waiting for MOKManager:
+
+```bash title="List pending MOK enrollment"
+sudo mokutil --list-new
+```
+
+Inspect the complete machine-readable state used by the graphical applications:
+
+```bash title="Inspect AnduinOS Secure Boot state"
+anduinos-securebootctl
+```
+
+For an installed module, compare its reported signing key with the local certificate:
+
+```bash title="Inspect a module signature"
+modinfo hid-xpadneo | grep -E 'signer|sig_key'
+openssl x509 \
+    -in /var/lib/shim-signed/mok/MOK.der \
+    -inform DER \
+    -noout -subject -serial -fingerprint
+```
+
+Do not infer trust from a single command failure. Driver Center also checks the enrolled and pending certificate lists because different `mokutil` versions do not use every exit status in the same way.
+
+## Common state transitions
+
+| Initial state | Action | Result |
+|---|---|---|
+| Secure Boot disabled | Enable it in UEFI settings | Driver Center may then request certificate creation or enrollment |
+| Certificate missing | Create and enroll from Driver Center | Key pair is created and enrollment is queued |
+| Enrollment pending | Restart and enter `123456` in MOKManager | Certificate becomes trusted by shim and the kernel on the following boot |
+| Certificate enrolled, signing config missing | Repair automatic signing | DKMS key paths are restored without changing firmware state |
+| Installed DKMS module signed by another key | Repair modules | Explicit installed targets are rebuilt and signed with the enrolled key |
+| No DKMS installed | Complete certificate setup only | No compiler toolchain or DKMS package is installed automatically |
+
+This separation is intentional: boot trust, certificate enrollment, persistent signing configuration, and the presence of third-party modules are related but independent states.

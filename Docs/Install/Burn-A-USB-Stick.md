@@ -11,6 +11,7 @@ Then, create a bootable USB drive with the downloaded ISO file. Obviously, you n
 If you are using a Windows machine, we recommend using **Rufus** to create a bootable USB drive.
 
 !!! note "Rufus"
+
     You can download Rufus from the [official website](https://rufus.ie/).
 
 !!! warning "Use `dd` mode in Rufus instead of `ISO` mode!"

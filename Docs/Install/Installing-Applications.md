@@ -24,6 +24,19 @@ Most of these applications are distributed as **Flatpaks**. Flatpak is a modern,
 * **Up-to-date**: Flatpaks are bundled with their own dependencies, meaning you always get the latest version straight from the developer, completely independent of the underlying OS updates.
 * **Clean System**: Because they are containerized, installing or removing Flatpaks will never leave messy dependencies behind or break your system.
 
+## Add extended multimedia format support
+
+AnduinOS includes the codecs needed for common desktop playback. During a new online installation, the installer can optionally add a wider collection of GStreamer and FFmpeg codecs for legacy and specialist formats.
+
+If you skipped that installer option, installed offline, or upgraded an existing system, install the same bundle later with:
+
+```bash title="Install extended multimedia codecs"
+sudo apt update
+sudo apt install anduinos-multimedia-codecs
+```
+
+This metapackage installs `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly`, `gstreamer1.0-libav`, and `libavcodec-extra`. Codec availability does not override patent, copyright, or distribution restrictions that may apply in your jurisdiction.
+
 ## Advanced: Using the Terminal (APT)
 
 While the Software center is perfect for everyday graphical applications, developers and power users may need to install command-line utilities, libraries, or system-level tools. For this, AnduinOS uses the advanced packaging tool (`apt`).

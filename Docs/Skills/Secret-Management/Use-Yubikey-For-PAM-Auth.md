@@ -2,6 +2,12 @@
 
 If you want to enhance the security of your Linux desktop login, you can configure your system to use a YubiKey for authentication. This allows you to log in by simply touching your YubiKey, providing both convenience and strong security.
 
+## Recommended graphical setup
+
+AnduinOS 2.0.2 includes **YubiKey Security Center**, which safely enrolls keys for GDM and `sudo`, preserves password recovery, supports multiple users and keys, and validates privileged policy changes. Use it for new configurations instead of editing PAM files manually.
+
+See [YubiKey Security Center](../../Applications/System/YubiKey-Security-Center/YubiKey-Security-Center.md). The commands below remain available for advanced inspection and recovery.
+
 !!! warning "Replacing an old YubiKey?"
 
     U2F registration (for sudo/login) and SSH key generation (`ssh-keygen -t ecdsa-sk`) use **completely separate slots** on your YubiKey — they are independent registration paths. Replacing your key means you must re-register for both.
@@ -53,7 +59,7 @@ When you lock your screen or log out, you will see the password prompt as usual.
 
 !!! tip "Troubleshooting"
 
-    If the YubiKey does not flash when you lock the screen, verify your key registration and PAM configuration by running the cross-check command in the [Query which keys are trusted](#query-which-keys-are-trusted) section below.
+    If the YubiKey does not flash when you lock the screen, verify your key registration and PAM configuration by running the cross-check command in the [Query which keys are trusted](#query-which-keys-are-trusted-by-your-system) section below.
 
 If anything goes wrong, press `Ctrl + Alt + F3` to switch to a terminal, log in with your username and password, and restore the original PAM configuration:
 
@@ -68,6 +74,7 @@ This will revert the changes and allow you to log in with your password again.
 If you want to use your YubiKey for authenticating `sudo` commands (giving you passwordless convenience with hardware security), you can modify the PAM configuration for `sudo`.
 
 !!! danger "NOPASSWD conflicts with YubiKey PAM"
+
     If you have `NOPASSWD:ALL` set in `/etc/sudoers.d/`, sudo **completely skips** the PAM authentication stack — your YubiKey will never be asked for. The two settings are mutually exclusive. Ensure you do not have NOPASSWD enabled if you want to use YubiKey.
 
 Run this script to configure sudo to accept your registered YubiKey:

@@ -3,6 +3,7 @@
 RDP (Remote Desktop Protocol) allows you to connect to your AnduinOS computer and control its graphical desktop from anywhere.
 
 !!! warning "Do NOT install `xrdp`"
+
     Many outdated Linux tutorials on the internet will instruct you to install the `xrdp` package to get remote desktop working. **Do not do this on AnduinOS.** 
     
     AnduinOS is a modern operating system that strictly enforces the secure **Wayland** display server protocol. The old `xrdp` package relies on the legacy X11 server and will not work correctly, potentially breaking your system's display configuration. Always use the built-in `gnome-remote-desktop` as outlined below.

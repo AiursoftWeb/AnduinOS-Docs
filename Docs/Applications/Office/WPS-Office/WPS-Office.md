@@ -12,7 +12,7 @@ flatpak install flathub com.wps.Office
 
 !!! warning "This package is global version"
 
-    This package is global version, if you want to use Chinese version, see [WPS Office CN](#wps-office-cn)
+    This package is the global version. If you want the Chinese edition, see [WPS Office Chinese edition](#wps-office-chinese-edition).
 
 ## System install (manual)
 
@@ -36,7 +36,7 @@ rm wps.deb
 
     This is because the software provider didn't setup a repository for automatic updates. You will need to check the official website for updates.
 
-## WPS Office 中文版
+## WPS Office Chinese edition
 
 如果您需要原生中文界面以及 WPS AI 等特有功能，可以通过以下步骤手动下载并安装官方中文版：
 

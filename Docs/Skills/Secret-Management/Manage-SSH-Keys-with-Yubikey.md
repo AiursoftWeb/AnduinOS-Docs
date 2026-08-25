@@ -1,5 +1,11 @@
 # How to Manage SSH Keys with YubiKey
 
+## Recommended graphical setup
+
+AnduinOS 2.0.2 includes **YubiKey Security Center**. It can inspect and create resident SSH credentials, load them into the desktop SSH agent, copy public keys, test signing, configure ten-minute SSH connection reuse, and select a key for Git commit signing.
+
+See [YubiKey Security Center](../../Applications/System/YubiKey-Security-Center/YubiKey-Security-Center.md). The commands below remain useful on servers and for advanced workflows.
+
 ## 1. Initialize Key & Save to YubiKey
 
 Generate a resident, PIN-protected Ed25519 key directly on the hardware device.
@@ -154,7 +160,7 @@ If you want to save the key stubs to disk so you don't have to run `ssh-add -K` 
 
 ```bash title="Save stubs to .ssh folder"
 mkdir -p ~/.ssh && cd ~/.ssh && ssh-keygen -K
-# This downloads the stub files (id_ed25519_sk_rk...) to your .ssh folder. Please note: your private key **IS** still in your Yubikey ONLY and not transfered!!!
+# This downloads the stub files (id_ed25519_sk_rk...) to your .ssh folder. Your private key remains only on your YubiKey and is not transferred.
 
 ```
 

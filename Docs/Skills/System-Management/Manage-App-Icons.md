@@ -2,6 +2,8 @@
 
 When you click the start menu, you see a list of apps. These apps are represented by icons. Sometimes you may want to add a new app to the list, or view which command is executed when you click an app icon.
 
+For normal desktop-icon and taskbar configuration, first use [AnduinOS Appearance](../../Applications/System/AnduinOS-Appearance/AnduinOS-Appearance.md). The instructions below cover advanced manual launcher-file management.
+
 This tutorial will show you how to manage app icons\shortcuts in AnduinOS.
 
 ## System wide apps

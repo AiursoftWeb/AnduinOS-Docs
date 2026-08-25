@@ -320,7 +320,7 @@ You can verify the current rules and decisions by running:
 ```bash
 # Collections are the CVEs that have been detected
 sudo cscli collections list
-# Senarios are the rules that detect malicious behavior
+# Scenarios are the rules that detect malicious behavior
 sudo cscli scenarios list
 # Decisions are the IPs that have been blocked
 sudo cscli decisions list

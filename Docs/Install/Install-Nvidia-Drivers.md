@@ -12,17 +12,17 @@ This guide provides a comprehensive approach to installing proprietary NVIDIA dr
 - Internet connection to download drivers and dependencies.
 - Backup your system or important data before proceeding with driver installations.
 
-## (Recommended) Using AnduinOS Welcome Center
+## (Recommended) Using Driver Center
 
-For most users, the easiest way to install the recommended NVIDIA drivers is via the built-in **AnduinOS Welcome Center**:
+For most users, the easiest way to install the recommended NVIDIA driver is the built-in **Driver Center**:
 
-1. Open **Welcome Center** (AnduinOS OOBE) from your application menu.
-2. Navigate to the **Unleash Your Graphics Hardware** (NVIDIA) page.
-3. Click the **One-Click NVIDIA Driver Install** button.
-4. The system will automatically detect your NVIDIA GPU, download, and install the recommended proprietary driver.
+1. Open **Driver Center** from the application menu.
+2. Open **Graphics**.
+3. Select the version marked **Recommended for this device**.
+4. Apply the change. Driver Center downloads the packaged driver selected by Ubuntu's hardware detection.
 5. **Reboot** your system to apply the changes.
 
-![One-Click NVIDIA Driver Install via Welcome Center](images/anduinos-oobe-nvidia.png)
+![NVIDIA driver selection in Driver Center](../Applications/System/Driver-Center/images/driver-center-graphics.png)
 
 !!! note "How does module signing work under the hood?"
 
@@ -47,7 +47,7 @@ sudo ubuntu-drivers install
 
 !!! warning "Known Issues and Stability"
 
-    NVIDIA proprietary drivers can sometimes introduce regressions or stability issues, especially with Wayland or very recent kernels. If you encounter issues, please check the [NVIDIA driver release notes](https://www.nvidia.com/en-us/drivers/unix/) or report them to the [NVIDIA Developer Forum](https://forums.developer.nvidia.com/c/linux/).
+    NVIDIA proprietary drivers can sometimes introduce regressions or stability issues, especially with Wayland or very recent kernels. If you encounter issues, please check the [NVIDIA driver release notes](https://www.nvidia.com/en-us/drivers/unix/) or report them to the [NVIDIA Linux Developer Forum](https://forums.developer.nvidia.com/c/gpu-graphics/linux/148).
 
     If you experience visual glitches or crashes, you can try:
 
@@ -375,7 +375,7 @@ To fix a kernel mismatch, first ensure you have the headers for your current ker
 
 Secure Boot is a UEFI feature that prevents untrusted code from running at boot. If the NVIDIA driver is installed but its kernel modules do not load, the modules may not be signed with the enrolled AnduinOS MOK, or the AnduinOS MOK may not yet be enrolled.
 
-Keep Secure Boot enabled. Open the **AnduinOS Welcome Center**, navigate to the **Secure Boot Configuration** page, and follow the displayed action to create and enroll the certificate or repair the signing configuration. Reboot when prompted. In the blue **MokManager** screen, complete the MOK enrollment using the password provided or requested by the Welcome Center, then boot back into AnduinOS.
+Keep Secure Boot enabled. Open **Driver Center**, select **Secure Boot**, and follow the displayed action to create and enroll the certificate or repair the signing configuration. Reboot when prompted. In the blue **MOKManager** screen, complete enrollment using the AnduinOS 2.0.2 one-time code `123456`, then boot back into AnduinOS.
 
 After rebooting, verify the trust chain and driver in this order:
 
@@ -391,7 +391,7 @@ The first command should report `SecureBoot enabled`, the second should report t
 
 This is related to point 2. If you installed your driver using the official `.run` file from NVIDIA's website, that driver is compiled *only* for your current kernel. **You must re-run the installer file every time AnduinOS updates its kernel.**
 
-To avoid this, we strongly recommend installing drivers via the **Welcome Center** or using the APT repositories (e.g., `sudo apt install nvidia-driver-550`). These methods use **DKMS** (Dynamic Kernel Module Support).
+To avoid this, we strongly recommend installing drivers via **Driver Center** or using the APT repositories (e.g., `sudo apt install nvidia-driver-550`). These methods use **DKMS** (Dynamic Kernel Module Support).
 
 DKMS automatically rebuilds the NVIDIA module every time your kernel is updated, which prevents this problem from happening. It's the "set it and forget it" solution.
 

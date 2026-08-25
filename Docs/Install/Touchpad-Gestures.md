@@ -22,4 +22,5 @@ Multi-tasking on AnduinOS relies heavily on workspaces. You can effortlessly gli
 * **Right Click**: Tap with **two fingers** to simulate a right-click.
 
 !!! tip "Natural Scrolling"
+
     By default, AnduinOS uses "Natural Scrolling" (moving your fingers up pushes the content up). If you prefer traditional scrolling, you can turn this off in **Settings** -> **Mouse & Touchpad** -> Disable **Natural Scrolling**.

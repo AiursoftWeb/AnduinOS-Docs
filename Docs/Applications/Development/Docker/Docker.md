@@ -13,6 +13,7 @@ sudo apt install -y docker.io
 ```
 
 !!! tip "Also install recommended plugins"
+
     It is recommended to install the following packages at the same time:
 
     | Package | Purpose |

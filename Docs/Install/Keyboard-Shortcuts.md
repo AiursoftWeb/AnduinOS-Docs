@@ -34,6 +34,7 @@ These are the featured shortcuts in the AnduinOS Welcome Center that help you ca
 * Start a screen recording: `Windows + G`
 
 !!! note
+
     To stop the screen recording, click the stop button `⬛` in the bottom right corner of the taskbar (or in the top right status area).
 
 ## Workspace

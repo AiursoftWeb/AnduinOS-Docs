@@ -24,7 +24,19 @@ To install QEMU and the ARM64 UEFI firmware on AnduinOS, run the following comma
 sudo apt install qemu-system-arm qemu-efi-aarch64
 ```
 
-Download the ARM64 ISO image from the [AnduinOS releases page](https://github.com/Aiursoft/AnduinOS/releases).
+Download the current ARM64 ISO image by following [Download AnduinOS](../Install/Download-AnduinOS.md). The commands below use the 2.0.2 filename; adjust it if you renamed the file or are testing another release.
+
+## ARM64 edition differences
+
+The ARM64 ISO provides the same AnduinOS desktop, native installer, Btrfs and Ext4 choices, Secure Boot workflow, Driver Center, and first-party system tools where the underlying packages support ARM64. The important architecture-specific differences are:
+
+- ARM64 installation supports standards-based UEFI/ACPI only; it does not provide the AMD64 Legacy BIOS path.
+- Welcome Center omits the Bottles page because the normal AnduinOS Bottles workflow runs x86 Windows applications and is not supported on ARM64.
+- Windows EXE Runner therefore does not offer the normal Bottles-based experience on ARM64.
+- The VMware guest integration carried by the AMD64 Live ISO is not included in the ARM64 image.
+- Applications or proprietary drivers distributed only for x86-64 remain unavailable even when the rest of the desktop works normally.
+
+These are product and third-party architecture limits, not signs of an incomplete ARM64 installation.
 
 ## Prepare the firmware variables
 
@@ -47,7 +59,7 @@ qemu-system-aarch64 \
     -drive if=pflash,file=/usr/share/AAVMF/AAVMF_CODE.fd,format=raw,readonly=on \
     -drive if=pflash,file=./vars.fd,format=raw \
     -device virtio-scsi-pci,id=scsihw0 \
-    -drive file=./AnduinOS-2.0.1-arm64.iso,if=none,id=cdrom,format=raw,readonly=on \
+    -drive file=./AnduinOS-2.0.2-arm64.iso,if=none,id=cdrom,format=raw,readonly=on \
     -device scsi-cd,bus=scsihw0.0,drive=cdrom,bootindex=100 \
     -netdev user,id=net0 \
     -device virtio-net-pci,netdev=net0 \
@@ -94,7 +106,7 @@ The UEFI firmware will show a boot menu. Select the SCSI CD-ROM device to boot f
         -drive if=pflash,file=/usr/share/AAVMF/AAVMF_CODE.fd,format=raw,readonly=on \
         -drive if=pflash,file=./vars.fd,format=raw \
         -device virtio-scsi-pci,id=scsihw0 \
-        -drive file=./AnduinOS-2.0.1-arm64.iso,if=none,id=cdrom,format=raw,readonly=on \
+        -drive file=./AnduinOS-2.0.2-arm64.iso,if=none,id=cdrom,format=raw,readonly=on \
         -device scsi-cd,bus=scsihw0.0,drive=cdrom,bootindex=100 \
         -netdev user,id=net0 \
         -device virtio-net-pci,netdev=net0 \

@@ -7,6 +7,7 @@ The following are some useful Docker commands and techniques that can help you m
 To install Docker on AnduinOS, please follow the instructions [here](../../Applications/Development/Docker/Docker.md).
 
 !!! tip "Also install recommended plugins"
+
     It is recommended to also install the following packages at the same time:
 
     | Package | Purpose |
@@ -22,6 +23,7 @@ To install Docker on AnduinOS, please follow the instructions [here](../../Appli
 ## Build an Image from a Dockerfile
 
 !!! warning "Legacy build command"
+
     `docker build` uses the classic builder and **does not support multi-architecture targets**. It is gradually being superseded by `docker buildx build`, which is backed by BuildKit and is the recommended approach going forward. See the [Build Multi-Architecture Images with `docker buildx`](#build-multi-architecture-images-with-docker-buildx) section at the bottom of this page for details.
 
 ```bash title="Build an Image from a Dockerfile"
@@ -438,6 +440,7 @@ Use this Dockerfile when you need to run GUI applications inside a Docker contai
 ## Build Multi-Architecture Images with `docker buildx`
 
 !!! info "Why `buildx`?"
+
     Supporting both **x86 (AMD64)** and **ARM64** in a single image tag is now a baseline expectation for public container images. The classic `docker build` command cannot produce a multi-architecture manifest. `docker buildx`, powered by **BuildKit**, solves this cleanly — one command, one tag, every architecture.
 
 ### 1. Install Prerequisites
@@ -463,6 +466,7 @@ docker buildx inspect --bootstrap
 ```
 
 !!! note "A background container appears"
+
     After `--bootstrap`, running `docker ps` will reveal a container named `buildx_buildkit_mybuilder0` using the `moby/buildkit` image. **This is expected.** BuildKit offloads all compilation work to this dedicated container, which gives it capabilities the standard Docker Daemon lacks (multi-arch manifest lists, advanced caching, parallelism). It is idle when not building and consumes negligible resources.
 
     To pause it: `docker buildx stop mybuilder`  
@@ -499,6 +503,7 @@ docker buildx build \
 ```
 
 !!! warning "Always use `--push` for multi-arch builds"
+
     A multi-architecture image is not a single fat blob — it is a **Manifest List** (or OCI Index) that acts as a directory: `amd64 → digest A`, `arm64 → digest B`. The traditional local Docker daemon cannot store a Manifest List. Without `--push`, BuildKit has nowhere to assemble it.
 
     If you do not have a registry available yet, export to an OCI tar instead:
@@ -563,6 +568,7 @@ before_script:
 ### 10. Common Pitfalls
 
 !!! danger "Architecture-specific dependencies break cross-compilation"
+
     If your Dockerfile downloads a pre-built binary or installs a package that only exists for one architecture (e.g., `gcc-x86-64-linux-gnu`), the ARM64 build leg will fail. **If any architecture fails, the entire `buildx` task fails and nothing is pushed.**
 
     The fix is to make your Dockerfile architecture-aware. BuildKit exposes `TARGETARCH` as a build argument automatically:
@@ -575,6 +581,7 @@ before_script:
     ```
 
 !!! tip "Verify a published multi-arch image with `regctl`"
+
     [`regctl`](https://github.com/regclient/regclient) is an open-source registry CLI that lets you inspect remote manifests:
 
     ```bash
@@ -612,6 +619,7 @@ ENTRYPOINT ["myapp"]
 ```
 
 !!! tip "Why this works"
+
     Go, Rust (`--target`), and most modern compilers support native cross-compilation — they can emit ARM64 machine code while running on an x86 CPU without QEMU. Only the *output binary* is ARM64. The compilation process itself runs at full native speed.
 
     For interpreted runtimes (Python, Node.js) that don't have a cross-compile mode, QEMU is still needed for `RUN` steps, but you can still use native stages to handle any ahead-of-time asset building before handing off to the QEMU-based stage.

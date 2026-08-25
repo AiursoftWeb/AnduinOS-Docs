@@ -6,12 +6,16 @@ After installing AnduinOS, hopefully all devices are functioning properly. Howev
 
     Some drivers are not open source and may have licensing restrictions. Please make sure you have the right to use these drivers before installing them.
 
-## (Recommended) Using AnduinOS Welcome Center
+## (Recommended) Using Driver Center
 
-The easiest way to install missing hardware drivers (such as NVIDIA Graphics and Xbox Controllers) is via the built-in **AnduinOS Welcome Center**. The Welcome Center automatically detects your hardware and securely configures necessary drivers with proper module signing.
+The easiest way to inspect and install supported hardware drivers is the built-in **Driver Center**. It checks graphics, audio, printing, Xbox controller, Secure Boot, and firmware support from one place.
 
-1. Open **Welcome Center** (AnduinOS OOBE) from your application menu.
-2. Navigate through the setup to find dedicated pages for Graphics and Controllers.
+1. Open the application menu and launch **Driver Center**.
+2. Select the hardware category that needs attention.
+3. Review the detected hardware and recommended action.
+4. Apply the change and restart when requested.
+
+See the complete [Driver Center guide](../Applications/System/Driver-Center/Driver-Center.md) for each hardware page.
 
 For more detailed guides on specific drivers, see the sections below.
 
@@ -66,23 +70,24 @@ You can use the NPU to run some AI models, like `DeepSeek R1`. For more details 
 
 By default, AnduinOS supports Xbox controllers. However, you may encounter issues with the latest Xbox controllers, such as the Xbox Series X controller (e.g., incorrect `LT` or `RT` triggers response). In this case, you need to install the advanced `xpadneo` driver.
 
-### (Recommended) Using AnduinOS Welcome Center
+### (Recommended) Using Driver Center
 
-The easiest and safest way to install this driver—especially if you have **Secure Boot enabled**—is via the built-in Welcome Center, which automatically configures module signing for you:
+The easiest and safest way to install this driver—especially if you have **Secure Boot enabled**—is Driver Center, which checks module-signing trust before making the change:
 
-1. Open **Welcome Center** (AnduinOS OOBE) from your application menu.
-2. Navigate to the **Xbox Controller Support** page.
+1. Open **Driver Center** from the application menu.
+2. Open **Xbox Controller Support**.
 3. Click **Install Xbox Driver**.
 4. Once completed, reboot your system. If you previously paired your controller, remove it from Bluetooth settings and re-pair it.
 
-![Xbox Controller Support via Welcome Center](images/anduinos-oobe-xbox.png)
+![Xbox Controller Support in Driver Center](../Applications/System/Driver-Center/images/driver-center-xbox.png)
 
 ### (Alternative) Command Line Installation
 
 If you prefer to install via the command line, you can install the `anduinos-xbox-controller-driver` package directly. 
 
 !!! warning "Secure Boot Requirements"
-    If you have Secure Boot enabled, ensure you have enrolled the AnduinOS system MOK (either via Welcome Center or MokManager). Ubuntu/AnduinOS configures DKMS automatically to sign modules using your system's MOK during the installation.
+
+    If Secure Boot is enabled, open Driver Center's **Secure Boot** page and ensure it reports that the local certificate is trusted. AnduinOS configures DKMS to sign modules using that machine-local key.
 
 Run the following commands to install the driver:
 

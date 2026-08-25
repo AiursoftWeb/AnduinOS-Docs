@@ -63,6 +63,7 @@ To fix this missing dependency issue and ensure high-performance rendering, foll
 Enable the 32-bit architecture and install the required 32-bit libraries.
 
 !!! warning "Check your current Nvidia driver version"
+
     Identify whether you are using the standard/open-source Nvidia driver or the server driver before running these commands. Mixing them might accidentally uninstall your existing 64-bit drivers!
 
 **For Closed-Source/Server Nvidia Drivers (e.g., `nvidia-driver-580-server`):**

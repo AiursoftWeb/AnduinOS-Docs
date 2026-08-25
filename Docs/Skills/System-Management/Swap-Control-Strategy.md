@@ -1,6 +1,6 @@
 # Swap Control Strategy
 
-Starting from AnduinOS 2.1, the system uses a **Zram-first, layered-priority** swap architecture. Multiple packages each contribute their own `sysctl.d` drop-in file, and higher-numbered filenames override lower ones. This article covers how to inspect your swap, how to change it, how the layers work, and how to undo changes.
+AnduinOS 2.0.2 uses a **Zram-first, layered-priority** Swap architecture and creates a dedicated disk-Swap partition on new installations. Multiple packages contribute `sysctl.d` settings, and later applicable files override earlier values. This article covers manual inspection and advanced overrides. For the supported graphical workflow, see [Virtual Memory Control](../../Applications/System/Virtual-Memory-Control/Virtual-Memory-Control.md).
 
 ## Why Zram?
 
@@ -114,9 +114,11 @@ sudo systemctl enable --now anduinos-zswap.service
 ```
 
 !!! warning "Zswap needs a backing swap device"
+
     Unlike Zram, Zswap does not create a swap device — it only compresses pages on their way to a disk swap file or partition. Make sure you have one configured first (see [Manage Swap](../../Install/Manage-Swap.md)).
 
 !!! tip "Don't run Zram and Zswap together"
+
     They solve the same problem. Running both wastes RAM and CPU. Pick one.
 
 ## How the layers work
@@ -193,6 +195,7 @@ The system falls back to `30-anduinos-swap.conf` (swappiness=100).
 The post-removal script runs `sysctl --system`. With `30-anduinos-swap.conf` gone, the next file wins — `20-anduinos-tweaks.conf` with swappiness=10. The Zram service is also removed, so your Zram devices disappear.
 
 !!! note "Swappiness=10 is the correct fallback when Zram is gone"
+
     Without Zram, your swap is a disk file. Low swappiness avoids pushing pages to slow disk I/O. The fallback chain is intentional: remove Zram → revert to disk-appropriate swappiness.
 
 ### Uninstalling `anduinos-system-tweaks`

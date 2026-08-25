@@ -1,6 +1,8 @@
 # Run Windows Apps on Linux
 
-To run Windows apps on Linux, you can use Wine, a compatibility layer capable of running Windows applications on several POSIX-compliant operating systems, such as Linux, macOS, and BSD. Wine is free and open-source software, and it is available for download on the WineHQ website.
+For the normal desktop workflow, first try [Windows EXE Runner](../../Applications/System/Windows-EXE-Runner/Windows-EXE-Runner.md). It opens supported `.exe` and `.msi` files through Bottles, prepares the compatibility environment graphically, and recommends native AnduinOS applications when they are a better fit.
+
+The manual process below is intended for users who specifically need a system Wine installation or direct access to `winecfg`. Wine is a compatibility layer rather than a Windows virtual machine, and compatibility varies by application.
 
 ## Install Wine
 

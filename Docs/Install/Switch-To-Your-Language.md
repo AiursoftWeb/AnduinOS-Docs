@@ -24,16 +24,18 @@ AnduinOS handles language packs and input methods automatically through the grap
 4. A prompt will appear asking you to **Restart Session**. Log out and log back in for the new language to take effect.
 
 ### Step 3: Add an Input Method (Keyboard)
-If you need to type in a language with complex characters (like Chinese Pinyin or Japanese Romaji), you need to add an input source.
+
+If you need to type in a language with complex characters, such as Chinese or Japanese, add an input source for that language.
 
 1. Open **Settings** and navigate to **Keyboard**.
 2. Under "Input Sources", click **Add Input Source**.
-3. Search for your language. For example, search for **Chinese (Rime)** or **Japanese (Anthy)**.
-   *(Note: AnduinOS pre-installs the excellent Rime engine for Chinese users).*
+3. Search for your language. For example, select **Chinese (Rime)** or **Japanese (Anthy)**.
 
 ![Settings Keyboard Input Sources](images/settings-keyboard-input.png)
 
 You can now use the <kbd>Super</kbd> + <kbd>Space</kbd> shortcut to toggle between English and your new input method.
+
+For installation, everyday use, customization, and troubleshooting of the AnduinOS Chinese input method, see [Type Chinese with Rime](./Use-Rime-Chinese-Input.md).
 
 ---
 
@@ -42,6 +44,7 @@ You can now use the <kbd>Super</kbd> + <kbd>Space</kbd> shortcut to toggle betwe
 If you prefer managing your system via the terminal, you can configure your locale and install language packs using standard commands.
 
 !!! warning "Do not edit `~/.pam_environment`"
+
     Older guides may tell you to edit `~/.pam_environment`. This feature has been permanently removed from modern Linux systems for security reasons. Use `localectl` instead.
 
 ### 1. Install Language Packs
