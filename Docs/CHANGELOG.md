@@ -4,10 +4,11 @@ Release notes are organized by major release line so that each page stays focuse
 
 ## Current release
 
-* [AnduinOS 2.0.2 Release Notes](./Release-Notes/2.0.2.md)
+* [AnduinOS 2.0.3 Release Notes](./Release-Notes/2.0.3.md) — under development
 
 ## Previous releases
 
+* [AnduinOS 2.0.2 Release Notes](./Release-Notes/2.0.2.md)
 * [AnduinOS 2.0.1 Release Notes](./Release-Notes/2.0.1.md)
 * [AnduinOS 2.0.0 Release Notes](./Release-Notes/2.0.0.md)
 * [AnduinOS 1.x Release Notes](./Release-Notes/1.x.md) — historical archive
