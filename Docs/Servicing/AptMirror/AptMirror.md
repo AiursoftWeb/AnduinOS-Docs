@@ -1,5 +1,9 @@
 # Host an apt Mirror
 
+!!! tip "Publishing your own packages?"
+
+    This page covers mirroring an existing repository. To build your own Debian packages and distribute signed updates, see the separate [Apkg guide](../../Apkg/Introduction.md).
+
 `apt` is the package manager for Debian-based systems. It is used to install, update, and remove software packages. An apt mirror is a server that stores a copy of the software packages available in the official repositories. Hosting an apt mirror on AnduinOS can help you speed up the package installation process and reduce the load on the official repositories.
 
 To host an apt mirror on AnduinOS, run the following commands.

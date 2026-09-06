@@ -250,6 +250,26 @@ nav:
         - 0AD: Applications/Games/0AD/0AD.md
         - XPlane12: Applications/Games/XPlane12/XPlane12.md
 
+  - Apkg:
+    - Overview:
+      - Introduction: Apkg/Introduction.md
+      - Install the CLI: Apkg/Install-the-CLI.md
+      - Build Your First Debian Package: Apkg/Build-Your-First-Package.md
+      - Develop AnduinOS Packages: Apkg/Develop-AnduinOS-Packages.md
+      - Host an Apkg Server: Apkg/Host-an-Apkg-Server.md
+      - Publish Packages and Configure APT: Apkg/Publish-Packages.md
+      - Maintenance and Troubleshooting: Apkg/Maintenance-and-Troubleshooting.md
+    - Reference:
+      - Design and Architecture: Apkg/Design-and-Architecture.md
+      - .aosproj Reference: Apkg/Aosproj-Reference.md
+      - Upstream Packages: Apkg/Upstream-Packages.md
+      - AppStream and GNOME Software: Apkg/AppStream.md
+      - Bundle and Upload Semantics: Apkg/Bundle-and-Upload-Reference.md
+      - CI and Preflight API: Apkg/CI-and-Preflight.md
+      - Server Configuration: Apkg/Server-Configuration.md
+      - Develop the Apkg Platform: Apkg/Contributing-to-Apkg.md
+      - Documentation Migration: Apkg/Documentation-Migration.md
+
   - Servicing:
     - Introduction: Servicing/Introduction.md
     - Setting up new Linux Server: Servicing/Linux.md
