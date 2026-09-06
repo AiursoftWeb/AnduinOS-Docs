@@ -2,6 +2,10 @@
 
 This guide follows the AnduinOS 2.0.2 installer from the Live USB to the first boot of the installed system.
 
+!!! note "Newer installer storage features"
+
+    The [2.0.3 development release](../Release-Notes/2.0.3.md) adds an expanded manual-storage workflow, including guarded NTFS shrinking. The screenshots and guided coexistence instructions here describe 2.0.2; they are not instructions for using the new manual editor.
+
 Before starting, back up anything important on every disk you may modify. For the most predictable installation, give AnduinOS its own physical disk. Installing beside Windows on the same disk is an advanced operation; read [Dual Boot with Windows](./Dual-Boot-With-Windows.md) before selecting that route.
 
 !!! tip "Before booting the USB"
