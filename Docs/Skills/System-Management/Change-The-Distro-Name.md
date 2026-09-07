@@ -1,52 +1,16 @@
-# Change AnduinOS's distro name to other Linux distro names
+# Changing the distribution identity — retired instructions
 
-In some cases, for example, some software may only support specific Linux distributions, you may need to change AnduinOS's distro name to other Linux distro names. In this guide, we will show you how to change AnduinOS's distro name to other Linux distro names.
+The former instructions for turning AnduinOS into Ubuntu by reinstalling
+identity packages are not supported on AnduinOS 2. AnduinOS supplies its own
+`base-files` package; reinstalling it does not convert the distribution.
 
-For example, if you want to change AnduinOS to Ubuntu without reinstalling the system, you can follow these steps:
+Changing `os-release` or `lsb-release` does not replace the installed package
+set or establish a supported Ubuntu release-upgrade path. Do not follow the
+old instructions to install Ubuntu upgrade components and run
+`do-release-upgrade` as a conversion procedure.
 
-Backup the original files:
-
-```bash
-sudo cp /etc/os-release /etc/os-release.bak
-sudo cp /etc/lsb-release /etc/lsb-release.bak
-```
-
-Then, reinstall the following packages:
-
-```bash
-sudo apt reinstall lsb-release distro-info-data base-files
-```
-
-That's it! You have successfully changed AnduinOS's distro name to Ubuntu. You can now use software that only supports Ubuntu on your system.
-
-To verify the change, you can run the following command:
-
-```bash
-lsb_release -a
-```
-
-You may observe `Ubuntu` as the distro name in the output.
-
-To revert the change, you can restore the backup files:
-
-```bash
-sudo cp /etc/os-release.bak /etc/os-release
-sudo cp /etc/lsb-release.bak /etc/lsb-release
-```
-
-## Next step
-
-After changing your distro name, you can install some Ubuntu-specific software on your system. For example, you can install `software-properties-gtk` to manage software sources:
-
-```bash
-sudo apt install software-properties-gtk gir1.2-goa-1.0 python3-dateutil ubuntu-advantage-desktop-daemon \
-  ubuntu-advantage-tools ubuntu-pro-client ubuntu-pro-client-l10n ubuntu-drivers-common ubuntu-release-upgrader-core \
-  ubuntu-release-upgrader-gtk ubuntu-report ubuntu-settings uno-libs-private update-manager update-manager-core update-notifier \
-  update-notifier-common gnome-software gnome-software-common gnome-power-manager
-```
-
-And of course you can upgrade your Ubuntu system to the latest version:
-
-```bash
-sudo do-release-upgrade
-```
+For software compatibility, use the vendor's documented installation method
+or an [isolated container](../Sandboxing/Using-Docker-As-Container.md).
+For system maintenance, see [using APT](./Use-APT-to-manage-packages.md)
+and [backup and recovery](../../Install/Backup-And-Restore.md).
+This address remains to explain why the former tutorial was withdrawn.
