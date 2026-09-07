@@ -30,10 +30,11 @@ For most users, the easiest way to install the recommended NVIDIA driver is the 
 
 ## (Alternative) Automatic CLI Installation
 
-If you prefer using the terminal, you can let the system automatically detect and install the recommended driver using the command line:
+No graphical session is required. On SSH-only servers, you can detect and install a packaged driver from the terminal. Arrange console access before rebooting if Secure Boot enrollment is needed:
 
 ```bash
 sudo apt update
+ubuntu-drivers devices
 sudo ubuntu-drivers install
 ```
 
@@ -43,7 +44,7 @@ sudo ubuntu-drivers install
 
 !!! note "Not Always the Latest Driver"
 
-    The automatically installed driver might **not** be the latest available from NVIDIA. If you require newer drivers—for example, to support newer GPU models or software features—you should proceed with the **Manual Installation** instructions.
+    The automatically installed driver might **not** be the latest available from NVIDIA. Check hardware and kernel compatibility before changing branches. If the packaged choices do not meet a specific requirement, the PPA and manual installation paths below remain available.
 
 !!! warning "Known Issues and Stability"
 
@@ -59,12 +60,20 @@ sudo ubuntu-drivers install
     To list all available NVIDIA driver versions for your hardware, use:
 
     ```bash title="List available NVIDIA driver versions"
-    ubuntu-drivers list --gpgpu
+    ubuntu-drivers devices
     ```
 
 ---
 
-## PPA Installation (Recommended if you need latest drivers)
+## Headless compute servers
+
+For compute-oriented driver choices, use `ubuntu-drivers list --gpgpu` and
+`sudo ubuntu-drivers install --gpgpu` instead of assuming desktop driver
+selection is appropriate. Inspect the proposed packages for your workload.
+See [Ubuntu's server driver guidance](https://ubuntu.com/server/docs/nvidia-drivers-installation/).
+No desktop application is required for these commands.
+
+## PPA Installation (Optional third-party source)
 
 If you don't want to use the automatic installation method or need a specific version of the NVIDIA driver, you can use a PPA (Personal Package Archive) to install the drivers. This method is useful for getting newer drivers that may not yet be available in the default repositories.
 
@@ -75,10 +84,12 @@ sudo add-apt-repository ppa:graphics-drivers/ppa
 sudo apt update
 ```
 
-This PPA contains the latest NVIDIA drivers. After adding the PPA, you can install the driver using:
+Check that the PPA supports your Ubuntu base release and architecture. Adding it changes the trust and maintenance boundary; it is not required for terminal installation. List the available choices with `ubuntu-drivers devices`, then install the exact package you selected:
 
 ```bash title="Install NVIDIA driver from PPA"
-sudo apt install nvidia-driver-550 # Replace '550' with the desired driver version
+read -r -p 'Exact package name from ubuntu-drivers devices: ' nvidia_package
+apt-cache policy "$nvidia_package"
+sudo apt install "$nvidia_package"
 ```
 
 Then reboot your system:
@@ -87,7 +98,7 @@ Then reboot your system:
 sudo reboot
 ```
 
-This method is generally safe and recommended for users who want to ensure they have the latest stable drivers without manually downloading and installing them.
+Review the proposed package changes before confirming. A newer PPA driver is not a guarantee of stability or compatibility.
 
 ---
 
@@ -95,32 +106,34 @@ This method is generally safe and recommended for users who want to ensure they 
 
 The manual installation method allows you to install specific (often newer) NVIDIA drivers, especially if you need features not yet packaged in the default AnduinOS/Ubuntu repositories.
 
-### Step 1: Clean the System of Existing Drivers
+### Step 1: Identify the existing installation
 
-Before proceeding, remove any existing or partially installed NVIDIA drivers to avoid conflicts:
+Do not combine APT-managed NVIDIA drivers and a `.run` installation. Inspect
+the existing packages before deciding which installation method to keep:
 
 ```bash
-sudo apt remove --purge nvidia-*
-sudo apt remove --purge libnvidia-*
-sudo apt remove --purge xserver-xorg-video-nvidia-*
-sudo apt remove --purge nvidia-settings
-sudo apt remove --purge nvidia-prime
-sudo apt autoremove --purge
-sudo apt autoclean
+dpkg-query -W 'nvidia-*' 'libnvidia-*' 'linux-modules-nvidia-*'
+dkms status
 ```
 
-This ensures no leftover packages interfere with the new installation.
+Missing-package messages are normal when no matching packages are installed.
+If changing from APT to `.run`, identify the exact conflicting packages and
+review an APT removal simulation before removing them. Do not use wildcard
+purges or automatic `autoremove` as a generic cleanup procedure: these can
+remove CUDA, graphics and application dependencies.
 
----
+For a previous `.run` installation, use its supplied `nvidia-uninstall`
+procedure when switching installation methods. Download the replacement
+installer and arrange recovery access before removing a working driver.
 
 ### Step 2: Download the NVIDIA Driver
 
 1. **Visit the [NVIDIA Drivers Website](https://www.nvidia.com/en-us/drivers/)**.
 2. **Locate the correct driver**:
    - Select your GPU model (e.g., GeForce RTX 4090, GTX 1080, etc.).
-   - Select the appropriate operating system (Linux 64-bit).
+   - Select the correct architecture and a driver branch supporting your GPU and kernel.
    - Click "Search" and download the appropriate `.run` file.
-3. **Make the file executable**. Suppose your file is named `NVIDIA-Linux-x86_64-565.77.run`:
+3. **Make the file executable**. The filename below is an example, not a recommended version; replace it everywhere with your actual download:
 
    ```bash
    chmod +x NVIDIA-Linux-x86_64-565.77.run
@@ -138,7 +151,9 @@ This ensures no leftover packages interfere with the new installation.
 
 Secure Boot ensures your system only loads drivers or kernel modules signed by a trusted key. Keep **Secure Boot enabled** in your BIOS/UEFI and sign the NVIDIA driver module with the AnduinOS Machine Owner Key (MOK).
 
-**Good news for AnduinOS users:** AnduinOS automatically generates a Machine Owner Key (MOK) for you during system installation, located at `/var/lib/shim-signed/mok/`. You DO NOT need to generate a new one!
+First run `mokutil --sb-state`. Traditional BIOS does not support Secure Boot. If signing is required, verify that `/var/lib/shim-signed/mok/MOK.der` and the corresponding private key `MOK.priv` exist. AnduinOS prepares them during its Secure Boot setup, but they are not guaranteed to exist on every server or installation. Never overwrite an existing key pair blindly.
+
+If the pair is missing, follow the [Secure Boot signing architecture](./Secure-Boot-Signing-Architecture.md) before continuing. MOK enrollment takes place at boot: SSH alone cannot complete it; arrange physical, BMC or remote-console access. Signing and enrollment are separate requirements.
 
 1. **Verify if your key is already enrolled**:
 
@@ -175,41 +190,41 @@ Secure Boot ensures your system only loads drivers or kernel modules signed by a
 
 !!! note "Keep Your Keys Safe"
 
-    - **Never share your private key (`.key`)** with others.
+    - **Never share your private key (`MOK.priv`)** with others.
     - Always keep these files in a secure place. If you lose them, you’ll need to re-sign or re-enroll future kernel modules.
 
 ---
 
-### Step 4: Blacklist the Nouveau Driver
+### Step 4: Check Nouveau and the initramfs
 
-The open-source Nouveau driver can conflict with NVIDIA’s proprietary driver. To ensure it doesn’t load:
+This step concerns the manual installer, not a blanket prerequisite for APT.
+Check whether Nouveau is loaded with `lsmod | grep nouveau`. If it must be
+disabled for your installation, edit a dedicated file:
 
-1. **Blacklist Nouveau**:
+```bash
+sudoedit /etc/modprobe.d/blacklist-nouveau.conf
+```
 
-   ```bash
-   sudo vim /etc/modprobe.d/blacklist-nouveau.conf
-   ```
+Use only the relevant settings:
 
-   Insert the following lines:
+```text
+blacklist nouveau
+options nouveau modeset=0
+```
 
-   ```bash
-   blacklist amd76x_edac
-   blacklist vga16fb
-   blacklist nouveau
-   blacklist rivafb
-   blacklist nvidiafb
-   blacklist rivatv
-   ```
+Do not blacklist unrelated framebuffer or hardware-error-detection modules.
+Regenerate the initramfs using the toolchain already installed on that system.
+On the current Dracut-based AnduinOS installation:
 
-   (Note: The line `blacklist amd76x_edac` is sometimes recommended on certain systems. If you do not have AMD hardware, it might be unnecessary. However, it’s often included in sample blacklist files.)
+```bash
+sudo dracut --regenerate-all --force
+```
 
-2. **Regenerate initramfs**:
-
-   ```bash
-   sudo update-initramfs -u -k all
-   ```
-
----
+Only on an older installation still maintained by `initramfs-tools`, use
+`sudo update-initramfs -u -k all` instead. Do not install or switch toolchains
+just to run this command. Check that regeneration succeeds and that you have
+console recovery access before rebooting. Reboot and verify Nouveau is no
+longer loaded before running the manual installer.
 
 ### Step 5: Prepare to Install the NVIDIA Driver
 
@@ -222,41 +237,23 @@ The open-source Nouveau driver can conflict with NVIDIA’s proprietary driver. 
 
    This ensures that you can compile the NVIDIA kernel module correctly.
 
-2. **Switch to a multi-user (text) target**:  
-   Before installing the driver, you must stop the graphical Wayland session. You can do this by changing the system’s runlevel/target:
+2. **Stop GPU users before installation**:
+
+   Stop GPU compute jobs, containers, persistence services and graphical
+   sessions that use the driver. Save work and verify SSH/console access first.
+   Do not stop networking or SSH to perform this step.
+
+   If a graphical display manager is active, stop it from a console or SSH:
 
    ```bash
-   sudo systemctl set-default multi-user.target
-   sudo systemctl isolate multi-user.target
+   systemctl is-active display-manager.service
+   sudo systemctl stop display-manager.service
    ```
 
-   Your screen will switch to a TTY console. **Log in** with your username and password. (Nothing appears as you type the password—this is normal.)
-
-!!! warning "Remember your username and password before switching to multi-user.target"
-
-    You will need to log in again after switching to the multi-user target. Make sure you remember your username and password, or you will be locked out of your system!
-
-    To query the current target, you can use:
-
-    ```bash
-    systemctl get-default
-    ```
-
-    To query the current user name, you can use:
-
-    ```bash
-    whoami
-    ```
-
-If you need to return to the graphical interface later, you can switch back to the graphical target with:
-
-```bash
-sudo systemctl set-default graphical.target
-```
-
-!!! warning "Be Prepared for a Terminal-Only Environment"
-
-    Once you move to `multi-user.target`, you lose the graphical interface. If something goes wrong, you will need to troubleshoot via the command line.
+   On a headless server there may be no display manager; skip that operation.
+   Do not change the default boot target or force a headless machine into a
+   graphical target. Record which services you stopped so they can be restored
+   after installation. Follow the installer's checks for modules still in use.
 
 ---
 
@@ -284,6 +281,7 @@ sudo systemctl set-default graphical.target
      - The installer will ask if you want to sign the kernel module. Select **Yes**.
      - Provide the **absolute path** to your **private key**: `/var/lib/shim-signed/mok/MOK.priv`
      - Provide the **absolute path** to your **public certificate**: `/var/lib/shim-signed/mok/MOK.der`
+     - Alternatively, use the installer's `--module-signing-secret-key` and `--module-signing-public-key` options with these existing paths. Check `--advanced-options` for your downloaded version; never put the private key contents in a command or report.
 
 !!! warning "Provide the Correct Key"
 
@@ -323,7 +321,7 @@ sudo systemctl set-default graphical.target
 
 ### Step 8: Configure Displays on Wayland
 
-AnduinOS 2.0 supports **Wayland only**. The login screen does not offer an option to select an Xorg session.
+This step is only for graphical desktop installations. Skip it on a headless or SSH-only server. AnduinOS 2.0's desktop supports **Wayland only**; it does not offer an Xorg session.
 
 **Check your current session type**:
 
@@ -331,7 +329,7 @@ AnduinOS 2.0 supports **Wayland only**. The login screen does not offer an optio
 echo $XDG_SESSION_TYPE
 ```
 
-The expected result is `wayland`. Any other result is unexpected on AnduinOS 2.0. Confirm that you are running AnduinOS 2.0 and that your graphical session started normally before continuing with driver troubleshooting.
+Run this inside the graphical session, where the expected result is `wayland`. An empty value or `tty` over SSH is normal and is not a driver failure.
 
 **Adjust your display configuration**:
 
@@ -349,35 +347,42 @@ If you use **Docker** and want to take advantage of your NVIDIA GPU inside conta
 
 ### 0. First Diagnostic: Check Driver Status
 
-Before troubleshooting, open a terminal and run `nvidia-smi`.
-
-If you see a table with your GPU name and driver version, your driver is **working**. If your problem is system lag or choppy animations on a laptop, skip to **point 5**.
-
-If you see an error like `NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver`, it means the driver module is **not loaded**. Start troubleshooting from point 1 or 2.
+Run `nvidia-smi`, `uname -r` and `sudo journalctl -b -k --no-pager`.
+A working management interface does not prove every graphics or compute
+workload is healthy. A failure can mean a missing module, an untrusted
+signature, a library/module version mismatch or another device problem.
+Inspect the actual error rather than assuming a single cause.
 
 ### 1. Black screen or system freeze after reboot
 
-This is the most common failure, usually happening right after installing a driver. It means the `nvidia` kernel module failed to load, often because it conflicts with the open-source `nouveau` driver, or it wasn't correctly registered with the kernel.
+Use an available console or a known-working boot entry to inspect the logs.
+A black screen does not by itself establish a Nouveau conflict. Do not purge
+every NVIDIA package or assume Nouveau will automatically work after removal.
+Identify whether the installation is APT-managed or manual, then repair or
+remove the specific installation using its own tooling.
 
-To fix this, you must boot into **recovery mode**. From the recovery menu, drop to a **root shell**. In the shell, run `mount -o remount,rw /` to make the system writable.
-
-Then, completely remove the broken driver by running `sudo apt-get purge '*nvidia*'` and `sudo apt autoremove`. After this, type `reboot`. Your system should now boot normally using the `nouveau` driver, and you can attempt to reinstall the NVIDIA driver again.
+If you added a Nouveau blacklist in Step 4 and later undo that installation,
+review that file and regenerate the initramfs with the installed toolchain;
+otherwise Nouveau may remain disabled. Keep another boot/recovery route.
 
 ### 2. Driver mismatch (nvidia-smi fails)
 
-This error means the system is running, but the NVIDIA driver isn't loaded. The most common cause is a **kernel update**. The NVIDIA driver is a kernel module that must be compiled for the *exact* kernel version you are running. When your kernel updates, the driver module (if not set up with DKMS) is left behind, causing a mismatch.
+Check the running kernel, installed driver package version and `dkms status`.
+For a DKMS build, matching headers must be available for the target kernel.
+Prebuilt module packages may not appear in DKMS at all. Do not assume headers
+or a generic `dpkg-reconfigure` command will fix every installation.
 
-Another common cause is a module signature that Secure Boot does not trust. See **point 3** for this.
-
-To fix a kernel mismatch, first ensure you have the headers for your current kernel: `sudo apt install linux-headers-$(uname -r)`. If you installed via `apt`, try `sudo dpkg-reconfigure nvidia-dkms-[version]` (e.g., `nvidia-dkms-550`) to force a recompile. If you used a `.run` file, you must re-run the installer.
+For a `.run` driver, inspect its installer/DKMS logs and verify compatibility
+with the new kernel before rebuilding. An old loaded module after an upgrade
+may simply require a planned reboot. Check signatures as described below.
 
 ### 3. Secure Boot issues
 
 Secure Boot is a UEFI feature that prevents untrusted code from running at boot. If the NVIDIA driver is installed but its kernel modules do not load, the modules may not be signed with the enrolled AnduinOS MOK, or the AnduinOS MOK may not yet be enrolled.
 
-Keep Secure Boot enabled. Open **Driver Center**, select **Secure Boot**, and follow the displayed action to create and enroll the certificate or repair the signing configuration. Reboot when prompted. In the blue **MOKManager** screen, complete enrollment using the AnduinOS 2.0.2 one-time code `123456`, then boot back into AnduinOS.
+Keep Secure Boot enabled. Open **Driver Center**, select **Secure Boot**, and follow the displayed action to create and enroll the certificate or repair the signing configuration. Reboot when prompted. In the blue **MOKManager** screen, use the code associated with the enrollment request (`123456` for the documented AnduinOS 2.0.2 managed flow; a manual `mokutil --import` uses the password you chose), then boot back into AnduinOS.
 
-After rebooting, verify the trust chain and driver in this order:
+On an SSH-only system, the manual `mokutil` procedure in Step 3 remains available; firmware enrollment still requires console access. On UEFI with Secure Boot enabled, verify the trust chain and driver after rebooting:
 
 ```bash
 sudo mokutil --sb-state
@@ -389,32 +394,29 @@ The first command should report `SecureBoot enabled`, the second should report t
 
 ### 4. Updates break the driver
 
-This is related to point 2. If you installed your driver using the official `.run` file from NVIDIA's website, that driver is compiled *only* for your current kernel. **You must re-run the installer file every time AnduinOS updates its kernel.**
+A manually installed driver needs modules built for each target kernel. A
+`.run` installation registered with DKMS may rebuild automatically; without
+that setup, rebuilding or reinstalling for the new kernel may be necessary.
+Neither DKMS nor packaged drivers guarantee compatibility with every new
+kernel. Verify build success and signature trust before rebooting a remote
+machine. Keep a known-working kernel until the new one is validated.
 
-To avoid this, we strongly recommend installing drivers via **Driver Center** or using the APT repositories (e.g., `sudo apt install nvidia-driver-550`). These methods use **DKMS** (Dynamic Kernel Module Support).
+See [NVIDIA's installer documentation](https://download.nvidia.com/XFree86/Linux-x86_64/580.95.05/README/installdriver.html)
+for the supported DKMS and signing options, and consult the README accompanying
+your chosen driver version.
 
-DKMS automatically rebuilds the NVIDIA module every time your kernel is updated, which prevents this problem from happening. It's the "set it and forget it" solution.
+### 5. Laptop animations are laggy
 
-### 5. Laptop animations are laggy (PRIME Profiles)
+Do not assume every slowdown is caused by PRIME on-demand mode or that forcing
+the discrete GPU will fix it. Check driver errors, load, power settings and the
+actual graphics topology first. Integrated graphics are not inherently too slow
+for the desktop.
 
-This is a **configuration issue**, not a driver failure. It's common on NVIDIA Optimus laptops (like HP OMEN) that have both Intel (integrated) and NVIDIA (dedicated) graphics. Your `nvidia-smi` will show the driver is working, but your desktop feels slow.
-
-This happens because the system is in **"On-Demand" mode** to save power. The Intel GPU runs your desktop (menus, animations), while the powerful NVIDIA GPU sleeps until you manually run a game on it. If your Intel GPU isn't powerful enough, the desktop will feel laggy.
-
-To fix this, force the NVIDIA GPU to run everything. Open `nvidia-settings` from your terminal. Go to the **"PRIME Profiles"** tab on the left. Change the setting from "NVIDIA On-Demand" to **"NVIDIA (Performance Mode)"**. Apply, and then **reboot your laptop**. Your desktop will now be rendered by the fast NVIDIA GPU and all animations will be smooth. (Note: this uses much more battery).
-
-Or you can do that via:
-
-```bash
-sudo apt update
-sudo apt install nvidia-prime
-sudo prime-select query # Query current mode (will likely show 'on-demand')
-sudo prime-select nvidia # Switch to NVIDIA (Performance Mode)
-```
-
-You must **reboot your laptop** after running this command for the change to take effect. This does the exact same thing as the `nvidia-settings` GUI method.
-
-To switch back to power-saving mode later (e.g., when on battery), you can run `sudo prime-select on-demand` and reboot again.
+If the installed hardware and driver support PRIME profiles, inspect
+`prime-select query` and the available profile controls before changing them.
+Record the previous profile so you can restore it. Discrete-GPU mode can
+increase power consumption and may not be supported by every laptop.
+This desktop-only troubleshooting does not apply to headless compute servers.
 
 ## Conclusion
 
