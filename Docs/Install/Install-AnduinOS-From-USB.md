@@ -62,6 +62,8 @@ These choices are optional. Driver detection can correctly finish without instal
 
 The disk page lists storage devices that can be used as the installation target. Check the device name, model, capacity, and current contents carefully.
 
+Minimum installation disk capacity: **25 GiB**. Recommended: **50 GiB or more**.
+
 ![AnduinOS Installer disk selection page](images/installer/select-disk.png)
 
 !!! danger "The selected disk may be erased"

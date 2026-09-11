@@ -65,7 +65,7 @@ powercfg /h off
    with its recovery key.
 5. Open **Disk Management** in Windows, right-click the Windows partition
    (usually `C:`), and select **Shrink Volume**.
-6. Create at least 24 GiB of unallocated space; 40 GiB or more is recommended
+6. Reserve space for AnduinOS: **25 GiB minimum**, **50 GiB or more recommended**
    for normal use. Leave the result as **Unallocated**. Do not create or format
    a new Windows volume in that space.
 7. Fully shut down Windows, then boot the AnduinOS installation media in UEFI
