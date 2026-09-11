@@ -17,7 +17,29 @@ The easiest way to find and configure the fastest APT mirror is via the built-in
 
 If you prefer to configure the mirror via the command line or are on a headless system, you can run the following script in the terminal. The script will automatically test available mirrors, find the fastest one for your region, and update your APT source list accordingly.
 
+Security updates remain on Ubuntu's official archive, independently of mirror
+speed: `security.ubuntu.com/ubuntu` for amd64 and `ports.ubuntu.com/ubuntu-ports`
+for arm64. The mirror list below targets amd64; arm64 uses the official ports
+archive for ordinary updates as well. See [Ubuntu security updates](https://documentation.ubuntu.com/security/security-updates/).
+
+!!! warning "Review and back up custom sources first"
+
+    This script rewrites `/etc/apt/sources.list` or `ubuntu.sources`; it is for
+    standard Ubuntu-base entries, not a merge tool for custom configurations.
+    Save a copy of `/etc/apt` before running it. Keep the separate AnduinOS
+    `anduinos.sources` file and signing keys. If you have other custom entries
+    in the rewritten files, preserve and review them manually.
+
 ```bash title="Select best apt source"
+# Select the official security archive for the installed architecture.
+official_security_mirror() {
+    case "$(dpkg --print-architecture)" in
+        amd64) echo 'https://security.ubuntu.com/ubuntu/' ;;
+        arm64) echo 'https://ports.ubuntu.com/ubuntu-ports/' ;;
+        *) echo 'Unsupported architecture; configure sources manually.' >&2; return 1 ;;
+    esac
+}
+
 # Check current APT source format status
 check_apt_format() {
     local old_format=false
@@ -51,6 +73,11 @@ check_apt_format() {
 
 # Find the fastest mirror
 find_fastest_mirror() {
+    # The candidate list below is for the main amd64 archive, not Ubuntu ports.
+    if [ "$(dpkg --print-architecture)" = arm64 ]; then
+        echo 'https://ports.ubuntu.com/ubuntu-ports/'
+        return
+    fi
     # Redirect all output to stderr
     echo "Testing mirror speeds..." >&2
     
@@ -154,6 +181,8 @@ find_fastest_mirror() {
 generate_old_format() {
     local mirror="$1"
     local codename="$2"
+    local security_mirror
+    security_mirror=$(official_security_mirror) || return 1
     
     echo "Generating old format source list /etc/apt/sources.list"
     
@@ -161,7 +190,7 @@ generate_old_format() {
 deb $mirror $codename main restricted universe multiverse
 deb $mirror $codename-updates main restricted universe multiverse
 deb $mirror $codename-backports main restricted universe multiverse
-deb $mirror $codename-security main restricted universe multiverse
+deb $security_mirror $codename-security main restricted universe multiverse
 EOF
     
     echo "Old format source list updated"
@@ -171,6 +200,8 @@ EOF
 generate_new_format() {
     local mirror="$1"
     local codename="$2"
+    local security_mirror
+    security_mirror=$(official_security_mirror) || return 1
     
     echo "Generating new format source list /etc/apt/sources.list.d/ubuntu.sources"
     
@@ -194,7 +225,7 @@ Components: main restricted universe multiverse
 Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
 Types: deb
-URIs: $mirror
+URIs: $security_mirror
 Suites: $codename-security
 Components: main restricted universe multiverse
 Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
@@ -205,6 +236,7 @@ EOF
 
 # Main function
 main() {
+    official_security_mirror >/dev/null || return 1
     # Ensure required packages are installed
     sudo apt update
     sudo apt install -y curl lsb-release

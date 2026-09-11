@@ -40,6 +40,10 @@ To install applications on AnduinOS, follow the instructions in the [Application
 
 To host services on AnduinOS, follow the instructions in the [Servicing Guide](./Servicing/Introduction.md).
 
+## How to build and distribute Debian packages?
+
+The [Apkg guide](./Apkg/Introduction.md) explains how to turn your scripts or applications into Debian packages, develop AnduinOS packages, host your own signed APT repository, and publish updates through CI. Local package development does not require an Apkg server.
+
 ## Where to get the source code of AnduinOS?
 
 AnduinOS 2 is developed across a layered architecture. Pick the repository that matches what you want to work on:

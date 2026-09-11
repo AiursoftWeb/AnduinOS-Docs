@@ -1,0 +1,147 @@
+{
+  "sourceRepository": "https://github.com/AiursoftWeb/Apkg",
+  "sourceCommit": "6009b7f76407e76d5d340babc445df894a68a3eb",
+  "purpose": "Unmodified historical source snapshots. Follow the maintained English chapters for current behavior.",
+  "files": [
+    {
+      "originalPath": "docs/aosproj.md",
+      "archivePath": "aosproj.md.txt",
+      "sha256": "a2cc0218432ba2cc6b93e24c54f94e0b233e383b0a9ae23efd43239271774686",
+      "bytes": 51621,
+      "lines": 964,
+      "sections": [
+        {
+          "start": 1,
+          "end": 122,
+          "currentPage": "../Aosproj-Reference.md"
+        },
+        {
+          "start": 123,
+          "end": 231,
+          "currentPage": "../Upstream-Packages.md"
+        },
+        {
+          "start": 232,
+          "end": 561,
+          "currentPage": "../Aosproj-Reference.md"
+        },
+        {
+          "start": 562,
+          "end": 657,
+          "currentPage": "../Develop-AnduinOS-Packages.md"
+        },
+        {
+          "start": 658,
+          "end": 723,
+          "currentPage": "../AppStream.md"
+        },
+        {
+          "start": 724,
+          "end": 917,
+          "currentPage": "../Bundle-and-Upload-Reference.md"
+        },
+        {
+          "start": 918,
+          "end": 964,
+          "currentPage": "../Install-the-CLI.md"
+        }
+      ]
+    },
+    {
+      "originalPath": "docs/design.md",
+      "archivePath": "design.md.txt",
+      "sha256": "680c400c889c756dc82763975ca26c96a225559cbe1c8f42b13d7e2a492a150d",
+      "bytes": 32655,
+      "lines": 501,
+      "sections": [
+        {
+          "start": 1,
+          "end": 145,
+          "currentPage": "../Design-and-Architecture.md"
+        },
+        {
+          "start": 146,
+          "end": 179,
+          "currentPage": "../Aosproj-Reference.md"
+        },
+        {
+          "start": 180,
+          "end": 266,
+          "currentPage": "../Design-and-Architecture.md"
+        },
+        {
+          "start": 267,
+          "end": 273,
+          "currentPage": "../AppStream.md"
+        },
+        {
+          "start": 274,
+          "end": 364,
+          "currentPage": "../Design-and-Architecture.md"
+        },
+        {
+          "start": 365,
+          "end": 390,
+          "currentPage": "../Bundle-and-Upload-Reference.md"
+        },
+        {
+          "start": 391,
+          "end": 400,
+          "currentPage": "../Server-Configuration.md"
+        },
+        {
+          "start": 401,
+          "end": 501,
+          "currentPage": "../Design-and-Architecture.md"
+        }
+      ]
+    },
+    {
+      "originalPath": "docs/development.md",
+      "archivePath": "development.md.txt",
+      "sha256": "af4522b0efcd15c39c6a2a1d48cc1ba0e6c3bec6ad43f0699b366b4a54f10ecb",
+      "bytes": 5528,
+      "lines": 110,
+      "sections": [
+        {
+          "start": 1,
+          "end": 89,
+          "currentPage": "../Contributing-to-Apkg.md"
+        },
+        {
+          "start": 90,
+          "end": 110,
+          "currentPage": "../Server-Configuration.md"
+        }
+      ]
+    },
+    {
+      "originalPath": "docs/operations.md",
+      "archivePath": "operations.md.txt",
+      "sha256": "66a514c32c4475bda02e0a39fce6ed23d36728f872c1752a0e2ae2afc6b132b1",
+      "bytes": 6925,
+      "lines": 187,
+      "sections": [
+        {
+          "start": 1,
+          "end": 187,
+          "currentPage": "../Server-Configuration.md"
+        }
+      ]
+    },
+    {
+      "originalPath": "docs/preflight.md",
+      "archivePath": "preflight.md.txt",
+      "sha256": "8dc2d0da7e5885b69cced391aef9b3c21ecb274bf43374ca742f53a0fce33c9f",
+      "bytes": 4435,
+      "lines": 150,
+      "sections": [
+        {
+          "start": 1,
+          "end": 150,
+          "currentPage": "../CI-and-Preflight.md"
+        }
+      ]
+    }
+  ]
+}

@@ -75,16 +75,19 @@ AnduinOS incorporates a wide array of technologies that enhance its functionalit
 
 To maintain and optimize your AnduinOS system, it's crucial to understand various system management techniques:
 
-- [**Change the Distro Name**](./System-Management/Change-The-Distro-Name.md): Customize the distribution identifier to suit your preferences or organizational standards.
 - [**Check File Format**](./System-Management/Check-File-Format.md): Verify and manage file formats to ensure compatibility and integrity.
 - [**Check System Layout**](./System-Management/Check-System-Layout.md): Analyze the directory structure and system configuration for optimal performance.
 - [**Debug Storage Consumption**](./System-Management/Debug-Storage-Consumption.md): Identify and resolve storage issues to maintain system efficiency.
 - [**Make a RAM Disk**](./File-System-Management/Make-A-RAM-Disk.md): Create temporary storage in RAM for faster data access and improved performance.
 - [**Mounting Remote Folders**](./File-System-Management/Mounting-Remote-Folder.md): Access and integrate remote directories seamlessly into your local filesystem.
-- [**Remove Duplicate APT Sources**](./System-Management/Remove-Duplicate-Apt-Source.md): Clean up package sources to prevent conflicts and streamline updates.
+- [**Remove Duplicate APT Sources**](./System-Management/Use-APT-to-manage-packages.md#clean-duplicate-sources): Identify and resolve specific duplicate repository entries.
 - [**Update Kernel Parameters**](./System-Management/Update-Kernel-Parameters.md): Modify kernel settings to fine-tune system behavior and performance.
 
 ## Building Your Own Kernel
+
+Older bookmarks may refer to [Auto Repair](./System-Management/Auto-Repair.md)
+or [changing the distribution identity](./System-Management/Change-The-Distro-Name.md).
+Those instructions are retired and must not be used to maintain AnduinOS 2.
 
 Linux's open-source nature invites users to contribute and develop their own solutions.
 

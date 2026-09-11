@@ -523,13 +523,30 @@ ls
 
 ### Clean duplicate sources
 
-Sometimes, you may have duplicate sources in your `/etc/apt/sources.list` and `/etc/apt/sources.list.d/`. You can use `aptsources-cleanup` to clean the duplicate sources.
+APT duplicate-target warnings identify the files and entries involved. Start
+with `sudo apt update` and read those paths; do not run a downloaded cleanup
+script as root or delete every source file.
 
-```bash title="Clean the duplicate sources"
-wget https://github.com/davidfoerster/aptsources-cleanup/releases/download/v0.1.7.5.2/aptsources-cleanup.pyz
-chmod +x aptsources-cleanup.pyz
-sudo bash -c "echo all | ./aptsources-cleanup.pyz  --yes"
+1. Back up the named files outside `/etc/apt/sources.list.d/` before editing.
+2. Compare the URI, suite, components, architecture filters and signing key.
+   Different update/security suites or architecture filters are not duplicates
+   merely because they share a hostname.
+3. Use `sudoedit` on the specific file from the warning. In a `.list` file,
+   comment out only the confirmed duplicate line. In a Deb822 `.sources` file,
+   use `Enabled: no` only if the entire stanza is redundant; a stanza may serve
+   multiple suites or components, so do not disable it just for a partial overlap.
+4. Keep the required Ubuntu base, updates and security entries, and the separate
+   AnduinOS repository. Do not remove `Signed-By` or disable signature checks.
+5. Refresh and verify the warnings are resolved without losing required sources:
+
+```bash
+sudo apt update
+apt-cache policy
 ```
+
+If an error appears or a needed source disappears, restore the backup and
+investigate before installing or upgrading packages. This procedure works over
+SSH and does not require a graphical source editor.
 
 ### Setting up your own apt mirror
 

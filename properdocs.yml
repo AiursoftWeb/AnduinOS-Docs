@@ -71,15 +71,12 @@ nav:
       - Advanced Power Management: Skills/System-Management/Advanced-Power-Management.md
       - Diagnose Sleep: Skills/System-Management/Diagnose-Sleep.md
       - Check system layout: Skills/System-Management/Check-System-Layout.md
-      - Change the Distro Name: Skills/System-Management/Change-The-Distro-Name.md
       - Manage App Icons: Skills/System-Management/Manage-App-Icons.md
       - Enter terminal mode: Skills/System-Management/Terminal-Mode.md
       - Use APT to manage packages: Skills/System-Management/Use-APT-to-manage-packages.md
       - Update Kernel Parameters: Skills/System-Management/Update-Kernel-Parameters.md
       - Debug storage consumption: Skills/System-Management/Debug-Storage-Consumption.md
       - Check file format: Skills/System-Management/Check-File-Format.md
-      - Remove duplicate apt source: Skills/System-Management/Remove-Duplicate-Apt-Source.md
-      - Auto Repair: Skills/System-Management/Auto-Repair.md
     - File System Management:
       - Mounting remote folders: Skills/File-System-Management/Mounting-Remote-Folder.md
       - Use dd to manage disks: Skills/File-System-Management/Use-dd-Manage-Disk.md
@@ -250,6 +247,26 @@ nav:
         - Stellarium: Applications/Games/Stellarium/Stellarium.md
         - 0AD: Applications/Games/0AD/0AD.md
         - XPlane12: Applications/Games/XPlane12/XPlane12.md
+
+  - Apkg:
+    - Overview:
+      - Introduction: Apkg/Introduction.md
+      - Install the CLI: Apkg/Install-the-CLI.md
+      - Build Your First Debian Package: Apkg/Build-Your-First-Package.md
+      - Develop AnduinOS Packages: Apkg/Develop-AnduinOS-Packages.md
+      - Host an Apkg Server: Apkg/Host-an-Apkg-Server.md
+      - Publish Packages and Configure APT: Apkg/Publish-Packages.md
+      - Maintenance and Troubleshooting: Apkg/Maintenance-and-Troubleshooting.md
+    - Reference:
+      - Design and Architecture: Apkg/Design-and-Architecture.md
+      - .aosproj Reference: Apkg/Aosproj-Reference.md
+      - Upstream Packages: Apkg/Upstream-Packages.md
+      - AppStream and GNOME Software: Apkg/AppStream.md
+      - Bundle and Upload Semantics: Apkg/Bundle-and-Upload-Reference.md
+      - CI and Preflight API: Apkg/CI-and-Preflight.md
+      - Server Configuration: Apkg/Server-Configuration.md
+      - Develop the Apkg Platform: Apkg/Contributing-to-Apkg.md
+      - Documentation Migration: Apkg/Documentation-Migration.md
 
   - Servicing:
     - Introduction: Servicing/Introduction.md
