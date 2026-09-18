@@ -38,7 +38,3 @@ df -h /
 ```
 
 Ensure you have enough `Avail` space before performing large updates or compiling large projects.
-
------
-
-**Tip:** If you require a more permanent solution or better I/O performance for a portable drive, you can also use the graphical installer within the Live environment to install AnduinOS fully onto *another* high-speed USB drive (as mentioned in community discussions), but the **AnduinOS ToGo** mode described above is the fastest way to get started with a single stick.

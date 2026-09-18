@@ -4,6 +4,8 @@
 
 Before installing AnduinOS, you need to download the ISO file from the releases page.
 
+Minimum installation disk capacity: **25 GiB**. Recommended: **50 GiB or more**.
+
 [Download AnduinOS (ISO)](https://www.anduinos.com/){ .md-button .md-button--primary }
 
 It is suggested to use [qbittorrent](https://www.qbittorrent.org/) to download the ISO file via Torrent, as it supports torrent and helps seed the file to others. You can also use other torrent clients like [Transmission](https://transmissionbt.com/) or [Deluge](https://deluge-torrent.org/).
