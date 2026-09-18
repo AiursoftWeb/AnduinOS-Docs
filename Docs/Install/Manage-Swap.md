@@ -8,7 +8,7 @@ Open **Virtual Memory Control** from the application menu. Its Dashboard reports
 
 ![Virtual Memory Control dashboard](../Applications/System/Virtual-Memory-Control/images/memory-overview.png)
 
-The application can manage Zram and Zswap, show the dedicated Swap partition created by the installer, and retain compatibility with `/swapfile` on older installations.
+The application can manage Zram and Zswap, show the dedicated Swap partition created by the installer, and manage `/swapfile` on compatible filesystems.
 
 See the complete [Virtual Memory Control guide](../Applications/System/Virtual-Memory-Control/Virtual-Memory-Control.md) before changing the configuration.
 

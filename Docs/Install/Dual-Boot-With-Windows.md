@@ -53,7 +53,7 @@ move the Windows filesystem.
 
 !!! note "Guided coexistence versus manual partitioning"
 
-    This procedure follows the 2.0.2 guided installer. The [2.0.3 development installer](../Release-Notes/2.0.3.md) also implements a separate manual GPT editor with guarded shrinking of healthy, unencrypted NTFS partitions. That is not an automatic step in guided coexistence and remains subject to release qualification. Suspending BitLocker is not sufficient for installer-side NTFS shrinking: the volume must be fully decrypted. The steps below instead prepare free space in Windows.
+    These instructions use guided coexistence, not the manual partition editor. Prepare unallocated space in Windows before starting the installer.
 
 1. Back up all important data and the BitLocker recovery key.
 2. Finish pending Windows updates.

@@ -85,10 +85,6 @@ To maintain and optimize your AnduinOS system, it's crucial to understand variou
 
 ## Building Your Own Kernel
 
-Older bookmarks may refer to [Auto Repair](./System-Management/Auto-Repair.md)
-or [changing the distribution identity](./System-Management/Change-The-Distro-Name.md).
-Those instructions are retired and must not be used to maintain AnduinOS 2.
-
 Linux's open-source nature invites users to contribute and develop their own solutions.
 
 ??? tip "Don't be afraid, building your kernel is easy!"

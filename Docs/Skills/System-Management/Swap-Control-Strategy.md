@@ -1,12 +1,12 @@
 # Swap Control Strategy
 
-AnduinOS 2.0.2 uses a **Zram-first, layered-priority** Swap architecture and creates a dedicated disk-Swap partition on new installations. Multiple packages contribute `sysctl.d` settings, and later applicable files override earlier values. This article covers manual inspection and advanced overrides. For the supported graphical workflow, see [Virtual Memory Control](../../Applications/System/Virtual-Memory-Control/Virtual-Memory-Control.md).
+AnduinOS uses a **Zram-first, layered-priority** Swap architecture and creates a dedicated disk-Swap partition during installation. Multiple packages contribute `sysctl.d` settings, and later applicable files override earlier values. This article covers manual inspection and advanced overrides. For the supported graphical workflow, see [Virtual Memory Control](../../Applications/System/Virtual-Memory-Control/Virtual-Memory-Control.md).
 
 ## Why Zram?
 
-Traditional swap writes to a physical disk — slow, millisecond-latency I/O. Zram creates a compressed block device *in RAM itself*. With the LZ4 algorithm, compression and decompression take **nanoseconds** on a modern CPU, making Zram roughly 1,000× faster than disk swap.
+Zram stores compressed pages in RAM, reducing disk I/O under memory pressure at the cost of CPU time for compression and decompression. Its performance depends on the workload and hardware.
 
-The old rule of "keep swappiness low to avoid disk thrashing" no longer applies. AnduinOS defaults to:
+AnduinOS defaults to:
 
 * **`vm.swappiness = 100`** — Move idle app memory into compressed RAM instead of throwing away file cache. Your UI resources and app code stay hot, so the desktop feels snappy under memory pressure.
 * **`vm.page-cluster = 0`** — Disable swap readahead (useless overhead for random-access RAM).

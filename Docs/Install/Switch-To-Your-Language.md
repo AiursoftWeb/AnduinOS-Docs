@@ -43,9 +43,7 @@ For installation, everyday use, customization, and troubleshooting of the Anduin
 
 If you prefer managing your system via the terminal, you can configure your locale and install language packs using standard commands.
 
-!!! warning "Do not edit `~/.pam_environment`"
-
-    Older guides may tell you to edit `~/.pam_environment`. This feature has been permanently removed from modern Linux systems for security reasons. Use `localectl` instead.
+Use `localectl` to configure the system locale as shown below.
 
 ### 1. Install Language Packs
 ```bash title="Install Chinese language packs"

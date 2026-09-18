@@ -67,7 +67,7 @@ An upstream package can initially be represented by metadata alone (`IsVirtual=t
 
 If the CAS object already exists, download serving can take the fast path and repair materialization state. During resync, previously materialized hashes from the current primary are carried into the new snapshot so already-cached payloads are not treated as missing again.
 
-GC is based on references, not `IsVirtual` alone: hashes still needed by active package records or retained local uploads must remain. Identical payloads may be shared across suites. In the current upload service, uploaded local `.deb` files also enter CAS; the former `LocalPackages/<repositoryId>/...` description is historical.
+GC is based on references, not `IsVirtual` alone: hashes still needed by active package records or retained local uploads must remain. Identical payloads may be shared across suites. Uploaded local `.deb` files also enter CAS.
 
 Hash fidelity matters throughout the pipeline: upload computes payload hashes from actual bytes; mirror metadata supplies expected upstream hashes; local-to-repository mapping preserves hash/size/control fields; CAS filenames identify those bytes. A re-signed index cannot make mismatched payload bytes valid.
 

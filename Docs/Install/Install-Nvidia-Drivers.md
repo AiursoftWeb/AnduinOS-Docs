@@ -213,16 +213,13 @@ options nouveau modeset=0
 ```
 
 Do not blacklist unrelated framebuffer or hardware-error-detection modules.
-Regenerate the initramfs using the toolchain already installed on that system.
-On the current Dracut-based AnduinOS installation:
+Regenerate the initramfs with Dracut:
 
 ```bash
 sudo dracut --regenerate-all --force
 ```
 
-Only on an older installation still maintained by `initramfs-tools`, use
-`sudo update-initramfs -u -k all` instead. Do not install or switch toolchains
-just to run this command. Check that regeneration succeeds and that you have
+Check that regeneration succeeds and that you have
 console recovery access before rebooting. Reboot and verify Nouveau is no
 longer loaded before running the manual installer.
 

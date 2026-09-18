@@ -77,11 +77,7 @@ Verify the installation:
 docker compose version
 ```
 
-!!! note "Docker Compose v2 vs v1"
-
-    Docker Compose v2 is the current standard and is recommended for all users. It is invoked as `docker compose` (space, no hyphen) and ships as a Docker CLI plugin.
-
-    Some older documentation may still reference Docker Compose v1, with the standalone binary `docker-compose` (hyphenated). The two are functionally equivalent for most use-cases, but v1 is no longer maintained.
+Docker Compose is a Docker CLI plugin. Run it with `docker compose` (space, no hyphen).
 
 ### Enable Swarm Mode (Optional)
 

@@ -26,7 +26,7 @@ Before continuing, you need to know how to open terminal on AnduinOS.
 
 !!! note "App Store, Software and GNOME Software"
 
-    In AnduinOS 2, `anduinos-appstore` is a metapackage providing GNOME Software and Flatpak integration. **App Store** and **Software** refer to that graphical software-management experience, not two independent store implementations. Older releases and customized installations can have a different installed application set.
+    `anduinos-appstore` provides GNOME Software and Flatpak integration. **App Store** and **Software** refer to the same application.
 
     Start with [installing, removing and choosing default applications](../Install/Installing-Applications.md). That guide also covers `.deb` files, AppImages and missing store components. The catalog below contains individual application guides; a catalog entry is not a guarantee of vendor support.
 

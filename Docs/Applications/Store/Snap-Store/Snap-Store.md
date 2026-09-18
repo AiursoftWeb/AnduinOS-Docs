@@ -108,10 +108,10 @@ else
 fi
 ```
 
-Do not substitute the old blocker if this version is unavailable. Starting
-with 2.0.2-2, no-snapd only applies the package policy; it no longer recursively
-deletes Snap directories or forcibly unmounts them. This does not guarantee
-that Snap's own removal operations preserve every application's data.
+This procedure requires `anduinos-no-snapd` version `2.0.2-2` or later. Stop if
+that requirement cannot be met. The package applies the blocking policy without
+deleting or forcibly unmounting Snap directories. Snap's own removal operations
+can still affect application data.
 
 Never use a blanket `rm -rf` on Snap's system directories or `~/snap` as a
 routine way to switch package policies.

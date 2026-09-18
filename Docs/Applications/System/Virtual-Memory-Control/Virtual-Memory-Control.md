@@ -22,19 +22,19 @@ Use Zram or Zswap, not both. Running both creates two compressed-memory layers a
 
 ## Configure disk-backed Swap
 
-The **Swap** page distinguishes an installer-managed Swap partition from the legacy `/swapfile` used by older installations.
+The **Swap** page shows the installer-managed Swap partition and supports a supplementary `/swapfile` on compatible filesystems.
 
 ![Virtual memory and Swap configuration](images/swap-configuration.png)
 
-### New installations
+### Swap partition
 
-The AnduinOS 2.0.2 installer creates a dedicated Swap partition for both Btrfs and Ext4 installations. Virtual Memory Control displays its device, capacity, and current use, but does not resize it while the system is running. Online resizing could require moving the adjacent root partition and is not a safe ordinary settings operation.
+The installer creates a dedicated Swap partition for both Btrfs and Ext4 installations. Virtual Memory Control displays its device, capacity, and current use, but does not resize it while the system is running. Online resizing could require moving the adjacent root partition and is not a safe ordinary settings operation.
 
 The installer chooses the size according to available disk space and memory while preserving at least 20 GiB for the operating system. The target is capped at 64 GiB and never smaller than 2 GiB.
 
-### Existing installations with `/swapfile`
+### Swap file
 
-Virtual Memory Control continues to support the supplementary `/swapfile` used by older AnduinOS installations on compatible filesystems. It can enable, disable, or resize that specific file and keeps `/etc/fstab` consistent.
+On compatible filesystems, Virtual Memory Control can enable, disable, or resize `/swapfile` and keeps `/etc/fstab` consistent.
 
 On the default Btrfs layout, an additional Swap file inside the root subvolume is disabled because an active Swap file would prevent Disk Snapshots Manager from creating system recovery points. The dedicated installer-managed Swap partition does not have this conflict.
 
@@ -57,7 +57,7 @@ The Dashboard reports hibernation as ready only when all required parts agree:
 - the target resolves to a real, active Swap device;
 - the target has enough capacity for the installed RAM.
 
-A large Swap device alone is not proof that hibernation is configured. If a legacy Swap file is the active resume target, resizing is blocked because changing the file could change its physical resume offset.
+A large Swap device alone is not proof that hibernation is configured. If a Swap file is the active resume target, resizing is blocked because changing the file could change its physical resume offset.
 
 ## Run a memory stress test
 

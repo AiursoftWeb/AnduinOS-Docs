@@ -1,6 +1,6 @@
 # Enable SSH
 
-SSH provides remote terminal access to your computer. New installations of AnduinOS 2.0.2 and later include the OpenSSH server so that GNOME Settings can manage this feature, but SSH remains disabled by default and the computer does not listen on port 22 until you enable it.
+SSH provides remote terminal access to your computer. AnduinOS includes the OpenSSH server, managed through GNOME Settings. SSH is disabled by default; the computer does not listen on port 22 until you enable it.
 
 !!! warning "Remote Access"
 
@@ -16,9 +16,9 @@ SSH provides remote terminal access to your computer. New installations of Andui
 
 This switch manages the system SSH listener. Turning it off prevents new incoming SSH connections without uninstalling OpenSSH, terminating established sessions, or deleting the computer's SSH host keys.
 
-### Upgraded Systems
+### Missing SSH server
 
-AnduinOS does not automatically install a new network server on systems upgraded from an earlier release. If **Secure Shell** is unavailable or cannot be enabled, install the server once:
+If **Secure Shell** is unavailable or cannot be enabled, install the server:
 
 ```bash title="Install the OpenSSH Server"
 sudo apt update

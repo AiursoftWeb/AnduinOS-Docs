@@ -2,11 +2,7 @@
 
 RDP (Remote Desktop Protocol) allows you to connect to your AnduinOS computer and control its graphical desktop from anywhere.
 
-!!! warning "Do NOT install `xrdp`"
-
-    Many outdated Linux tutorials on the internet will instruct you to install the `xrdp` package to get remote desktop working. **Do not do this on AnduinOS.** 
-    
-    AnduinOS is a modern operating system that strictly enforces the secure **Wayland** display server protocol. The old `xrdp` package relies on the legacy X11 server and will not work correctly, potentially breaking your system's display configuration. Always use the built-in `gnome-remote-desktop` as outlined below.
+Use the built-in **GNOME Remote Desktop** for the AnduinOS Wayland desktop. Installing `xrdp` is not required.
 
 ## Setup RDP Server on AnduinOS
 
@@ -15,7 +11,7 @@ To enable RDP on AnduinOS, follow these steps.
 AnduinOS comes with `gnome-remote-desktop` pre-installed, meaning you do not need to use the terminal to set up a server.
 
 1. Open your application menu and launch **Settings**.
-2. Navigate to **System** -> **Remote Desktop** (or **Sharing** -> **Remote Desktop** depending on your GNOME version).
+2. Navigate to **System** → **Remote Desktop**.
 3. Toggle the **Desktop Sharing** and/or **Remote Login** options to the **ON** position.
 
 You will need to set a username and password for the remote connection within this menu. (Note: This credential only applies to the remote desktop connection, not your main user account).

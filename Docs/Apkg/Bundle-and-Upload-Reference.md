@@ -50,7 +50,7 @@ Each `Entry` names an archive `DebFile`, `Suite`, and `Architecture`. Filenames 
 
 The family identity is immutable: changing any field creates a different family. The first uploader owns a new family, and another user cannot subsequently claim the same identity. Version, suite, and architecture vary across revisions.
 
-Current routing includes component membership. Older documents described a distro/suite/architecture-only router; that is no longer the rule in `RepositoryTargetService`. Package `all` matches repositories with concrete client architectures. Repository architecture lists and component lists are comma-separated in server configuration.
+Routing includes component membership. Package `all` matches repositories with concrete client architectures. Repository architecture lists and component lists are comma-separated in server configuration.
 
 ## Validation and revision lifecycle
 

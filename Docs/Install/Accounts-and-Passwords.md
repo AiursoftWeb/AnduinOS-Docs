@@ -1,6 +1,6 @@
 # Accounts, passwords and automatic login
 
-These instructions focus on the AnduinOS 2 GNOME desktop. Open **Settings → System → Users**; on older desktop versions, **Users** may be a top-level Settings page.
+Open **Settings → System → Users** to manage user accounts.
 
 ## Which password does sudo need? What is the root password?
 
