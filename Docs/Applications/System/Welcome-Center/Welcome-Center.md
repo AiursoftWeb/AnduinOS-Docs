@@ -13,43 +13,27 @@ The dots at the bottom show how far you have progressed. The exact number of pag
 **Define Your Visual Order** applies the first desktop choices immediately:
 
 - light or dark appearance;
+- the primary display's supported scaling, with a **Recommended** choice when the display provides suitable information;
 - Classic or Modern taskbar layout; and
 - whether the virtual-desktop switch button appears on the taskbar.
 
-![Welcome Center appearance and taskbar layout controls](images/welcome-center/visual-order.png)
+Opening the page does not change display scaling. Selecting a scale applies it while preserving the display resolution; screens without usable physical dimensions may not have a recommendation.
+
+![Welcome Center appearance page showing display scaling, a recommended scale, and taskbar layout controls](images/welcome-center/visual-order.png)
 
 These are not one-time decisions. You can later use [AnduinOS Appearance](../AnduinOS-Appearance/AnduinOS-Appearance.md) for additional layouts, taskbar positions, panel widgets, desktop icons, and sign-in-screen appearance.
 
 ## Select local system policies
 
-**Digital Sovereignty, Under Your Control** collects several independent settings that are otherwise spread across the desktop:
-
-![Welcome Center controls for firewall, local discovery, location, sleep, and Bash suggestions](images/welcome-center/digital-sovereignty.png)
+**Digital Sovereignty, Under Your Control** offers three choices:
 
 - **Network Firewall (UFW)** controls inbound network protection.
-- **Local Network Discovery (mDNS)** lets trusted local networks discover services, printers, and `.local` hostnames.
 - **Location Access** allows applications such as Weather and Clocks to request approximate location.
 - **Auto Sleep** controls automatic suspend while the computer is idle.
-- **Bash Command Predictions** enables local command suggestions in Bash. See [Bash Command Suggestions](../Bash-Command-Suggestions/Bash-Command-Suggestions.md) for acceptance keys, privacy behavior, and advanced controls.
+
+![Welcome Center policy page with Firewall, Location Access, and Auto Sleep controls](images/welcome-center/digital-sovereignty.png)
 
 The switches change real system or user settings; they are not merely preferences for the Welcome Center. A system-level change can request administrator authorization.
-
-!!! note "Local discovery and the firewall are separate"
-
-    Enabling mDNS does not disable the firewall. It prepares local discovery through the firewall policy. Only enable discovery on networks you trust.
-
-## Update the new system
-
-When the computer is online, **Keep Your System Up to Date** can select a responsive package mirror and check for updates.
-
-![Welcome Center update page with mirror and update actions](images/welcome-center/system-update.png)
-
-- **Find Fastest Mirror** measures available sources and selects a suitable mirror.
-- **Check for Updates** refreshes package information and installs available updates.
-- **Do It Later** leaves the system unchanged and continues setup.
-- **Terminal Output** reveals the underlying progress and any error details.
-
-This page is removed from the remaining workflow if you explicitly continue offline. Updates remain available later through the App Store or the normal `apt` commands.
 
 ## Verify Secure Boot trust
 
@@ -116,17 +100,6 @@ The list can include region-specific applications. For example, Simplified Chine
 
 This page requires an Internet connection and disappears from the current run after you choose **Continue Offline**.
 
-## Connect accounts and protect data
-
-**Connect & Protect Your Data** has two separate purposes:
-
-- **Online Accounts** opens GNOME Settings, where Google, Microsoft, and Nextcloud accounts can integrate files, calendars, contacts, and supported services.
-- **Data protection** recommends the tool appropriate for the installed filesystem.
-
-On a supported Btrfs installation, it opens [Disk Snapshots Manager](../Disk-Snapshots-Manager/Disk-Snapshots-Manager.md) to configure automatic system snapshots. Otherwise, it offers Déjà Dup through the App Store for conventional local or remote file backups.
-
-Snapshots and backups are complementary rather than interchangeable. A same-disk Btrfs snapshot is useful for quick rollback, while an independent backup protects data when the entire disk is lost. See [Backup and Restore](../../../Install/Backup-And-Restore.md).
-
 ## Conditional pages
 
 Welcome Center can also show pages for:
@@ -137,8 +110,9 @@ Welcome Center can also show pages for:
 - preparing Bottles for Windows applications on supported architectures;
 - learning keyboard shortcuts;
 - discovering recommended applications;
-- connecting online accounts and planning backups;
 - reviewing privacy choices; and
 - finding AnduinOS community and support resources.
 
 ARM64 systems omit the Bottles page because the supported Bottles workflow is intended for x86 Windows applications. Network-dependent pages are removed after **Continue Offline**, while local appearance, privacy, security, and help pages remain available.
+
+For software sources, local network discovery, command predictions, and backup tools, see [Control Panel](../Control-Panel/Control-Panel.md).

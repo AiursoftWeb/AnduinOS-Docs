@@ -8,7 +8,11 @@ New AnduinOS installations using Btrfs include **Disk Snapshots Manager**. It ca
 
 ![System snapshots in Disk Snapshots Manager](../Applications/System/Disk-Snapshots-Manager/images/system-recovery.png)
 
-See the complete [Disk Snapshots Manager guide](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md) for system rollback, Personal Files history, automatic snapshots, retention, and disk-health checks.
+Open **Control Panel → Backup and Recovery → System Snapshots**. See the complete [Disk Snapshots Manager guide](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md) for system rollback, Personal Files history, automatic snapshots, retention, and disk-health checks. Scheduled snapshots pause below the configured free-space minimum, which defaults to **40 GiB**; the initial factory recovery points are not subject to that additional limit.
+
+### Return to the initial installed state
+
+Control Panel offers **Backup and Recovery → Factory Reset** on supported Btrfs installations with an installer-created **New OS** recovery point. It preserves Home by default. Choosing **Erase user files** restores the initial Home baseline and removes Home snapshot history after successful recovery; it affects the shared Home subvolume, not just the currently signed-in user. Back up files you want to keep to another device or service first. See the [factory reset procedure and prerequisites](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md#factory-reset).
 
 !!! warning "A local snapshot is not an independent backup"
 
@@ -32,7 +36,7 @@ For comprehensive backups (including automatic scheduling and encryption), we re
 
 ![Deja Dup Backups](images/deja-dup-backups.png)
 
-1. Open **Software** and search for `Deja Dup` (or click "Get Deja Dup" in the Welcome Center).
+1. Open **Control Panel → Backup and Recovery → Back Up Home Folder**, or open **Software** and search for `Deja Dup`.
 2. Install and launch the **Backups** app.
 3. Follow the setup wizard to:
    - Select which folders to back up (defaults to your Home folder).

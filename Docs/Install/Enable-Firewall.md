@@ -26,10 +26,12 @@ Allow only the services you intend other devices to reach. Router rules and clou
 For most users, the easiest way to manage your firewall without touching the command line is through the **AnduinOS Welcome Center**:
 
 1. Open **Welcome Center** (AnduinOS OOBE) from your application menu.
-2. Navigate to the **Security & Privacy** page.
+2. Navigate to the **Digital Sovereignty, Under Your Control** page.
 3. Locate the **Network Firewall (UFW)** card and toggle it **On**.
 
 The Welcome Center will securely enable the firewall in the background.
+
+To configure local discovery, open **Control Panel → Network and Internet → Firewall** and use **Local Network Discovery (mDNS)**.
 
 ## (Recommended) Advanced Configuration via Firewall App
 

@@ -114,6 +114,7 @@ nav:
   - Applications:
     - Introduction: Applications/Introduction.md
     - AnduinOS System Tools:
+      - Control Panel: Applications/System/Control-Panel/Control-Panel.md
       - Driver Center: Applications/System/Driver-Center/Driver-Center.md
       - YubiKey Security Center: Applications/System/YubiKey-Security-Center/YubiKey-Security-Center.md
       - Bash Command Suggestions: Applications/System/Bash-Command-Suggestions/Bash-Command-Suggestions.md

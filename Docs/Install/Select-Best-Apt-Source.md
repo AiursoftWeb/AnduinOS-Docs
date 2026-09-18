@@ -1,17 +1,22 @@
 # Select best apt source
 
-By default, AnduinOS may not have selected the most optimal APT source for your region. You can easily test and apply the best APT mirror for your system to speed up software installation and updates.
+The installer tests Ubuntu mirrors during an online installation. An offline installation keeps the source included in the image; a failed online mirror test also leaves the existing source in place. You can test again after moving to another country, changing networks, or noticing slow downloads.
 
-## (Recommended) Using AnduinOS Welcome Center
+## (Recommended) Using Control Panel
 
-The easiest way to find and configure the fastest APT mirror is via the built-in **AnduinOS Welcome Center**:
+To select a mirror using [Control Panel](../Applications/System/Control-Panel/Control-Panel.md):
 
-1. Open **Welcome Center** (AnduinOS OOBE) from your application menu.
-2. In the OOBE setup wizard or the settings interface, navigate to the **Keep Your System Up to Date** page.
-3. Click the **Find Fastest Mirror** button.
-4. The system will automatically test a comprehensive list of mirrors and apply the fastest one for you.
+1. Open **Control Panel** from your application menu.
+2. Under **Programs**, select **Software Source**. The window opens inside Control Panel.
+3. Select **Switch to Fastest Mirror** and wait for the speed tests.
+4. Review the proposed mirror, latency, and bandwidth. Select **Switch** to apply it, or **Keep Current** to leave the source unchanged.
+5. Authenticate when requested. The tool changes the Ubuntu source and refreshes its package indexes. If that refresh fails, it restores the original source and tries refreshing it again.
 
-![Find Fastest Mirror via Welcome Center](images/anduinos-oobe-find-fastest-mirror.png)
+![Software Source opened from Control Panel, with current mirror and mirror-switching action](../Applications/System/Control-Panel/images/software-source.png)
+
+The window shows the current mirror and offers **Terminal Output** for progress and errors. If the selected mirror is already active, it reports that rather than asking you to switch again. Switching mirrors refreshes package information; it does not by itself upgrade installed packages. Use **Check for Updates**, then **Install Updates** when offered, or follow [Update your system](./Update-Your-System.md).
+
+The mainland-China **Flathub** mirror choice in Welcome Center changes the Flatpak source, not APT.
 
 ## (Advanced) Using the Command Line
 

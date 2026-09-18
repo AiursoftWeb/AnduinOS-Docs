@@ -1,10 +1,6 @@
 # Install AnduinOS from USB
 
-This guide follows the AnduinOS 2.0.2 installer from the Live USB to the first boot of the installed system.
-
-!!! note "Newer installer storage features"
-
-    The [2.0.3 development release](../Release-Notes/2.0.3.md) adds an expanded manual-storage workflow, including guarded NTFS shrinking. The screenshots and guided coexistence instructions here describe 2.0.2; they are not instructions for using the new manual editor.
+This guide covers installation from the Live USB to the first boot of the installed system. The disk setup instructions cover guided installation, not the manual partition editor.
 
 Before starting, back up anything important on every disk you may modify. For the most predictable installation, give AnduinOS its own physical disk. Installing beside Windows on the same disk is an advanced operation; read [Dual Boot with Windows](./Dual-Boot-With-Windows.md) before selecting that route.
 
@@ -120,7 +116,7 @@ The three advanced switches are independent and off by default. They do not remo
 
     The screenshot demonstrates one switch in its enabled state; it does not show the defaults. Leave an option disabled unless you specifically need that behavior. SSH password login never enables root password login.
 
-New AnduinOS 2.0.2 installations contain the SSH server so GNOME Settings can enable Secure Shell later without installing another package. If the installer switch remains off, SSH does not listen for connections after installation. See [Enable SSH](./Enable-SSH.md).
+AnduinOS includes the SSH server so GNOME Settings can enable Secure Shell without installing another package. If the installer switch remains off, SSH does not listen for connections after installation. See [Enable SSH](./Enable-SSH.md).
 
 ## Select the timezone
 
@@ -145,6 +141,10 @@ Keep the computer powered on and do not remove the USB drive while the progress 
 ![AnduinOS installation progress with individual installation steps](images/installer/installation-progress.png)
 
 The left side shows the current installation step. **Output** displays detailed diagnostics, while **Discover AnduinOS** provides an introduction during the wait.
+
+During an online installation, the installer attempts to select a fast Ubuntu mirror before refreshing APT. Offline installation, or a failed mirror test, keeps the source included in the image. After installation, use **Control Panel → Programs → Software Source** to test again or change it.
+
+On a supported Btrfs installation, the installer creates a protected **New OS** system snapshot and a hidden initial Home recovery point after target configuration and optional package changes finish. These are the baselines for [Factory Reset](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md#factory-reset). Their creation is not controlled by the automatic-snapshot 40 GiB setting. If this step cannot complete, the installer reports a warning; do not assume that a bootable installation necessarily has factory recovery available. Ext4 and other non-Btrfs installations do not receive these recovery points.
 
 If installation fails, preserve the installer log before closing the window. The step name and detailed output are important when reporting the problem.
 

@@ -49,7 +49,15 @@ In **System Recovery**, each row has a snapshot name, timestamp and **Roll Back*
 
 ### Desktop settings broken or want a factory reset
 
-Use [display and desktop troubleshooting](./Troubleshoot-Displays-and-Desktop.md) to isolate the affected extension or user setting. AnduinOS 2 does not use the old `do-anduinos-autorepair` tool. An APT update does not reset user settings. Avoid blanket `dconf reset` operations; restore a known configuration or change the specific setting after backing it up.
+Use [display and desktop troubleshooting](./Troubleshoot-Displays-and-Desktop.md) to isolate the affected extension or user setting. An APT update does not reset user settings. Avoid blanket `dconf reset` operations; restore a known configuration or change the specific setting after backing it up.
+
+Open **Control Panel → Backup and Recovery → Factory Reset** to reset a supported Btrfs installation with its original **New OS** recovery point. Read the [factory reset guide](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md#factory-reset) before proceeding. The default reset preserves Home, including user-specific settings, so it may preserve the setting causing a desktop problem. **Erase user files** also resets Home and removes its snapshot history after successful recovery; back up anything you need first.
+
+Factory reset is unavailable without the factory recovery point. Insufficient free space or an unready recovery boot configuration can also prevent reset. The displayed error identifies the failed check.
+
+### Automatic snapshots have paused
+
+The default minimum free space for scheduled System and Home snapshots is **40 GiB**. Below the configured minimum, new scheduled snapshots pause while enabled retention cleanup can still run. Creation resumes on a later scheduler check after enough space is available. Open **Automatic Snapshots → Disk Space Protection** to inspect or change the shared limit. A small disk can reach this limit soon after installation; it does not mean the initial factory recovery point failed to be created. See [automatic snapshot settings](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md#automatic-snapshots-and-cleanup).
 
 ## When to ask for help
 

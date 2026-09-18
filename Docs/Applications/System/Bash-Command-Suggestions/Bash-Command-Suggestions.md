@@ -35,7 +35,7 @@ By default, new learning remains in the current shell process. AnduinOS does not
 
 ## Turn suggestions on or off
 
-The **Bash Command Predictions** switch in [Welcome Center](../Welcome-Center/Welcome-Center.md) controls the normal user-facing setting. Open a new terminal after changing it.
+Open [Control Panel](../Control-Panel/Control-Panel.md), then **AI Stack → Bash Command Predictions** to enable or disable suggestions. Open a new terminal after changing it.
 
 For a temporary test in one terminal, run:
 

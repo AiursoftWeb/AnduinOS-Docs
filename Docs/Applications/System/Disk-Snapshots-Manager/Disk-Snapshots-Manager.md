@@ -1,12 +1,14 @@
 # Disk Snapshots Manager
 
-Disk Snapshots Manager provides fast local recovery for AnduinOS installations that use Btrfs. It keeps system snapshots and Personal Files snapshots separate, so rolling back the operating system does not roll back the user's Home directory.
+Disk Snapshots Manager provides fast local recovery for supported AnduinOS Btrfs installations. It keeps system snapshots and Personal Files snapshots separate: an ordinary system rollback leaves Home unchanged. Factory reset additionally offers an explicit choice to reset Home, as described below.
 
 !!! important "Snapshots are not backups"
 
     Snapshots normally remain on the same physical disk as the live system. They are useful for recovering from a broken update, configuration change, or accidental file edit, but they do not protect against disk failure, theft, or loss of the computer. Keep an independent backup on another disk or service.
 
 The application is installed on new Btrfs systems. It is not used on Ext4 installations because Ext4 does not provide the required Btrfs subvolume and snapshot model.
+
+Open **Control Panel → Backup and Recovery → System Snapshots**.
 
 ## System Recovery
 
@@ -33,7 +35,44 @@ Before changing the active system root, the recovery engine creates and protects
 
 !!! warning "Personal Files are not rolled back"
 
-    A system rollback changes the operating-system root but deliberately leaves Personal Files unchanged. This prevents a driver or package rollback from silently discarding newer documents. Recover older personal files separately from **Personal Files Recovery**.
+    An ordinary system rollback changes the operating-system root but deliberately leaves Personal Files unchanged. This prevents a driver or package rollback from silently discarding newer documents. Recover older personal files separately from **Personal Files Recovery**. The optional Home reset below is specific to factory reset, not to ordinary snapshot rollback.
+
+## Factory reset
+
+Factory reset returns system files, installed packages, and system settings to the initial installed **New OS** state. That state is captured after the installer has applied the selected configuration and optional package changes; it is not a fresh download of the latest release.
+
+### Requirements
+
+- A supported AnduinOS Btrfs layout, with a healthy installer-created **New OS** system snapshot.
+- An installed snapshot manager that supports the factory-reset workflow.
+- Enough available space to prepare the current-system safety snapshot and recovery files.
+- A recovery boot configuration that passes the manager's readiness checks.
+- For **Erase user files**, a healthy initial Home recovery point as well.
+
+The installer creates the protected system baseline and hidden Home baseline on supported Btrfs installations. Automatic cleanup never removes them. The **New OS** baseline cannot be renamed or unprotected; deliberate deletion requires a warning confirmation because it disables factory recovery.
+
+### Choose what to reset
+
+![Factory reset confirmation with Erase user files selected and the Reset and Restart action](images/factory-reset.png)
+
+The screenshot shows **Erase user files selected** to illustrate the optional Home reset. **It is unchecked by default.** Leave it unchecked if you want to preserve Home files and user settings.
+
+1. Back up files you want to keep to another device or service, save your work, and close applications.
+2. Open **Control Panel → Backup and Recovery → Factory Reset**. Control Panel opens the snapshot manager, which checks availability and prepares the operation.
+3. Read the confirmation. Leave **Erase user files** unchecked to preserve Home, or select it only if you intend to restore Home to its initial installed state too.
+4. Select **Reset and Restart** and authenticate when requested. The manager repeats its readiness checks and creates a safety snapshot of the current system before arming recovery.
+5. Once recovery is armed, the computer restarts automatically within 60 seconds. Let recovery and the subsequent boot finish without interrupting power.
+
+| Choice | System files and packages | Home files and user settings | Home snapshot history |
+| --- | --- | --- | --- |
+| Default reset | Restored to New OS | Preserved | Preserved |
+| Erase user files selected | Restored to New OS | Restored to the initial Home baseline | Removed after the recovered system boots and is verified |
+
+Home reset affects the shared Home subvolume, including other users' Home directories. The initial baseline can contain account files and defaults created during installation; it is not necessarily empty. The current-system safety snapshot does not provide an independent backup of your personal files. Once recovery is confirmed, the Home reset cannot be undone using the removed Home history.
+
+This is a snapshot-based reset, not a secure disk wipe or a reset of every data location. Separate storage such as external disks, persistent logs, container data, and virtual-machine images is outside the system-root and Home reset scope. The feature is not a data-sanitization procedure for selling a computer.
+
+If the factory Home baseline is missing or damaged, **Erase user files** is unavailable. If the system baseline or layout is unsupported, the application explains that factory reset is unavailable. Other preparation errors, such as insufficient space, must be resolved before a restart can be scheduled. See [recovery troubleshooting](../../../Install/Troubleshoot-Updates-and-Recovery.md).
 
 ## Personal Files Recovery
 
@@ -62,23 +101,36 @@ Only local paths inside the user's Home directory are eligible. Network location
 
 Select **Automatic Snapshots** on either recovery page to configure that scope. System and Personal Files schedules are independent.
 
-![Automatic snapshot and retention settings](images/automatic-snapshots.png)
-
 You can configure:
 
 - whether automatic snapshots are created;
 - the freshness interval, from one to 24 hours;
 - whether old snapshots are cleaned automatically;
 - how long to keep every snapshot;
-- daily, weekly, monthly, and yearly representatives.
+- daily, weekly, monthly, and yearly representatives; and
+- **Disk Space Protection → Minimum free space**, shared by the System and Home automatic-snapshot settings.
 
-If the computer is asleep or powered off when a snapshot was due, the scheduler creates at most one catch-up snapshot after the next start. Protected snapshots and snapshots involved in an active recovery transaction are not removed by automatic cleanup.
+If the computer is asleep or powered off when a snapshot was due, the scheduler creates at most one catch-up snapshot on its next check, provided the creation checks pass. Protected snapshots and snapshots involved in an active recovery transaction are not removed by automatic cleanup.
+
+### Free-space protection
+
+![Automatic System Snapshots settings with Disk Space Protection set to a custom minimum of 37 GiB](images/automatic-snapshots.png)
+
+The screenshot shows a custom **37 GiB** setting. The default is **40 GiB**; use the value appropriate for your disk and recovery needs.
+
+The minimum defaults to **40 GiB**. When available filesystem space is below the configured value, the scheduler skips creating new scheduled snapshots. Enabled retention cleanup still runs according to its normal rules; it does not delete protected snapshots to force space above the limit. Creation can resume on a later scheduler check once available space reaches the configured minimum.
+
+The settings window reports **Automatic snapshots paused** for the affected scope, and a desktop notification explains the pause. A small disk can fall below 40 GiB soon after installation, even though the installed system and its initial recovery points are valid. Review this setting if the default is unsuitable for your disk.
+
+System and Home have independent schedules, but share this minimum setting. The available space is checked for each scope's filesystem. Set the value to **0** to disable this additional scheduled-snapshot limit; ordinary storage and operation checks still apply.
+
+This setting does not apply to manually requested snapshots, package-transaction snapshots, installer-created factory baselines, or the safety snapshot required for a recovery transaction. Those operations can still fail their own space checks. Pausing scheduled snapshots therefore does not disable all snapshot creation.
 
 AnduinOS also creates a system snapshot before a real DPKG package transaction by default. Advanced Settings controls this behavior and its notifications.
 
 ## Snapshot protection, deletion, and size
 
-A protected snapshot is kept until protection is removed. Other manual, automatic, and package-change snapshots can participate in automatic cleanup.
+Ordinary protected snapshots are excluded from automatic cleanup while protected. Other manual, automatic, and package-change snapshots can participate in automatic cleanup. Factory baselines have the additional protection and deletion rules described under [Factory reset](#factory-reset).
 
 Btrfs snapshots share unchanged data. The apparent size of several snapshots must not be added together as though each were a complete independent copy. Open **Properties** when you need the size information available for one snapshot. Enabling Btrfs quota accounting can provide shared and exclusive subvolume sizes, but its initial scan may take time.
 
@@ -106,6 +158,8 @@ A healthy result means no important warning was reported at the time of the chec
 |---|---|
 | A package or driver update broke the system | System snapshot rollback |
 | A document was edited or deleted | Personal Files history |
+| Return a supported installation to its initial system state | Factory reset, preserving Home by default |
+| Also discard Home files and user settings | Factory reset with Erase user files, after independent backup |
 | The internal disk failed or the computer was lost | Independent external or cloud backup |
 | An Ext4 installation needs file protection | Deja Dup, cloud sync, or another backup tool |
 
