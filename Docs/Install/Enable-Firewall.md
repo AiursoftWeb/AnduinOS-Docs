@@ -1,24 +1,25 @@
-# Enable Firewall on AnduinOS
+# Enable or disable the firewall on AnduinOS
 
-!!! warning "Firewall is Disabled by Default!!"
+!!! note "Check the current firewall state"
 
-    The firewall is disabled by default in AnduinOS. This is a deliberate choice to enhance user experience and avoid unnecessary complications. You can enable it at any time using the command `sudo ufw enable`.
+    Run `sudo ufw status verbose` before changing settings. The firewall can be disabled on a fresh installation; previous configuration or setup choices may change its state. The screenshot below shows an enabled firewall.
 
 !!! danger "Do Not Lock Out Your SSH Session"
 
-    If you are currently connected to this computer through SSH, allow OpenSSH **before** enabling UFW:
+    Before enabling UFW remotely, allow the port actually used by your SSH server. For the standard OpenSSH profile, inspect and allow it with:
 
     ```bash
+    sudo ufw app info OpenSSH
     sudo ufw allow OpenSSH
     ```
 
-## Why is the Firewall Disabled by Default in AnduinOS?
+    If SSH uses a different port, allow that TCP port instead. For example, `sudo ufw allow 2222/tcp` applies only to a server listening on port 2222. Keep console or other recovery access available: enabling UFW can interrupt existing connections. After enabling it, test a new SSH connection before closing your current session.
 
-If you're new to AnduinOS or Linux in general, you might be surprised to find that its built-in firewall, UFW (Uncomplicated Firewall), is not active right after installation. This may seem like a security oversight, but it's actually a deliberate design choice rooted in a philosophy of "secure by default" and prioritizing user experience. In a fresh AnduinOS system, there are no network services listening for incoming connections. With no open doors, there is nothing for a firewall to protect. The system is inherently secure because it doesn't offer any entry points for potential attackers to target.
+## What does the firewall protect?
 
-The primary reason for keeping the firewall off by default is to prevent a frustrating user experience. Imagine if the firewall were active from the start, blocking all incoming connections. When you later decide to set up a service, like SSH for remote access, a Samba share for local network files, or a web server for development, it would fail to connect without any obvious reason. You would be left troubleshooting a perfectly configured service, only to eventually discover it was being silently blocked by a firewall you didn't even know was active. AnduinOS avoids this "trap" by giving you, the user, the control to enable and configure the firewall precisely when you need it—that is, when you start running services that need to be accessed.
+UFW filters network traffic according to its rules and default policies. A disabled firewall does not establish that the computer has no listening services or is inherently secure. Installed applications, remote-access settings and local-network services affect what is reachable.
 
-This "clean slate" approach also aligns perfectly with modern computing practices. In cloud environments like AWS or Google Cloud, network security is typically managed at a higher level by "Security Groups," making a host-based firewall redundant and an extra layer of complexity. Similarly, for users who automate deployments with tools like Ansible, starting with a predictable, disabled firewall makes scripting easier and more reliable. UFW remains a powerful and simple tool, ready for you to enable with a single command (`sudo ufw enable`) as soon as you open your first network port to the world.
+Allow only the services you intend other devices to reach. Router rules and cloud security groups control traffic at other points in the network; they do not make the computer's own firewall irrelevant. See the [Ubuntu firewall guide](https://documentation.ubuntu.com/server/how-to/security/firewalls/index.html) for UFW configuration basics.
 
 ## (Recommended) Enable Firewall via Welcome Center
 
@@ -37,33 +38,46 @@ While the Welcome Center provides a convenient on/off switch, you will often nee
 1. Open your application menu and search for **Firewall**.
    *(If it's not installed, you can easily install it via the App Store or terminal: `sudo apt install anduinos-ufwall-gtk`)*.
 2. Enter your password to unlock the interface.
-3. Open **Status** and turn the **Firewall** switch on. If you are working remotely, complete the OpenSSH command above first.
+3. Open **Status** and turn the **Firewall** switch on. If you are working remotely, allow your actual SSH port as described above first.
 
-![AnduinOS Firewall Status Page](images/ufwall-gtk-rules.png)
+![Firewall Status page with the Firewall switch on and Active status](images/firewall-active-status.png){ width=840 }
 
-4. Open **Profiles** and turn on **OpenSSH** if this computer should accept SSH connections. You can use **Rules** to review or create more specific rules.
+The top **Firewall** switch is on and its status reads **Active**. The example uses **Incoming: Deny** and **Outgoing: Allow** under **Default Policies**. **Local Network Discovery (mDNS)** has its own switch; changing it is separate from turning firewall filtering on or off. **Log Level: Off** refers to logging, not firewall status.
 
-![AnduinOS Firewall Rules Page](images/ufwall-gtk-add-rule.png)
+### Allow a service or add a rule
 
-5. Use **Audit** to inspect current network activity and identify services that may need additional rules.
+Open **Profiles** and turn on **OpenSSH** if this computer should accept SSH connections. Open **Rules** to review the resulting rules or choose **Add Rule** for a specific service. The ports shown below are examples, not rules every computer needs.
 
-![AnduinOS Firewall Network Audit](images/ufwall-gtk-main.png)
+![AnduinOS Firewall Rules Page](images/ufwall-gtk-add-rule.png){ width=840 }
+
+### Inspect network activity
+
+Open **Audit** to inspect current network activity. Use the direction and protocol filters above the process list to focus on a connection you are troubleshooting.
+
+![AnduinOS Firewall Network Audit](images/ufwall-gtk-main.png){ width=840 }
 
 See [Enable SSH](./Enable-SSH.md) for instructions on controlling the SSH listener through GNOME Settings. A firewall rule permits traffic but does not start SSH by itself.
 
-## (Alternative) Command Line Installation
+## (Alternative) Enable from the command line
 
-To enable the firewall on AnduinOS using the terminal, simply run the following command:
+Review existing rules and default policies first with `sudo ufw status verbose`. If connected remotely, allow your actual SSH port as described above, then enable filtering and inspect the result:
 
 ```bash title="Enable Firewall"
 sudo ufw enable
+sudo ufw status verbose
 ```
 
-But this command is risky because it will block all incoming connections, including SSH. If you are connected via SSH, you will lose your connection and will not be able to reconnect until you disable the firewall or allow SSH connections.
+Which connections are allowed depends on the configured rules and policies. Enabling UFW can interrupt existing SSH sessions; see the [UFW manual](https://manpages.ubuntu.com/manpages/questing/man8/ufw.8.html). Test a new connection after enabling it.
 
-To safely enable the firewall while allowing SSH connections, use the following commands:
+## Turn off the firewall and confirm its status
 
-```bash title="Enable Firewall with SSH"
-sudo ufw allow ssh
-sudo ufw enable
+To disable filtering, open **Firewall → Status** and turn off the top **Firewall** switch, shown on in the example above. Authenticate if requested. Use this main switch rather than the separate mDNS switch. In a terminal, the equivalent is:
+
+```bash
+sudo ufw disable
+sudo ufw status verbose
 ```
+
+The status should report `inactive`. Disabling UFW keeps its configured rules for later use, but stops enforcing its policy; network services may become reachable. Prefer allowing a specific service when that is the actual goal. Other firewalls on the router or network remain independent.
+
+To enable UFW again, first allow your actual SSH port if you are connected remotely, then run `sudo ufw enable` and inspect `sudo ufw status verbose`. Turning off UFW does not stop an SSH, Samba or other listening service.

@@ -1,4 +1,4 @@
-# Run Windows Apps on Linux
+# Run Windows .exe applications on AnduinOS
 
 For the normal desktop workflow, first try [Windows EXE Runner](../../Applications/System/Windows-EXE-Runner/Windows-EXE-Runner.md). It opens supported `.exe` and `.msi` files through Bottles, prepares the compatibility environment graphically, and recommends native AnduinOS applications when they are a better fit.
 

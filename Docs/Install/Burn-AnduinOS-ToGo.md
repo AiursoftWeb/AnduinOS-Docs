@@ -1,4 +1,4 @@
-## AnduinOS Live with persistence (AnduinOS ToGo)
+# Keep files on a Live USB after reboot (AnduinOS ToGo)
 
 Starting from **AnduinOS 1.4**, the ISO image includes a "AnduinOS ToGo" feature. This allows you to use the installation media as a fully persistent portable operating system. You can install packages (e.g., Rust, compilers), change system configurations, and save files, all of which will be retained on the USB drive after a reboot.
 

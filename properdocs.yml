@@ -33,7 +33,7 @@ nav:
       - AnduinOS 1.x: Release-Notes/1.x.md
   - Install:
     - Installing AnduinOS:
-      - System Requirements: https://www.anduinos.com/
+      - System Requirements: Install/System-Requirements.md
       - Download AnduinOS: Install/Download-AnduinOS.md
       - Burn a USB Stick: Install/Burn-A-USB-Stick.md
       - Burn AnduinOS ToGo: Install/Burn-AnduinOS-ToGo.md
@@ -41,12 +41,14 @@ nav:
       - Dual Boot with Windows: Install/Dual-Boot-With-Windows.md
       - Install AnduinOS from USB: Install/Install-AnduinOS-From-USB.md
     - Setting Up AnduinOS:
+      - Accounts, Passwords and Login: Install/Accounts-and-Passwords.md
       - Secure Boot Guide: Install/First-Boot-For-Secure-Boot.md
       - Secure Boot Architecture: Install/Secure-Boot-Signing-Architecture.md
       - Switch to Your Language: Install/Switch-To-Your-Language.md
       - Type Chinese with Rime: Install/Use-Rime-Chinese-Input.md
       - Select Best APT Source: Install/Select-Best-Apt-Source.md
       - Update Your System: Install/Update-Your-System.md
+      - Upgrade from 1.x to 2: Install/Upgrade-and-Migrate.md
       - Update Firmware: Install/Upgrade-Firmware.md
       - Install Drivers: Install/Install-Drivers.md
       - Install NVIDIA Drivers: Install/Install-Nvidia-Drivers.md
@@ -55,15 +57,26 @@ nav:
       - Configure Power Settings: Install/Configure-Power-Settings.md
       - Add Printers: Install/Managing-Printers.md
       - Allow Sudo Without Password: Install/Allow-Sudo-Without-Password.md
-      - Enable Firewall: Install/Enable-Firewall.md
+      - Enable or Disable Firewall: Install/Enable-Firewall.md
       - Enable SSH: Install/Enable-SSH.md
       - Enable RDP: Install/Enable-RDP.md
+      - Text, Icons and Display Scaling: Install/Text-Icons-and-Displays.md
+      - Startup Applications: Install/Startup-Applications.md
+      - Shortcuts, Taskbar and Wallpaper: Install/Shortcuts-and-Appearance.md
     - Learning AnduinOS:
       - Keyboard Shortcuts: Install/Keyboard-Shortcuts.md
       - Touchpad Gestures: Install/Touchpad-Gestures.md
-      - Installing Applications: Install/Installing-Applications.md
+      - Install, Remove and Default Apps: Install/Installing-Applications.md
+      - Scan Documents: Install/Scanning-Documents.md
+      - Android, ROCm, Domains and Other Desktops: Install/Compatibility-FAQ.md
     - Maintaining AnduinOS:
       - Setup Backup: Install/Backup-And-Restore.md
+      - Find Help by Symptom: Install/Troubleshooting.md
+      - Wi-Fi and Bluetooth: Install/Troubleshoot-Network-and-Bluetooth.md
+      - Sound and Microphones: Install/Troubleshoot-Sound.md
+      - Displays and Desktop: Install/Troubleshoot-Displays-and-Desktop.md
+      - Printing and Scanning: Install/Troubleshoot-Printing-and-Scanning.md
+      - Updates and Recovery: Install/Troubleshoot-Updates-and-Recovery.md
   - Skills:
     - Introduction: Skills/Introduction.md
     - System Management:

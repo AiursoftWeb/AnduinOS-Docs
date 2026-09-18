@@ -1,5 +1,7 @@
 # Update your system
 
+For migration from AnduinOS 1.x, use [Upgrade and migrate](./Upgrade-and-Migrate.md). For interrupted updates, use [update troubleshooting](./Troubleshoot-Updates-and-Recovery.md).
+
 Keeping your system up-to-date helps you receive security patches, bug fixes, and new features. AnduinOS combines background updates with manual update options; periodically check for updates even when automatic updates are enabled.
 
 ## Automatic Updates

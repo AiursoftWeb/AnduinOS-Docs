@@ -24,13 +24,11 @@ While we provide an official way to install some applications, you can also inst
 
 Before continuing, you need to know how to open terminal on AnduinOS.
 
-!!! note "AnduinOS 2 ships with a native app store"
+!!! note "App Store, Software and GNOME Software"
 
-    Starting with AnduinOS 2, the **`anduinos-appstore`** comes pre-installed. It provides a curated, one-click installation experience for popular applications — while always installing software through their official channels, so you never get an outdated or repackaged version.
+    In AnduinOS 2, `anduinos-appstore` is a metapackage providing GNOME Software and Flatpak integration. **App Store** and **Software** refer to that graphical software-management experience, not two independent store implementations. Older releases and customized installations can have a different installed application set.
 
-    That said, AnduinOS remains agnostic about how you manage your software. If you prefer Flatpak, Snap, AppImage, or Nix, you are free to set them up. The native store is a convenience, not a walled garden.
-
-    For third-party store options, see the guides linked in the Store section of the sidebar.
+    Start with [installing, removing and choosing default applications](../Install/Installing-Applications.md). That guide also covers `.deb` files, AppImages and missing store components. The catalog below contains individual application guides; a catalog entry is not a guarantee of vendor support.
 
 ## How to paste the commands into the terminal
 
@@ -56,11 +54,11 @@ This command will install the necessary tools to install applications from the o
 
 ## Install applications from the apt repository
 
-To install applications from the apt repository, you can run:
+To install applications from the apt repository, replace `package-name` with the actual package name:
 
 ```bash
 sudo apt update
-sudo apt install <package-name>
+sudo apt install package-name
 ```
 
 For example, to install `htop`, you can run:

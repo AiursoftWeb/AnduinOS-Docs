@@ -101,14 +101,14 @@ Enter your full name, username, account password, and computer name.
 
 ![User account and computer-name page](images/installer/user-account.png)
 
-- The password cannot be blank.
+- The account password cannot be blank. Automatic login and passwordless sudo do not remove this requirement. See [accounts and passwords](./Accounts-and-Passwords.md) for the difference.
 - The installer validates the account before it creates the final installation plan.
 - The computer name may contain ASCII letters, digits, and internal hyphens. It cannot begin or end with a hyphen and may contain at most 63 characters.
 - Uppercase computer names are accepted and stored in lowercase. For example, `TT-VIEW-71` becomes `tt-view-71`.
 
 ## Choose advanced access options
 
-The three advanced switches are independent, and **all three are off by default**:
+The three advanced switches are independent and off by default. They do not remove the requirement to set an account password:
 
 ![Advanced access options in the AnduinOS Installer](images/installer/advanced-options.png)
 

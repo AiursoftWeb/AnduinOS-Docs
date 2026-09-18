@@ -1,5 +1,7 @@
 # Managing Printers
 
+For scanning pages into PDF, see [Scan documents](./Scanning-Documents.md). For paused jobs or discovery failures, see [printing and scanning troubleshooting](./Troubleshoot-Printing-and-Scanning.md).
+
 In the past, setting up a printer on Linux was a nightmare of finding the right drivers. Today, AnduinOS supports **Driverless Printing** (via IPP Everywhere and Apple AirPrint) out of the box. 
 
 The CUPS printing system is **pre-installed**, meaning most modern printers will work the moment you plug them in via USB or connect them to the same Wi-Fi network.

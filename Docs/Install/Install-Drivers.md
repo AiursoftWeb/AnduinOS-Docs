@@ -1,5 +1,7 @@
 # Install Driver
 
+For missing Wi-Fi or Bluetooth, start with [network troubleshooting](./Troubleshoot-Network-and-Bluetooth.md). For Dummy Output or microphone failures, see [sound troubleshooting](./Troubleshoot-Sound.md).
+
 After installing AnduinOS, hopefully all devices are functioning properly. However, if you find that some devices are not working as expected, you may need to install additional drivers. This guide will show you how to install drivers on AnduinOS.
 
 !!! note "Non-open source drivers"
