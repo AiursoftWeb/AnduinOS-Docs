@@ -35,7 +35,7 @@ Before changing the active system root, the recovery engine creates and protects
 
 !!! warning "Personal Files are not rolled back"
 
-    An ordinary system rollback changes the operating-system root but deliberately leaves Personal Files unchanged. This prevents a driver or package rollback from silently discarding newer documents. Recover older personal files separately from **Personal Files Recovery**. The optional Home reset below is specific to factory reset, not to ordinary snapshot rollback.
+    An ordinary system rollback changes the operating-system root but deliberately leaves Personal Files unchanged. This prevents a driver or package rollback from silently discarding newer documents. Recover older personal files separately from **Personal Files Recovery**. Use Home snapshot rollback separately when you want to restore all users' files and settings.
 
 ## Factory reset
 
@@ -47,42 +47,55 @@ Factory reset returns system files, installed packages, and system settings to t
 - An installed snapshot manager that supports the factory-reset workflow.
 - Enough available space to prepare the current-system safety snapshot and recovery files.
 - A recovery boot configuration that passes the manager's readiness checks.
-- For **Erase user files**, a healthy initial Home recovery point as well.
+- For **Roll back user data**, a healthy initial Home recovery point as well.
 
-The installer creates the protected system baseline and hidden Home baseline on supported Btrfs installations. Automatic cleanup never removes them. The **New OS** baseline cannot be renamed or unprotected; deliberate deletion requires a warning confirmation because it disables factory recovery.
+The installer creates the protected **New OS** baselines in both System Recovery and Personal Files Recovery on supported Btrfs installations. Automatic cleanup never removes them. The **New OS** baseline cannot be renamed or unprotected; deliberate deletion requires a warning confirmation because it disables factory recovery.
 
 ### Choose what to reset
 
-![Factory reset confirmation with Erase user files selected and the Reset and Restart action](images/factory-reset.png)
+<!-- Replace images/factory-reset.png with the new Roll back user data confirmation before restoring this illustration. -->
 
-The screenshot shows **Erase user files selected** to illustrate the optional Home reset. **It is unchecked by default.** Leave it unchecked if you want to preserve Home files and user settings.
+**Roll back user data is unchecked by default.** Leave it unchecked to preserve current Home files and user settings.
 
 1. Back up files you want to keep to another device or service, save your work, and close applications.
 2. Open **Control Panel → Backup and Recovery → Factory Reset**. Control Panel opens the snapshot manager, which checks availability and prepares the operation.
-3. Read the confirmation. Leave **Erase user files** unchecked to preserve Home, or select it only if you intend to restore Home to its initial installed state too.
-4. Select **Reset and Restart** and authenticate when requested. The manager repeats its readiness checks and creates a safety snapshot of the current system before arming recovery.
+3. Read the confirmation. Leave **Roll back user data** unchecked to preserve Home, or select it only if you intend to restore Home to its initial installed state too.
+4. Select **Reset and Restart** and authenticate when requested. The manager repeats its readiness checks and creates safety snapshots of the affected scopes before arming recovery.
 5. Once recovery is armed, the computer restarts automatically within 60 seconds. Let recovery and the subsequent boot finish without interrupting power.
 
 | Choice | System files and packages | Home files and user settings | Home snapshot history |
 | --- | --- | --- | --- |
 | Default reset | Restored to New OS | Preserved | Preserved |
-| Erase user files selected | Restored to New OS | Restored to the initial Home baseline | Removed after the recovered system boots and is verified |
+| Roll back user data selected | Restored to New OS | Restored to the initial Home baseline | Preserved |
 
-Home reset affects the shared Home subvolume, including other users' Home directories. The initial baseline can contain account files and defaults created during installation; it is not necessarily empty. The current-system safety snapshot does not provide an independent backup of your personal files. Once recovery is confirmed, the Home reset cannot be undone using the removed Home history.
+Home reset affects the shared Home subvolume, including other users' Home directories. The initial baseline can contain account files and defaults created during installation; it is not necessarily empty. The current-system safety snapshot does not provide an independent backup of your personal files. Home rollback also creates a Home safety snapshot; older snapshots remain browsable and reusable, subject to the configured retention policy.
 
 This is a snapshot-based reset, not a secure disk wipe or a reset of every data location. Separate storage such as external disks, persistent logs, container data, and virtual-machine images is outside the system-root and Home reset scope. The feature is not a data-sanitization procedure for selling a computer.
 
-If the factory Home baseline is missing or damaged, **Erase user files** is unavailable. If the system baseline or layout is unsupported, the application explains that factory reset is unavailable. Other preparation errors, such as insufficient space, must be resolved before a restart can be scheduled. See [recovery troubleshooting](../../../Install/Troubleshoot-Updates-and-Recovery.md).
+If the factory Home baseline is missing or damaged, **Roll back user data** is unavailable. If the system baseline or layout is unsupported, the application explains that factory reset is unavailable. Other preparation errors, such as insufficient space, must be resolved before a restart can be scheduled. See [recovery troubleshooting](../../../Install/Troubleshoot-Updates-and-Recovery.md).
 
 ## Personal Files Recovery
 
 The **Personal Files Recovery** page manages snapshots of Home directories independently from the operating system.
 
-![Personal Files Recovery snapshots](images/personal-files-recovery.png)
+<!-- Replace images/personal-files-recovery.png with the visible New OS baseline and Roll Back action. -->
 
 Select **Browse Files** to explore the contents of a snapshot. You can recover a file or folder without replacing the whole Home directory. Recovery writes an ordinary copy chosen by the current user; when necessary, the application uses a distinct recovered name instead of silently overwriting unrelated data.
 
 Personal Files history is restricted to the authenticated user's own Home directory. System snapshot browsing requires administrator authorization.
+
+### Roll back user data
+
+Choose **Roll Back** on a Home snapshot, authenticate as an administrator, and
+confirm the restart. This restores **all users' Home files and settings** to the
+selected snapshot without replacing the system. The manager creates a Home
+safety snapshot first and keeps snapshot history. **Browse Files** remains
+available in the snapshot's menu without a restart.
+
+Home rollback requires compatible local account directories and UID/GID
+ownership. A mismatch or nested Btrfs subvolumes in Home blocks the operation:
+ordinary snapshots do not recursively capture nested subvolume contents.
+Do not use this recovery feature as a secure data-erasure procedure.
 
 ## Recover an earlier version from Files
 
@@ -116,7 +129,7 @@ If the computer is asleep or powered off when a snapshot was due, the scheduler 
 
 ![Automatic System Snapshots settings with Disk Space Protection set to a custom minimum of 37 GiB](images/automatic-snapshots.png)
 
-The screenshot shows a custom **37 GiB** setting. The default is **40 GiB**; use the value appropriate for your disk and recovery needs.
+**Roll back user data is unchecked by default.** Leave it unchecked to preserve current Home files and user settings.
 
 The minimum defaults to **40 GiB**. When available filesystem space is below the configured value, the scheduler skips creating new scheduled snapshots. Enabled retention cleanup still runs according to its normal rules; it does not delete protected snapshots to force space above the limit. Creation can resume on a later scheduler check once available space reaches the configured minimum.
 
@@ -159,7 +172,7 @@ A healthy result means no important warning was reported at the time of the chec
 | A package or driver update broke the system | System snapshot rollback |
 | A document was edited or deleted | Personal Files history |
 | Return a supported installation to its initial system state | Factory reset, preserving Home by default |
-| Also discard Home files and user settings | Factory reset with Erase user files, after independent backup |
+| Also return Home files and settings to their initial state | Factory reset with Roll back user data, after independent backup |
 | The internal disk failed or the computer was lost | Independent external or cloud backup |
 | An Ext4 installation needs file protection | Deja Dup, cloud sync, or another backup tool |
 

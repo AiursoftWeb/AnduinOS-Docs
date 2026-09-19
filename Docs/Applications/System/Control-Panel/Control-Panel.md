@@ -34,6 +34,6 @@ Use these entries to configure the corresponding feature:
 
 **System Snapshots** opens [Disk Snapshots Manager](../Disk-Snapshots-Manager/Disk-Snapshots-Manager.md) for supported Btrfs installations. The manager owns snapshot creation, automatic schedules, retention, and recovery checks.
 
-**Factory Reset** opens the manager's reset workflow. It requires a supported Btrfs layout and the installer-created **New OS** baseline. The default preserves Home. The optional **Erase user files** choice also resets Home and removes its snapshot history after successful recovery. Read the [factory reset guide](../Disk-Snapshots-Manager/Disk-Snapshots-Manager.md#factory-reset) before confirming.
+**Factory Reset** opens the manager's reset workflow. It requires a supported Btrfs layout and the installer-created **New OS** baseline. The default preserves Home. The optional **Roll back user data** choice also resets Home and preserves its snapshot history. Read the [factory reset guide](../Disk-Snapshots-Manager/Disk-Snapshots-Manager.md#factory-reset) before confirming.
 
 **Back Up Home Folder** opens the backup application or offers to install it. Keep independent backups even when local snapshots are enabled; both live files and same-disk snapshots can be lost with the disk. See [Backup and Restore](../../../Install/Backup-And-Restore.md).

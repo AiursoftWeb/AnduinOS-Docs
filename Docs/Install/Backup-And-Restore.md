@@ -12,7 +12,7 @@ Open **Control Panel → Backup and Recovery → System Snapshots**. See the com
 
 ### Return to the initial installed state
 
-Control Panel offers **Backup and Recovery → Factory Reset** on supported Btrfs installations with an installer-created **New OS** recovery point. It preserves Home by default. Choosing **Erase user files** restores the initial Home baseline and removes Home snapshot history after successful recovery; it affects the shared Home subvolume, not just the currently signed-in user. Back up files you want to keep to another device or service first. See the [factory reset procedure and prerequisites](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md#factory-reset).
+Control Panel offers **Backup and Recovery → Factory Reset** on supported Btrfs installations with an installer-created **New OS** recovery point. It preserves Home by default. Choosing **Roll back user data** restores the initial Home baseline and preserves Home snapshot history; it affects the shared Home subvolume, not just the currently signed-in user. Back up files you want to keep to another device or service first. See the [factory reset procedure and prerequisites](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md#factory-reset).
 
 !!! warning "A local snapshot is not an independent backup"
 

@@ -51,7 +51,7 @@ In **System Recovery**, each row has a snapshot name, timestamp and **Roll Back*
 
 Use [display and desktop troubleshooting](./Troubleshoot-Displays-and-Desktop.md) to isolate the affected extension or user setting. An APT update does not reset user settings. Avoid blanket `dconf reset` operations; restore a known configuration or change the specific setting after backing it up.
 
-Open **Control Panel → Backup and Recovery → Factory Reset** to reset a supported Btrfs installation with its original **New OS** recovery point. Read the [factory reset guide](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md#factory-reset) before proceeding. The default reset preserves Home, including user-specific settings, so it may preserve the setting causing a desktop problem. **Erase user files** also resets Home and removes its snapshot history after successful recovery; back up anything you need first.
+Open **Control Panel → Backup and Recovery → Factory Reset** to reset a supported Btrfs installation with its original **New OS** recovery point. Read the [factory reset guide](../Applications/System/Disk-Snapshots-Manager/Disk-Snapshots-Manager.md#factory-reset) before proceeding. The default reset preserves Home, including user-specific settings, so it may preserve the setting causing a desktop problem. **Roll back user data** also resets Home and preserves its snapshot history; back up anything you need first.
 
 Factory reset is unavailable without the factory recovery point. Insufficient free space or an unready recovery boot configuration can also prevent reset. The displayed error identifies the failed check.
 
