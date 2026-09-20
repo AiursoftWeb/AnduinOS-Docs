@@ -2,9 +2,7 @@
 
 Disk Snapshots Manager provides fast local recovery for supported AnduinOS Btrfs installations. It keeps system snapshots and Personal Files snapshots separate: an ordinary system rollback leaves Home unchanged. Factory reset additionally offers an explicit choice to reset Home, as described below.
 
-!!! important "Snapshots are not backups"
-
-    Snapshots normally remain on the same physical disk as the live system. They are useful for recovering from a broken update, configuration change, or accidental file edit, but they do not protect against disk failure, theft, or loss of the computer. Keep an independent backup on another disk or service.
+**Important: Snapshots are not backups.** Snapshots normally remain on the same physical disk as the live system. They are useful for recovering from a broken update, configuration change, or accidental file edit, but they do not protect against disk failure, theft, or loss of the computer. Keep an independent backup on another disk or service.
 
 The application is installed on new Btrfs systems. It is not used on Ext4 installations because Ext4 does not provide the required Btrfs subvolume and snapshot model.
 
@@ -33,9 +31,7 @@ Use **Roll Back** when an update or system configuration change has made AnduinO
 
 Before changing the active system root, the recovery engine creates and protects a fallback snapshot of the current system. The selected snapshot remains reusable after a successful rollback.
 
-!!! warning "Personal Files are not rolled back"
-
-    An ordinary system rollback changes the operating-system root but deliberately leaves Personal Files unchanged. This prevents a driver or package rollback from silently discarding newer documents. Recover older personal files separately from **Personal Files Recovery**. Use Home snapshot rollback separately when you want to restore all users' files and settings.
+**Warning: Personal Files are not rolled back.** An ordinary system rollback changes the operating-system root but deliberately leaves Personal Files unchanged. This prevents a driver or package rollback from silently discarding newer documents. Recover older personal files separately from **Personal Files Recovery**. Use Home snapshot rollback separately when you want to restore all users' files and settings.
 
 ## Factory reset
 
@@ -52,8 +48,6 @@ Factory reset returns system files, installed packages, and system settings to t
 The installer creates the protected **New OS** baselines in both System Recovery and Personal Files Recovery on supported Btrfs installations. Automatic cleanup never removes them. The **New OS** baseline cannot be renamed or unprotected; deliberate deletion requires a warning confirmation because it disables factory recovery.
 
 ### Choose what to reset
-
-<!-- Replace images/factory-reset.png with the new Roll back user data confirmation before restoring this illustration. -->
 
 **Roll back user data is unchecked by default.** Leave it unchecked to preserve current Home files and user settings.
 
@@ -77,8 +71,6 @@ If the factory Home baseline is missing or damaged, **Roll back user data** is u
 ## Personal Files Recovery
 
 The **Personal Files Recovery** page manages snapshots of Home directories independently from the operating system.
-
-<!-- Replace images/personal-files-recovery.png with the visible New OS baseline and Roll Back action. -->
 
 Select **Browse Files** to explore the contents of a snapshot. You can recover a file or folder without replacing the whole Home directory. Recovery writes an ordinary copy chosen by the current user; when necessary, the application uses a distinct recovered name instead of silently overwriting unrelated data.
 
@@ -128,8 +120,6 @@ If the computer is asleep or powered off when a snapshot was due, the scheduler 
 ### Free-space protection
 
 ![Automatic System Snapshots settings with Disk Space Protection set to a custom minimum of 37 GiB](images/automatic-snapshots.png)
-
-**Roll back user data is unchecked by default.** Leave it unchecked to preserve current Home files and user settings.
 
 The minimum defaults to **40 GiB**. When available filesystem space is below the configured value, the scheduler skips creating new scheduled snapshots. Enabled retention cleanup still runs according to its normal rules; it does not delete protected snapshots to force space above the limit. Creation can resume on a later scheduler check once available space reaches the configured minimum.
 
