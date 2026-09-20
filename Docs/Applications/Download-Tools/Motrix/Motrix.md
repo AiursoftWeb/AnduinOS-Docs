@@ -14,8 +14,6 @@ flatpak install flathub net.agalwood.Motrix
 
 To install Motrix on AnduinOS, you can run:
 
-<!-- The link needs to be updated regularly. -->
-
 ```bash
 wget https://github.com/agalwood/Motrix/releases/download/v1.8.19/Motrix_1.8.19_amd64.deb -O Motrix.deb
 sudo apt install ./Motrix.deb -y

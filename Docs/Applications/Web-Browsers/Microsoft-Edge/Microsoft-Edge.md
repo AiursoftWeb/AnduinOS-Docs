@@ -14,8 +14,6 @@ flatpak install flathub com.microsoft.Edge
 
 To install Microsoft Edge on AnduinOS, you can run:
 
-<!-- The link needs to be updated regularly. -->
-
 ```bash title="Install Microsoft Edge"
 wget https://go.microsoft.com/fwlink?linkid=2149051 -O microsoft-edge-stable.deb
 sudo apt install ./microsoft-edge-stable.deb -y

@@ -14,8 +14,6 @@ flatpak install flathub com.jetbrains.Rider
 
 To install JetBrains Rider on AnduinOS, you can run the following commands:
 
-<!-- The link needs to be updated regularly. -->
-
 ```bash
 # Download and extract the tarball.
 url="https://download-cdn.jetbrains.com/rider/JetBrains.Rider-2026.1.2.tar.gz"

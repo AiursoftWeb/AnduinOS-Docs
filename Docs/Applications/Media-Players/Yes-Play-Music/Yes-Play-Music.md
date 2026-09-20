@@ -18,8 +18,6 @@ flatpak install flathub io.github.qier222.YesPlayMusic
 
 To Install Yes-Play-Music on AnduinOS, first download a deb package from [here](https://github.com/qier222/YesPlayMusic/releases). Then you can install it with `apt`:
 
-<!-- The link needs to be updated regularly. -->
-
 ```bash
 wget https://github.com/qier222/YesPlayMusic/releases/download/v0.4.10/yesplaymusic_0.4.10_amd64.deb -O yesplaymusic.deb
 sudo apt install ./yesplaymusic.deb -y

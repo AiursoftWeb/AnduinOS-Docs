@@ -18,8 +18,6 @@ flatpak install flathub com.qq.QQmusic
 
 To install QQ Music on AnduinOS, you can run:
 
-<!-- The link needs to be updated regularly. -->
-
 ```sh
 curl -Lo qqmusic.deb https://dldir.y.qq.com/ecosfile_plink/music_clntupate/linux/other/qqmusic_1.1.8_amd64.deb?sign=1781341015-ZbAhJKdJDCw15Dy9-0-016cfdd2a19c4d7210ab2cb60f13328d
 sudo apt install -y ./qqmusic.deb

@@ -14,8 +14,6 @@ flatpak install flathub com.dropbox.Client
 
 To install Dropbox on AnduinOS, you can run:
 
-<!-- The link needs to be updated regularly. -->
-
 ```bash
 url=https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2026.05.06_amd64.deb
 wget $url -O dropbox.deb

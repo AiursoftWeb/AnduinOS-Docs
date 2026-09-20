@@ -14,8 +14,6 @@ flatpak install flathub md.obsidian.Obsidian
 
 To install Obsidian on AnduinOS, follow these steps:
 
-<!-- The link needs to be updated regularly. -->
-
 ```bash title="Install Obsidian"
 link=https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb
 wget $link -O /tmp/obsidian.deb
@@ -57,4 +55,3 @@ sudo apt install obsidian
     This is a repository maintained by third-party, and AnduinOS does not make any guarantees for it.
 
     The author stadeclared that he used index redirection to allow users to download directly from the official distribution of the software, ensuring the security and legality of the source of the software package.
-
