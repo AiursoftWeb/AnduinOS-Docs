@@ -26,6 +26,7 @@ nav:
     - License: https://github.com/AiursoftWeb/AnduinOS-2/blob/master/LICENSE
     - Release Notes:
       - Overview: CHANGELOG.md
+      - AnduinOS 2.0.4 (draft): Release-Notes/2.0.4.md
       - AnduinOS 2.0.3: Release-Notes/2.0.3.md
       - AnduinOS 2.0.2: Release-Notes/2.0.2.md
       - AnduinOS 2.0.1: Release-Notes/2.0.1.md
@@ -81,6 +82,7 @@ nav:
     - Introduction: Skills/Introduction.md
     - System Management:
       - Swap Control Strategy: Skills/System-Management/Swap-Control-Strategy.md
+      - GRUB Display Modes: Skills/System-Management/GRUB-Display-Modes.md
       - Advanced Power Management: Skills/System-Management/Advanced-Power-Management.md
       - Diagnose Sleep: Skills/System-Management/Diagnose-Sleep.md
       - Check system layout: Skills/System-Management/Check-System-Layout.md

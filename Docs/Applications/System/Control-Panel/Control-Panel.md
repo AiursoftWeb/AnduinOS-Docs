@@ -30,6 +30,8 @@ Use these entries to configure the corresponding feature:
 | Independent Home backups | Backup and Recovery → Back Up Home Folder |
 | Online accounts | GNOME Settings → Online Accounts |
 
+For boot-menu resolution, open **Startup and Boot** in Control Panel. It offers High resolution, Automatic, and Large text; see [GRUB Display Modes](../../../Skills/System-Management/GRUB-Display-Modes.md) for how these choices interact with the default configuration.
+
 ## Backup and recovery
 
 **System Snapshots** opens [Disk Snapshots Manager](../Disk-Snapshots-Manager/Disk-Snapshots-Manager.md) for supported Btrfs installations. The manager owns snapshot creation, automatic schedules, retention, and recovery checks.
