@@ -26,6 +26,7 @@ nav:
     - License: https://github.com/AiursoftWeb/AnduinOS-2/blob/master/LICENSE
     - Release Notes:
       - Overview: CHANGELOG.md
+      - AnduinOS 2.0.5 (draft): Release-Notes/2.0.5.md
       - AnduinOS 2.0.4: Release-Notes/2.0.4.md
       - AnduinOS 2.0.3: Release-Notes/2.0.3.md
       - AnduinOS 2.0.2: Release-Notes/2.0.2.md
@@ -41,6 +42,7 @@ nav:
       - Change NVMe LBA Size: Install/Change-NVME-LBA-Size.md
       - Dual Boot with Windows: Install/Dual-Boot-With-Windows.md
       - Install AnduinOS from USB: Install/Install-AnduinOS-From-USB.md
+      - Installation Diagnostics (FAQ): Install/Installation-Diagnostics.md
     - Setting Up AnduinOS:
       - Accounts, Passwords and Login: Install/Accounts-and-Passwords.md
       - Secure Boot Guide: Install/First-Boot-For-Secure-Boot.md

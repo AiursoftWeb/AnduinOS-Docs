@@ -4,6 +4,7 @@ Start with what fails, even if you do not know which driver or service is respon
 
 | Symptom | Guide |
 | --- | --- |
+| Installation USB stuck at startup, `plymouthd` error, installer or first boot fails | [Installation diagnostics (FAQ)](./Installation-Diagnostics.md) |
 | Wi-Fi missing, Realtek adapter not detected, Bluetooth disconnects | [Network and Bluetooth](./Troubleshoot-Network-and-Bluetooth.md) |
 | No sound, Dummy Output, microphone not working | [Sound and microphones](./Troubleshoot-Sound.md) |
 | Black screen, external monitor freezes, wrong refresh rate, broken desktop | [Displays and desktop](./Troubleshoot-Displays-and-Desktop.md) |

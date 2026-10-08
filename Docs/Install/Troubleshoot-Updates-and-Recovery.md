@@ -10,6 +10,8 @@ Keep power connected. If the desktop still works, check Internet access and free
 
 If the desktop fails but a text console works, use the [terminal-mode guide](../Skills/System-Management/Terminal-Mode.md). If the OS cannot boot, use trusted Live media to inspect and back up files before changing disks.
 
+If the Live USB itself cannot reach its desktop, see [Installation diagnostics](./Installation-Diagnostics.md), including **Console Compatibility** for startup failures involving `plymouthd`. These instructions concern the installation media, not recovery of the installed system's boot configuration.
+
 ## Collect diagnostic information
 
 On the installed system, inspect:

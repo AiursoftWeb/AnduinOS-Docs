@@ -26,6 +26,12 @@ The language selected here controls the installer interface. It also becomes the
 
 Choose the keyboard layout on the next page. Use the preview field to verify letters, punctuation, and any layout-specific keys before continuing.
 
+### If the Live USB cannot reach the desktop
+
+See [Installation diagnostics (FAQ)](./Installation-Diagnostics.md) for black screens, startup freezes, media checks, and installer errors. Try **Advanced Options... → Safe Graphics** for suspected graphics problems, or **Console Compatibility** (new in 2.0.5) for startup failures involving `plymouthd`. The FAQ includes a manual `console=tty0` workaround for images without that menu entry.
+
+To enter the Live desktop without waiting for media verification, use **Skip Media Check** on 2.0.5 or newer installation images. See [skipping the startup check](./Installation-Diagnostics.md#skip-media-check) for its limits; installation still verifies the medium before changing partitions.
+
 ## Review the Secure Boot recommendation
 
 On a UEFI computer where Secure Boot is disabled, the installer explains its benefits before making any disk changes.
