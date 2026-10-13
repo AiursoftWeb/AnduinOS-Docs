@@ -1,6 +1,6 @@
 # Driver Center
 
-Driver Center is the central place for checking hardware support in AnduinOS 2.0.2. It can inspect graphics, audio, printing, Xbox controllers, Secure Boot, and device firmware from one window.
+Driver Center is the central place for checking hardware support in AnduinOS 2. It can inspect graphics, audio, printing, Xbox controllers, Secure Boot, and device firmware from one window.
 
 Open the application menu, search for **Driver Center**, and launch it. The home page summarizes each area and shows whether action is required.
 
@@ -66,6 +66,8 @@ The **Device Firmware** page uses the system `fwupd` service. It lists supported
 Not every device supports firmware updates through Linux. A device missing from this list may require an update supplied by its manufacturer. Keep the computer connected to power and do not interrupt a firmware update. Restart when Driver Center requests it.
 
 ## Troubleshooting
+
+If the window becomes blank after the hardware scan or a refresh, update `anduinos-driver-center` and reopen it. AnduinOS 2.0.5 fixes a failure while building the hardware navigation and Secure Boot summary; this symptom alone does not establish that a driver installation failed.
 
 If a page cannot refresh or install a package:
 

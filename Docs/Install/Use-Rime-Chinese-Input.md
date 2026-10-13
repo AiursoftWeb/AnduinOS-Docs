@@ -80,3 +80,7 @@ Open **Settings** > **Keyboard** and confirm that both your physical keyboard la
 ### Candidates do not reflect a configuration change
 
 Select **Deploy** from the Rime input-source menu. If applications still use the old configuration, save your work and log out once.
+
+### Unexpected IBus restart notification after login
+
+Earlier Customize IBus packages could replay an old restart request when the extension started or was enabled again, or react to an empty settings value as a request. This could restart IBus and show a notification with an incorrect date, including 1970. AnduinOS 2.0.5 fixes this in `gnome-shell-extension-customize-ibus`; update that package through APT and log out and back in to load the updated extension. You do not need to delete your Rime configuration. A restart you explicitly request from Customize IBus remains supported and can still produce a notification.
