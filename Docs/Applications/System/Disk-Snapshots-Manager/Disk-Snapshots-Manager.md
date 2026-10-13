@@ -43,30 +43,34 @@ Factory reset returns system files, installed packages, and system settings to t
 - An installed snapshot manager that supports the factory-reset workflow.
 - Enough available space to prepare the current-system safety snapshot and recovery files.
 - A recovery boot configuration that passes the manager's readiness checks.
-- For **Roll back user data**, a healthy initial Home recovery point as well.
+- For **Roll back user data** or **Delete all snapshot history**, a healthy initial Home recovery point as well.
 
 The installer creates the protected **New OS** baselines in both System Recovery and Personal Files Recovery on supported Btrfs installations. Automatic cleanup never removes them. The **New OS** baseline cannot be renamed or unprotected; deliberate deletion requires a warning confirmation because it disables factory recovery.
 
 ### Choose what to reset
 
-**Roll back user data is unchecked by default.** Leave it unchecked to preserve current Home files and user settings.
+**Roll back user data and Delete all snapshot history are unchecked by default.** Leave both unchecked to preserve current Home files and user settings.
 
 1. Back up files you want to keep to another device or service, save your work, and close applications.
 2. Open **Control Panel → Backup and Recovery → Factory Reset**. Control Panel opens the snapshot manager, which checks availability and prepares the operation.
 3. Read the confirmation. Leave **Roll back user data** unchecked to preserve Home, or select it only if you intend to restore Home to its initial installed state too.
-4. Select **Reset and Restart** and authenticate when requested. The manager repeats its readiness checks and creates safety snapshots of the affected scopes before arming recovery.
-5. Once recovery is armed, the computer restarts automatically within 60 seconds. Let recovery and the subsequent boot finish without interrupting power.
+4. To remove snapshot history as well, select **Delete all snapshot history** (available starting with the 2.0.5 feature update). This also selects **Roll back user data**.
+5. Select **Reset and Restart** and authenticate when requested. The manager repeats its readiness checks and creates safety snapshots of the affected scopes before arming recovery.
+6. Once recovery is armed, the computer restarts automatically within 60 seconds. Let recovery and the subsequent boot finish without interrupting power.
 
-| Choice | System files and packages | Home files and user settings | Home snapshot history |
+| Choice | System files and packages | Home files and user settings | Managed System and Home snapshot history |
 | --- | --- | --- | --- |
 | Default reset | Restored to New OS | Preserved | Preserved |
 | Roll back user data selected | Restored to New OS | Restored to the initial Home baseline | Preserved |
+| Delete all snapshot history selected | Restored to New OS | Restored to the initial Home baseline | Only the two New OS factory recovery points remain |
 
-Home reset affects the shared Home subvolume, including other users' Home directories. The initial baseline can contain account files and defaults created during installation; it is not necessarily empty. The current-system safety snapshot does not provide an independent backup of your personal files. Home rollback also creates a Home safety snapshot; older snapshots remain browsable and reusable, subject to the configured retention policy.
+Home reset affects the shared Home subvolume, including other users' Home directories. The initial baseline can contain account files and defaults created during installation; it is not necessarily empty. The current-system safety snapshot does not provide an independent backup of your personal files. Home rollback also creates a Home safety snapshot. Without history deletion, older snapshots remain browsable and reusable, subject to the configured retention policy.
+
+With **Delete all snapshot history**, deletion starts only after System and Home recovery is confirmed. It removes managed non-factory snapshots, including pinned snapshots and the safety snapshots created for this reset, and cleans up the replaced System/Home subvolumes. Both New OS factory recovery points remain available for repeated factory resets. Interrupted cleanup retries automatically and remains pending until completion; creating new snapshots is paused during this operation. Once history deletion begins, the reset cannot be cancelled or reverted. Unregistered snapshot storage or nested subvolumes that prevent safe cleanup produce an error rather than a successful completion.
 
 This is a snapshot-based reset, not a secure disk wipe or a reset of every data location. Separate storage such as external disks, persistent logs, container data, and virtual-machine images is outside the system-root and Home reset scope. The feature is not a data-sanitization procedure for selling a computer.
 
-If the factory Home baseline is missing or damaged, **Roll back user data** is unavailable. If the system baseline or layout is unsupported, the application explains that factory reset is unavailable. Other preparation errors, such as insufficient space, must be resolved before a restart can be scheduled. See [recovery troubleshooting](../../../Install/Troubleshoot-Updates-and-Recovery.md).
+If the factory Home baseline is missing or damaged, **Roll back user data** and **Delete all snapshot history** are unavailable. If the system baseline or layout is unsupported, the application explains that factory reset is unavailable. Other preparation errors, such as insufficient space, must be resolved before a restart can be scheduled. See [recovery troubleshooting](../../../Install/Troubleshoot-Updates-and-Recovery.md).
 
 ## Personal Files Recovery
 
