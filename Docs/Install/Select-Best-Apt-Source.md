@@ -16,7 +16,7 @@ To select a mirror using [Control Panel](../Applications/System/Control-Panel/Co
 
 The window shows the current mirror and offers **Terminal Output** for progress and errors. If the selected mirror is already active, it reports that rather than asking you to switch again. Switching mirrors refreshes package information; it does not by itself upgrade installed packages. Use **Check for Updates**, then **Install Updates** when offered, or follow [Update your system](./Update-Your-System.md).
 
-The mainland-China **Flathub** mirror choice in Welcome Center changes the Flatpak source, not APT.
+To change Flathub downloads, select **Flatpak** in this window (starting with 2.0.5), choose **Official Flathub** or **USTC (China)**, and select **Apply**. The page displays the actual system-wide Flathub address, including custom addresses. It changes only the system Flathub remote; per-user remotes and other Flatpak repositories are outside its scope. Existing applications and repository signing keys are retained, and refreshing the application catalog does not install application updates. The mainland-China Flathub choice in Welcome Center remains available.
 
 ## (Advanced) Using the Command Line
 

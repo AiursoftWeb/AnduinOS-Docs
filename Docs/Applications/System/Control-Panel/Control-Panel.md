@@ -6,12 +6,14 @@ Control Panel brings system settings, AnduinOS tools, and recovery options into 
 
 ## Software sources and updates
 
-Under **Programs**, select **Software Source**, the first entry in that category. The window shows the current Ubuntu mirror and provides two actions:
+Under **Programs**, select **Software Source**, the first entry in that category. The window has **Automatic**, **Advanced**, and **Flatpak** tabs. Automatic shows the current Ubuntu mirror and provides two actions:
 
 - **Switch to Fastest Mirror** tests available mirrors and asks before applying a different one. Applying a mirror requires administrator authorization and refreshes package indexes. If the refresh fails, the helper restores the original source and retries the refresh.
 - **Check for Updates** refreshes package information and checks for available APT package upgrades. When updates are available, select **Install Updates** to install them.
 
 ![Software Source window showing the current mirror, Switch to Fastest Mirror, and Check for Updates](images/software-source.png)
+
+**Advanced** lets you select an Ubuntu mirror or enter a custom address. Starting with 2.0.5, **Flatpak** shows the current system-wide Flathub address and provides a dropdown for **Official Flathub** or **USTC (China)**, followed by **Apply**. Applying a choice asks for administrator authorization and switches the system Flathub remote. A current custom address is shown as it is and requires an explicit choice before replacement. If Flathub is missing, it is added through the official repository descriptor before applying the selected source.
 
 Expand **Terminal Output** to inspect progress and errors. Switching a mirror does not itself install package upgrades. Flatpak application updates are managed separately through App Store.
 
@@ -23,7 +25,7 @@ Use these entries to configure the corresponding feature:
 
 | Setting | Where to find it |
 | --- | --- |
-| APT mirrors and system package updates | Programs → Software Source |
+| APT mirrors, Flathub source, and system package updates | Programs → Software Source |
 | Bash command suggestions | AI Stack → Bash Command Predictions |
 | Local Network Discovery (mDNS) | Network and Internet → Firewall, then its mDNS setting |
 | Automatic Btrfs snapshots | Backup and Recovery → System Snapshots, then Automatic Snapshots |
