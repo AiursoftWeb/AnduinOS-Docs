@@ -56,7 +56,9 @@ A resident SSH credential keeps its private key inside the YubiKey. Security Cen
 
 ![Hardware-backed SSH keys](images/ssh-keys.png)
 
-Inspection requires the YubiKey's FIDO PIN and may require a touch. The PIN is used only for that operation and is not placed in command arguments, logs, or files.
+Select **Inspect** to list resident keys on the connected YubiKey. Inspection requires its FIDO PIN and may require a touch. It does not load keys into the SSH agent: an agent with zero identities is ready but `ssh-add -L` still reports no identities.
+
+After inspection, select **Load all** on the YubiKey row to load its resident keys into the current desktop SSH agent. Enter the FIDO PIN and touch the key when prompted. This action runs `ssh-add -K`; use `ssh-add -L` in a terminal to confirm the key is available. **Load all** appears when one YubiKey is connected, the agent is reachable, and at least one inspected key is not yet loaded. The PIN is used only for the operation and is not placed in command arguments, logs, or files.
 
 After a key is loaded, copy its public key and add it to the remote server's `~/.ssh/authorized_keys` or to the SSH-key page provided by GitHub, GitLab, or another service. The public key and its SHA-256 fingerprint may be shared; the private credential remains non-exportable on the YubiKey.
 
