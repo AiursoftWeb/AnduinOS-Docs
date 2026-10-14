@@ -46,7 +46,7 @@ nav:
     - Setting Up AnduinOS:
       - Accounts, Passwords and Login: Install/Accounts-and-Passwords.md
       - Secure Boot Guide: Install/First-Boot-For-Secure-Boot.md
-      - Secure Boot Architecture: Install/Secure-Boot-Signing-Architecture.md
+      - Boot Stack and Signing Architecture: Install/Secure-Boot-Signing-Architecture.md
       - Switch to Your Language: Install/Switch-To-Your-Language.md
       - Type Chinese with Rime: Install/Use-Rime-Chinese-Input.md
       - Select Best APT Source: Install/Select-Best-Apt-Source.md

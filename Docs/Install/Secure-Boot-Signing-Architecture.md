@@ -1,142 +1,181 @@
-# Secure Boot Signing Architecture
+# The AnduinOS Boot Stack and Secure Boot Signing
 
-This reference explains how AnduinOS 2.0.2 keeps UEFI Secure Boot enabled while allowing packaged third-party kernel modules, such as NVIDIA, VirtualBox, or the optional Xbox controller driver, to load.
+AnduinOS 2.0.5 introduces an AnduinOS-maintained GRUB and a machine-local signing identity for new AMD64 installations on the Resolute base. The installation USB still starts through Ubuntu's officially signed bootloaders. These are two separate boot paths, not an inconsistent package database.
 
-!!! note "For end users"
+This page describes the package design and maintenance contract. For the blue enrollment screen, see the [Secure Boot Guide](./First-Boot-For-Secure-Boot.md); for graphical inspection and repair, use [Driver Center](../Applications/System/Driver-Center/Driver-Center.md).
 
-    For normal setup and recovery, use [Driver Center](../Applications/System/Driver-Center/Driver-Center.md) and follow the [Secure Boot Guide](./First-Boot-For-Secure-Boot.md). The details below are intended for troubleshooting and development.
+!!! important "Existing users do not need to migrate"
 
-## The trust chain
+    Normal updates within AnduinOS 2.0 do not require replacing Ubuntu's working bootloader or generating and enrolling a new certificate. Keep using the existing boot stack unless you deliberately choose a supported migration. Receiving 2.0.5 application updates is not a request to change firmware trust.
+
+!!! warning "Do not independently upgrade to Ubuntu 26.10"
+
+    Remaining on the Resolute base and installing its updates is different from a distribution upgrade. Do not use `do-release-upgrade` or change APT suites to move an existing AnduinOS installation to Ubuntu 26.10. Wait for an AnduinOS-supported upgrade procedure.
+
+    Ubuntu reports that its 26.10 **signed GRUB** no longer reads Btrfs `/boot`. AnduinOS's default layout keeps `/boot` inside the Btrfs root filesystem, so replacing its bootloader with that build can make the system unbootable. This is a bootloader limitation, not removal of Btrfs from Linux. A separate ext4 `/boot` avoids this particular limitation, but does not make an untested distribution upgrade supported. See [Ubuntu's security announcement](https://ubuntu.com/blog/ubuntu-26-10-security).
+
+## Scope and rationale
+
+The new boot packages currently target **AMD64 on Resolute**. ARM64 retains its existing Ubuntu boot stack. Adapting the next Ubuntu base is separate work.
+
+Keeping `/boot` with the Btrfs root filesystem allows the kernel and initramfs to stay with the system snapshot they belong to. Maintaining our GRUB build gives AnduinOS control over the filesystem and cryptographic readers needed for this layout, instead of changing the disk layout to match a reduced signed module set.
+
+The build includes Btrfs, LUKS2, and Argon2 support. **These bootloader capabilities do not mean that disk-encryption installation or TPM automatic unlocking is delivered in 2.0.5.** Those require their own installer, recovery, and acceptance work.
+
+AnduinOS keeps Ubuntu's officially signed shim and kernels. It does not ask users to replace the firmware's platform keys or trust an unsigned first-stage bootloader. In exchange for maintaining GRUB, the project must track GRUB security fixes, Ubuntu patches, shim compatibility, and SBAT/revocation changes.
+
+## Packages and ownership
+
+| Package | Responsibility |
+|---|---|
+| `anduinos-grub` | Builds GRUB with the Ubuntu patch set, BIOS/EFI tools, and an unsigned EFI template. The template is signed locally before deployment. No shared private key is shipped. |
+| `anduinos-shim-signed` | Packages Ubuntu's already-signed shim and MokManager binaries, with AnduinOS dependency and deployment integration. The upstream EFI signatures are preserved. It depends on `anduinos-grub`. |
+| `anduinos-secureboot-toolkit` | Inspects trust, manages the local certificate and DKMS configuration, and prepares, verifies, and deploys the locally signed GRUB. Driver Center and the installer share this implementation. |
+| `anduinos-core-system` | Suggests `anduinos-shim-signed` on AMD64; it does not force an existing installation to replace its boot stack. |
+
+The replacement packages declare the relevant **Provides**, **Conflicts**, and **Replaces** relationships. They replace the Ubuntu packages that own those bootloader files; they do not pretend that an Ubuntu package still owns an overwritten AnduinOS binary.
+
+`Suggests` is intentionally weaker than `Depends` or `Recommends`. Default APT behavior does not install suggestions during an ordinary upgrade. Explicit installation or a custom policy that installs suggestions is a different operation. Fresh ISO construction explicitly selects the AnduinOS packages, so a fresh installed AMD64 system receives the new stack even though an existing system is not automatically migrated.
+
+## One certificate, two signing mechanisms
 
 ```text
 UEFI firmware
-  trusts the signed shim bootloader
-        ↓
-shim
-  verifies the signed boot chain and maintains the Machine Owner Key list
-        ↓
-Linux kernel
-  imports enrolled MOK certificates into its trusted keyrings
-        ↓
-third-party kernel module
-  loads when its signature matches an enrolled certificate
+  → officially signed Ubuntu shim
+      → locally MOK-signed AnduinOS GRUB
+          → officially signed Ubuntu kernel
+              → trusted kernel modules
 ```
 
-The MOK certificate is enrolled in shim's machine-specific trust database. It is not normally added directly to the motherboard's platform-key database.
+The public certificate is enrolled in **shim's MOK trust store**, not normally in the motherboard's PK/KEK database. Driver Center's firmware-trust check reports this MOK enrollment.
 
-Ubuntu provides the signed shim, GRUB and kernel packages, `mokutil`, `update-secureboot-policy`, and the optional DKMS framework. AnduinOS adds a shared toolkit and an installer policy that make the certificate state, signing configuration, and repair flow consistent across the installer, Welcome Center, and Driver Center.
+The local identity can sign both EFI applications and kernel modules, but the signing tools and validators differ:
 
-## Fresh installation
-
-The native AnduinOS installer probes the boot mode and Secure Boot state before it creates the installation plan.
-
-When Secure Boot is enabled, it:
-
-1. verifies the architecture-matched signed shim and GRUB packages;
-2. creates a new MOK private key and certificate inside the target system;
-3. writes the persistent DKMS signing paths;
-4. processes installed DKMS modules when DKMS is present and verifies their signer;
-5. queues the new certificate for MOK enrollment; and
-6. verifies that the enrollment request exists before installation completes.
-
-The first restart enters MOKManager. The one-time enrollment code is `123456`.
-
-When Secure Boot is disabled, unsupported, or not applicable to an AMD64 Legacy BIOS installation, the installer does not queue MOK enrollment. ARM64 installations use standards-based UEFI only.
-
-## Shared AnduinOS toolkit
-
-The `anduinos-secureboot-toolkit` package owns the common inspection and repair implementation used by Driver Center and Welcome Center. It distinguishes these states instead of reducing them to one green or red result:
-
-- Secure Boot enabled, disabled, unsupported, or unknown;
-- local MOK key pair present or missing;
-- certificate enrolled, pending enrollment, or not enrolled;
-- persistent DKMS signing configuration present or missing; and
-- installed DKMS modules signed correctly, signed by another key, or unsigned.
-
-The toolkit directly depends on the small Secure Boot inspection utilities. It does **not** depend on DKMS, a compiler, or `build-essential`; DKMS is only a suggestion. A computer without third-party source-built modules can therefore manage its MOK certificate without pulling in a development toolchain.
-
-When DKMS is already installed, repair targets only module/version pairs that `dkms status` reports as installed for the running kernel. It rebuilds those explicit targets with the configured key. It does not run an unconditional `dkms autoinstall` and does not install DKMS merely to perform certificate enrollment.
-
-## Persistent signing configuration
-
-The toolkit and installer write:
-
-```ini title="/etc/dkms/framework.conf.d/anduinos-sb-sign.conf"
-mok_signing_key="/var/lib/shim-signed/mok/MOK.priv"
-mok_certificate="/var/lib/shim-signed/mok/MOK.der"
-```
-
-DKMS selects the correct kernel `sign-file` implementation for each kernel version. Keeping only the key paths in this configuration allows later kernel and driver updates to use the same enrolled machine certificate.
-
-The key files are:
-
-| Path | Purpose |
+| Object | Signing and verification |
 |---|---|
-| `/var/lib/shim-signed/mok/MOK.priv` | Private module-signing key; must remain private to the machine |
-| `/var/lib/shim-signed/mok/MOK.der` | Public certificate queued or enrolled through MOKManager |
-| `/etc/dkms/framework.conf.d/anduinos-sb-sign.conf` | Persistent DKMS signing-key selection |
+| AnduinOS GRUB EFI image | The toolkit uses `sbsign` and verifies the result before deployment. Shim validates it at boot. |
+| Locally built DKMS modules, such as xpadneo | DKMS uses the kernel's `sign-file` mechanism with the configured local identity. The running kernel validates module signatures. |
+| Official Ubuntu kernels and trusted prebuilt modules | Keep their upstream signatures; they do not need to be re-signed merely because the local MOK changes. |
 
-The certificate may be inspected or shared for diagnosis. The `.priv` file must never be published or copied to another computer.
+GRUB is **not** a DKMS module. Sharing a certificate does not make its package hooks and the DKMS build hooks the same mechanism. Shim also does not directly validate drivers loaded later by Linux.
 
-## Driver Center recovery
+Older automatically generated certificates can carry the module-only extended-key-usage OID `1.3.6.1.4.1.2312.16.1.2`. Such a certificate can be useful for drivers while unsuitable for signing a GRUB that shim will accept. The new identity permits both purposes. This certificate permission is distinct from Unix file permissions on its private key.
 
-Driver Center's **Secure Boot** page uses the shared toolkit. Depending on the detected state, it can:
+## Why the Live USB still boots without your certificate
 
-- create the missing machine-local certificate;
-- queue an existing certificate for enrollment;
-- report that MOKManager enrollment is already pending;
-- restore the persistent DKMS signing configuration; or
-- rebuild explicitly installed DKMS modules whose signatures do not match.
+The ISO builder has two independent production paths:
 
-Certificate enrollment still requires a restart and physical confirmation in MOKManager. A graphical application running inside the operating system cannot silently add a new MOK.
+```text
+run_chroot_anduinos
+  → installed-system packages, including AnduinOS GRUB/shim
+  → kernel, initramfs, manifest, and squashfs
 
-## Inspect the state
+run_chroot_ubuntu
+  → official bootloader packages selected from the target Ubuntu suite
+  → extracted official EFI files for the ISO's removable-media boot path
 
-Check whether signature enforcement is active:
-
-```bash title="Check Secure Boot"
-sudo mokutil --sb-state
+build_iso
+  → combines these outputs into the installation medium
 ```
 
-Check whether the AnduinOS certificate is enrolled:
+The official bootloader packages are downloaded and extracted in the separate Ubuntu workspace. They are **not installed over the AnduinOS root filesystem**. The USB's firmware-facing EFI files can therefore boot before any local MOK exists, while the squashfs contains the AnduinOS package set and an unsigned GRUB template.
 
-```bash title="Check the local MOK certificate"
+There is no temporary replacement package, no falsified dpkg database, and no machine's private signing key in the ISO. The installed boot stack and required payload are on the medium, so the installer can prepare the target without a network connection.
+
+## Fresh installation and first boot
+
+The installer:
+
+1. Creates a new unified key pair in the target system. Independent installations get independent identities; retries of the same installation can reuse the verified target identity rather than generating another enrollment request.
+2. Configures DKMS to use that identity for future local module builds.
+3. Prepares and verifies a locally signed GRUB, then deploys the target boot files. The packaged source template remains unsigned.
+4. Processes and checks relevant installed DKMS modules when applicable.
+5. If Secure Boot is enabled, queues and verifies MOK enrollment before completing installation.
+
+On the first restart, confirm **Enroll MOK → Continue → Yes**, enter `123456`, and reboot. This code authorizes the pending enrollment; it is not the disk-encryption password or the signing key's passphrase.
+
+!!! warning "Enrollment is part of installation"
+
+    With Secure Boot enabled, the new locally signed GRUB needs its certificate to be trusted. Skipping enrollment can prevent the installed system from booting, even though the Live USB still works. Do not apply the older advice that enrollment only affects optional drivers to this boot stack.
+
+When Secure Boot is disabled, the installer still prepares the appropriate identity and locally signed GRUB, but does not automatically queue enrollment. Before enabling Secure Boot later, use Driver Center to complete certificate enrollment and check boot readiness. Turning on firmware enforcement first can lock the installed system out of its boot path.
+
+## Existing installations and optional migration
+
+An existing system can continue using Ubuntu's signed GRUB and its already-trusted driver certificates. A module-only certificate does not invalidate the official Ubuntu GRUB, which is trusted through Ubuntu's signing chain rather than that local certificate.
+
+Consequently, a Driver Center finding such as **certificate cannot sign GRUB** or **AnduinOS GRUB not installed** is not, by itself, evidence that the old boot chain is broken. Existing users do not need to migrate merely to make the new-stack checks green.
+
+For users who deliberately opt in, Driver Center separates certificate preparation/enrollment from bootloader replacement. A suitable certificate must be enrolled before replacing a working Secure Boot chain. Enrollment becomes usable without a separate manual **Use** step. Future signing uses the configured new identity; existing enrolled certificates are not automatically removed, and modules already trusted through them need not suddenly stop working.
+
+The replacement workflow checks the APT plan, refuses unrelated removals, and preserves boot-file and firmware-entry recovery information. These safeguards are not a whole-disk backup or a guarantee against every power failure. Do not bypass the workflow with forced package removals or manual EFI overwrites.
+
+## What happens when GRUB is updated or reinstalled?
+
+The downloaded package contains an unsigned template, not the final machine-specific signed image:
+
+```text
+package configuration
+  → validate the source template and signing identity
+  → reuse a verified matching signed artifact, or sign a new candidate
+  → verify the candidate signature
+  → package trigger deploys the prepared boot chain
+```
+
+The preparation cache tracks the source image and certificate. Reinstalling identical inputs can reuse the existing artifact after verification; changed inputs require a newly signed artifact. Keeping the same enrolled certificate means an ordinary GRUB update does **not** require another MOK enrollment.
+
+A signing failure must not deploy an unsigned replacement to the ESP. Deployment has its own backup and recovery handling. Package hooks may defer deployment when the installed boot configuration or mounted ESP is absent: package installation alone is therefore not proof that the machine's actual boot files are current.
+
+`update-grub` regenerates the boot menu. It is not the EFI signing operation. Likewise, updating a kernel or DKMS driver does not mean rebuilding GRUB through DKMS.
+
+## Inspection and repair
+
+Start with **Driver Center → Secure Boot**. It separates firmware enforcement, local identity, certificate signing permissions, enrollment, module readiness, and the AnduinOS bootloader state. Follow the action associated with the failing check. Unknown or unreadable state must not be treated as Secure Boot being disabled.
+
+Read-only command-line checks include:
+
+```bash
+anduinos-securebootctl status --json
+mokutil --sb-state
+mokutil --list-new
 sudo mokutil --test-key /var/lib/shim-signed/mok/MOK.der
+sudo dpkg --audit
+dpkg-query -W anduinos-grub anduinos-shim-signed
 ```
 
-Check whether a request is waiting for MOKManager:
+Missing AnduinOS packages are expected on an unmigrated installation. A pending enrollment is not an enrolled certificate. A valid image signature alone does not prove that firmware selected that image or that shim's revocation policy accepts it: complete a real reboot as the final check.
 
-```bash title="List pending MOK enrollment"
-sudo mokutil --list-new
-```
+The third-party-driver check concerns signing and trust, not whether a controller pairs correctly or a GPU application works. Test the actual hardware separately after changes.
 
-Inspect the complete machine-readable state used by the graphical applications:
+### Files that matter
 
-```bash title="Inspect AnduinOS Secure Boot state"
-anduinos-securebootctl
-```
+| Location | Purpose |
+|---|---|
+| `/usr/lib/anduinos-grub/grubx64.efi` | Package-owned unsigned EFI template; do not replace it with a locally signed copy. |
+| `/var/lib/anduinos-grub/` | Generated signing/deployment state and recovery artifacts. |
+| `/var/lib/shim-signed/mok/MOK.priv` | Machine-local private signing key. |
+| `/var/lib/shim-signed/mok/MOK.der` | Public certificate used for MOK enrollment. |
+| `/etc/dkms/framework.conf.d/anduinos-sb-sign.conf` | Persistent DKMS key selection. |
+| The active ESP's AnduinOS EFI directory | Deployed shim, GRUB, and MokManager; discover the actual boot entry instead of assuming a directory name. |
 
-For an installed module, compare its reported signing key with the local certificate:
+Never publish the private key, copy it to another computer, or put it on the ESP. It is needed for future local signing. Restrictive file permissions protect against ordinary users, not an attacker who already controls root or can read an unencrypted disk offline. Machine-local signing is an explicit security trade-off, not equivalent to keeping a distribution's signing key offline.
 
-```bash title="Inspect a module signature"
-modinfo hid-xpadneo | grep -E 'signer|sig_key'
-openssl x509 \
-    -in /var/lib/shim-signed/mok/MOK.der \
-    -inform DER \
-    -noout -subject -serial -fingerprint
-```
+## Maintainer checklist
 
-Do not infer trust from a single command failure. Driver Center also checks the enrolled and pending certificate lists because different `mokutil` versions do not use every exit status in the same way.
+* Track upstream GRUB security fixes and Ubuntu's patch set, and update pinned package-build inputs and their provenance deliberately.
+* Preserve shim and MokManager's upstream signed bytes. Packaging them with different dependencies does not create a new Microsoft signature.
+* Retain shim verification, the embedded readers required before `/boot` is accessible, and correct SBAT metadata. Never solve a boot failure by disabling signature enforcement.
+* Keep the Live-media inputs separate from the installed-system package payload. Check both AMD64 and ARM64 media paths even where their installed boot stacks differ.
+* Test offline UEFI/Secure Boot installation, physical MOK confirmation, removal of the installation medium, and a successful installed-system boot.
+* Test ordinary upgrades of existing systems without forced migration, deliberate migration, same-version reinstall, changed-version re-signing, missing/untrusted keys, absent ESP, and interrupted deployment recovery.
+* Verify trusted modules still work and untrusted boot images are rejected. A green status display or a successful package build alone is insufficient.
 
-## Common state transitions
+The 2.0.5 development validation includes an offline Secure Boot/Btrfs installation and enrollment test, a real-machine boot through the new chain, and a same-version GRUB reinstall that preserved a verified signed artifact and the active EFI files. These are useful regression cases, not substitutes for the complete release acceptance matrix or proof that disk-encryption installation is ready.
 
-| Initial state | Action | Result |
-|---|---|---|
-| Secure Boot disabled | Enable it in UEFI settings | Driver Center may then request certificate creation or enrollment |
-| Certificate missing | Create and enroll from Driver Center | Key pair is created and enrollment is queued |
-| Enrollment pending | Restart and enter `123456` in MOKManager | Certificate becomes trusted by shim and the kernel on the following boot |
-| Certificate enrolled, signing config missing | Repair automatic signing | DKMS key paths are restored without changing firmware state |
-| Installed DKMS module signed by another key | Repair modules | Explicit installed targets are rebuilt and signed with the enrolled key |
-| No DKMS installed | Complete certificate setup only | No compiler toolchain or DKMS package is installed automatically |
+### Implementation references
 
-This separation is intentional: boot trust, certificate enrollment, persistent signing configuration, and the presence of third-party modules are related but independent states.
+* [ISO builder](https://github.com/AiursoftWeb/AnduinOS-2/blob/master/build.sh)
+* [GRUB package](https://github.com/AiursoftWeb/AnduinOS-Packages/tree/master/anduinos-grub)
+* [Shim package](https://github.com/AiursoftWeb/AnduinOS-Packages/tree/master/anduinos-shim-signed)
+* [Shared Secure Boot toolkit](https://github.com/AiursoftWeb/AnduinOS-Packages/tree/master/anduinos-secureboot-toolkit)
+* [Installer certificate preparation](https://github.com/AiursoftWeb/AnduinOS-Packages/blob/master/anduinos-installer-beta/src/installer_core/secure_boot.py)

@@ -46,16 +46,22 @@ When Secure Boot is enabled, the controller driver must also be signed by a cert
 
 ## Secure Boot and driver signing
 
-The **Secure Boot** page checks four separate conditions:
+The **Secure Boot** page separates these conditions for the new AMD64 boot stack:
 
 1. Secure Boot is enabled in the computer's firmware.
 2. A local AnduinOS MOK certificate exists.
-3. The certificate is enrolled in the machine's MOK trust store.
-4. Installed third-party kernel modules are signed with it.
+3. The certificate permits both GRUB and kernel-module signing.
+4. The certificate is enrolled in shim's MOK trust store.
+5. Third-party kernel modules have trusted signatures and automatic signing is configured.
+6. The AnduinOS GRUB/shim packages are installed and the deployed GRUB is signed and trusted.
 
 ![Secure Boot trust status](images/driver-center-secure-boot.png)
 
-If the page reports **System Trust Established**, third-party modules managed by AnduinOS can load while Secure Boot remains enabled. If it reports a missing certificate, pending enrollment, or unsigned modules, follow the action shown on that page. See the [Secure Boot Guide](../../../Install/First-Boot-For-Secure-Boot.md) for the reboot and MOKManager steps.
+The screenshot shows an earlier interface. New versions add certificate permissions and bootloader checks. Follow the action next to the condition requiring attention; certificate enrollment still requires confirmation in MOKManager after restarting. Once enrolled, the new identity is used without a separate **Use** step.
+
+Existing installations using Ubuntu's signed bootloader do not need to migrate merely to receive 2.0.5 updates. A module-only certificate or an absent AnduinOS GRUB package does not by itself mean that the existing Ubuntu boot chain is untrusted. See the [boot-stack guide](../../../Install/Secure-Boot-Signing-Architecture.md) before choosing an optional migration, and the [Secure Boot Guide](../../../Install/First-Boot-For-Secure-Boot.md) for enrollment and recovery.
+
+Signing readiness is not a hardware functionality test. A signed module may still need a restart, device pairing, or hardware-specific configuration.
 
 ## Device firmware
 
