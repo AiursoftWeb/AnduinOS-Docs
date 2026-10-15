@@ -38,7 +38,7 @@ You can also select the indicator directly. The Rime menu provides access to its
 
 With **Chinese (Rime)** selected:
 
-1. Type the Pinyin for the text you want.
+1. Type the full Pinyin for the text you want (the default scheme).
 2. Review the numbered candidate list.
 3. Press the candidate number, or use the arrow keys and <kbd>Space</kbd>, to commit a candidate.
 4. Use the arrows at the right side of the candidate window to view more candidates.
@@ -48,6 +48,21 @@ With **Chinese (Rime)** selected:
 Rime can produce normal Chinese text while retaining English words, letters, and numbers where they are appropriate. The AnduinOS package also includes candidate filtering that keeps useful spelling guidance without displaying internal Pinyin annotations beside every ordinary candidate.
 
 ![Chinese and Latin text entered together with Rime](images/rime/mixed-text.png)
+
+## Switch between full Pinyin and Shuangpin
+
+Starting with AnduinOS 2.0.5, AnduinOS Rime includes three Shuangpin layouts: **Natural Code (自然码双拼)**, **Microsoft (微软双拼)**, and **Xiaohe (小鹤双拼)**. Shuangpin uses a keyboard layout that usually represents each syllable with two keystrokes. Full Pinyin remains the default.
+
+1. Use <kbd>Super</kbd> + <kbd>Space</kbd> or the input-source menu to select **Chinese (Rime)**.
+2. Click a text field, such as a document in Text Editor.
+3. Press <kbd>F4</kbd> to open Rime's settings and scheme menu. You can also use <kbd>Ctrl</kbd> + <kbd>`</kbd> (backtick).
+4. Select **自然码双拼**, **微软双拼**, or **小鹤双拼** to use that layout. To return to full Pinyin, open the same menu and select **中文拼音** (full Pinyin).
+
+![Rime's F4 scheme menu showing full Pinyin, Natural Code, Microsoft, and Xiaohe Shuangpin](images/rime/scheme-menu.png)
+
+F4 opens Rime's menu while Rime is the active input method; it does not open the desktop Keyboard settings. The Welcome app shows this shortcut in its shortcuts page when the current language is Simplified Chinese.
+
+If the new layouts do not appear after upgrading, select **Deploy** from the Rime input-source menu and open the scheme menu again. If you have a personal `~/.config/ibus/rime/default.custom.yaml`, its `schema_list` overrides the system list. Add the desired scheme IDs (`double_pinyin`, `double_pinyin_mspy`, or `double_pinyin_flypy`) to your existing list, keeping `rime_ice` if you also want full Pinyin, then deploy again.
 
 ## Customize or refresh Rime
 
