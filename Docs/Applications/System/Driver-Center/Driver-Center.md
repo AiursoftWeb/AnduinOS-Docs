@@ -46,7 +46,7 @@ When Secure Boot is enabled, the controller driver must also be signed by a cert
 
 ## Secure Boot and driver signing
 
-The **Secure Boot** page separates these conditions for the new AMD64 boot stack:
+The **Secure Boot** page separates these conditions for the new AMD64 and ARM64 boot stack:
 
 1. Secure Boot is enabled in the computer's firmware.
 2. A local AnduinOS MOK certificate exists.
