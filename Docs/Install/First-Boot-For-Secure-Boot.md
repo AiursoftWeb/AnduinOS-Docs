@@ -1,6 +1,6 @@
 # Secure Boot Guide
 
-AnduinOS supports UEFI Secure Boot while still allowing trusted third-party kernel modules, such as the optional Xbox controller driver, to load. New AMD64 installations starting with 2.0.5 also use a locally signed AnduinOS GRUB bootloader.
+AnduinOS supports UEFI Secure Boot while still allowing trusted third-party kernel modules, such as the optional Xbox controller driver, to load. New AMD64 and ARM64 installations starting with 2.0.5 also use a locally signed AnduinOS GRUB bootloader.
 
 The installer creates a certificate owned by the newly installed computer. On the first restart, you confirm that certificate in the firmware-level MOKManager screen. This is a one-time physical-presence step; it does not disable Secure Boot.
 
@@ -19,7 +19,7 @@ The installer creates a certificate owned by the newly installed computer. On th
 3. Enable Secure Boot. If the firmware asks for a mode, use **Standard** or **Windows UEFI mode**, not a custom-key mode.
 4. Save the settings and boot the AnduinOS USB drive in UEFI mode.
 
-The installer detects the running firmware state. For the new AMD64 boot stack, it creates a machine-local certificate suitable for GRUB and kernel modules, signs and verifies the target GRUB, and prepares relevant DKMS modules. With Secure Boot enabled, it requests and verifies MOK enrollment before installation completes. The USB itself uses official signed boot files and does not need this local certificate.
+The installer detects the running firmware state. For the new AMD64 and ARM64 boot stack, it creates a machine-local certificate suitable for GRUB and kernel modules, signs and verifies the target GRUB, and prepares relevant DKMS modules. With Secure Boot enabled, it requests and verifies MOK enrollment before installation completes. The USB itself uses official signed boot files and does not need this local certificate.
 
 When Secure Boot is disabled, the installer still prepares the identity and signed GRUB, but does not automatically queue enrollment. Installation without Secure Boot enforcement does not establish trust for enabling it later.
 
@@ -46,7 +46,7 @@ The following boot should enter the installed AnduinOS desktop with Secure Boot 
 
 ## Verify the result in Driver Center
 
-Open **Driver Center**, then select **Secure Boot**. On a fully configured new AMD64 installation, check all six areas:
+Open **Driver Center**, then select **Secure Boot**. On a fully configured new AMD64 or ARM64 installation, check all six areas:
 
 - Secure Boot is enabled.
 - The local MOK certificate exists.

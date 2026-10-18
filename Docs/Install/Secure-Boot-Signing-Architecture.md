@@ -1,6 +1,6 @@
 # The AnduinOS Boot Stack and Secure Boot Signing
 
-AnduinOS 2.0.5 introduces an AnduinOS-maintained GRUB and a machine-local signing identity for new AMD64 installations on the Resolute base. The installation USB still starts through Ubuntu's officially signed bootloaders. These are two separate boot paths, not an inconsistent package database.
+AnduinOS 2.0.5 introduces an AnduinOS-maintained GRUB and a machine-local signing identity for new AMD64 and ARM64 installations on the Resolute base. The installation USB still starts through Ubuntu's officially signed bootloaders. These are two separate boot paths, not an inconsistent package database.
 
 This page describes the package design and maintenance contract. For the blue enrollment screen, see the [Secure Boot Guide](./First-Boot-For-Secure-Boot.md); for graphical inspection and repair, use [Driver Center](../Applications/System/Driver-Center/Driver-Center.md).
 
@@ -16,7 +16,7 @@ This page describes the package design and maintenance contract. For the blue en
 
 ## Scope and rationale
 
-The new boot packages currently target **AMD64 on Resolute**. ARM64 retains its existing Ubuntu boot stack. Adapting the next Ubuntu base is separate work.
+The new boot packages target **AMD64 and ARM64 on Resolute**. Both architectures share the signing, deployment, status, and update workflow while installing their own native EFI binaries. Legacy BIOS support is AMD64-only. Adapting the next Ubuntu base is separate work.
 
 Keeping `/boot` with the Btrfs root filesystem allows the kernel and initramfs to stay with the system snapshot they belong to. Maintaining our GRUB build gives AnduinOS control over the filesystem and cryptographic readers needed for this layout, instead of changing the disk layout to match a reduced signed module set.
 
@@ -28,14 +28,14 @@ AnduinOS keeps Ubuntu's officially signed shim and kernels. It does not ask user
 
 | Package | Responsibility |
 |---|---|
-| `anduinos-grub` | Builds GRUB with the Ubuntu patch set, BIOS/EFI tools, and an unsigned EFI template. The template is signed locally before deployment. No shared private key is shipped. |
+| `anduinos-grub` | Builds GRUB with the Ubuntu patch set, native EFI tools, and an unsigned EFI template; AMD64 also includes BIOS tools. The template is signed locally before deployment. No shared private key is shipped. |
 | `anduinos-shim-signed` | Packages Ubuntu's already-signed shim and MokManager binaries, with AnduinOS dependency and deployment integration. The upstream EFI signatures are preserved. It depends on `anduinos-grub`. |
 | `anduinos-secureboot-toolkit` | Inspects trust, manages the local certificate and DKMS configuration, and prepares, verifies, and deploys the locally signed GRUB. Driver Center and the installer share this implementation. |
-| `anduinos-core-system` | Suggests `anduinos-shim-signed` on AMD64; it does not force an existing installation to replace its boot stack. |
+| `anduinos-core-system` | Suggests `anduinos-shim-signed` on both architectures; it does not force an existing installation to replace its boot stack. |
 
 The replacement packages declare the relevant **Provides**, **Conflicts**, and **Replaces** relationships. They replace the Ubuntu packages that own those bootloader files; they do not pretend that an Ubuntu package still owns an overwritten AnduinOS binary.
 
-`Suggests` is intentionally weaker than `Depends` or `Recommends`. Default APT behavior does not install suggestions during an ordinary upgrade. Explicit installation or a custom policy that installs suggestions is a different operation. Fresh ISO construction explicitly selects the AnduinOS packages, so a fresh installed AMD64 system receives the new stack even though an existing system is not automatically migrated.
+`Suggests` is intentionally weaker than `Depends` or `Recommends`. Default APT behavior does not install suggestions during an ordinary upgrade. Explicit installation or a custom policy that installs suggestions is a different operation. Fresh ISO construction explicitly selects the AnduinOS packages, so a fresh installed AMD64 or ARM64 system receives the new stack even though an existing system is not automatically migrated.
 
 ## One certificate, two signing mechanisms
 
@@ -151,7 +151,7 @@ The third-party-driver check concerns signing and trust, not whether a controlle
 
 | Location | Purpose |
 |---|---|
-| `/usr/lib/anduinos-grub/grubx64.efi` | Package-owned unsigned EFI template; do not replace it with a locally signed copy. |
+| `/usr/lib/anduinos-grub/grubx64.efi` (AMD64) or `/usr/lib/anduinos-grub/grubaa64.efi` (ARM64) | Package-owned native unsigned EFI template; do not replace it with a locally signed copy. |
 | `/var/lib/anduinos-grub/` | Generated signing/deployment state and recovery artifacts. |
 | `/var/lib/shim-signed/mok/MOK.priv` | Machine-local private signing key. |
 | `/var/lib/shim-signed/mok/MOK.der` | Public certificate used for MOK enrollment. |
@@ -165,7 +165,7 @@ Never publish the private key, copy it to another computer, or put it on the ESP
 * Track upstream GRUB security fixes and Ubuntu's patch set, and update pinned package-build inputs and their provenance deliberately.
 * Preserve shim and MokManager's upstream signed bytes. Packaging them with different dependencies does not create a new Microsoft signature.
 * Retain shim verification, the embedded readers required before `/boot` is accessible, and correct SBAT metadata. Never solve a boot failure by disabling signature enforcement.
-* Keep the Live-media inputs separate from the installed-system package payload. Check both AMD64 and ARM64 media paths even where their installed boot stacks differ.
+* Keep the Live-media inputs separate from the installed-system package payload. Check both AMD64 and ARM64 media paths and their native installed boot files.
 * Test offline UEFI/Secure Boot installation, physical MOK confirmation, removal of the installation medium, and a successful installed-system boot.
 * Test ordinary upgrades of existing systems without forced migration, deliberate migration, same-version reinstall, changed-version re-signing, missing/untrusted keys, absent ESP, and interrupted deployment recovery.
 * Verify trusted modules still work and untrusted boot images are rejected. A green status display or a successful package build alone is insufficient.
