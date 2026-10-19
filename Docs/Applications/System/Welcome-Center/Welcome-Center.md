@@ -100,6 +100,25 @@ The list can include region-specific applications. For example, Simplified Chine
 
 This page requires an Internet connection and disappears from the current run after you choose **Continue Offline**.
 
+## Control your computer with natural language
+
+Starting with AnduinOS 2.0.5, **Control Your Computer with Natural Language** follows the application recommendations. Its cards offer optional coding agents that can help with projects through natural-language instructions. You can continue setup without installing one.
+
+![Welcome Center coding-agent cards with their logos, descriptions, and installation status in dark appearance](images/welcome-center/coding-agents.png)
+
+The recommendations depend on the current language:
+
+- **Mainland Simplified Chinese (`zh_CN`):** Kimi Code, DeepSeek Harness, GLM through OpenCode, MiniMax Code, and Qwen Code.
+- **Other languages:** Claude Code, Codex, GitHub Copilot, Antigravity, and OpenCode.
+
+Select a **Not installed** card to review the installation confirmation. The installer downloads and runs third-party software with your account permissions and may change your user environment. Coding agents can read and modify files, run commands, and send project data to their provider. Review the warning before agreeing, and use agents only in projects you trust.
+
+After confirmation, an indeterminate progress bar remains visible while installation runs. Expand **Advanced Output** to inspect the actual installation command and its output. Navigation and window closing are disabled during installation; wait for it to finish before continuing. A failed installation retains its output and lets you select the card again to retry.
+
+An **Installed** card opens the agent in a new terminal window. DeepSeek Harness uses a local web interface. Its confirmation also explains that, if a compatible Node.js and npm are missing, installation prepares nvm and the latest Node.js release for your user account. The GLM card shares the OpenCode client; select **Z.AI** when configuring its model provider.
+
+Provider sign-in or an API key may still be required after installation, and provider charges may apply. The Welcome Center does not collect or store those credentials. Like the application recommendations, this page requires an Internet connection and is omitted after **Continue Offline**.
+
 ## Conditional pages
 
 Welcome Center can also show pages for:
@@ -110,6 +129,7 @@ Welcome Center can also show pages for:
 - preparing Bottles for Windows applications on supported architectures;
 - learning keyboard shortcuts;
 - discovering recommended applications;
+- optionally installing coding agents;
 - reviewing privacy choices; and
 - finding AnduinOS community and support resources.
 
