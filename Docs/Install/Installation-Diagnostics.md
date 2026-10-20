@@ -11,6 +11,7 @@ Use this page when booting installation media, running the installer, or startin
 | Installer stops while checking Secure Boot | [Check the firmware detection error](#secure-boot-detection) |
 | Driver installation reports unmet dependencies | [Check the package source and versions](#driver-dependencies) |
 | No target disk, unallocated space, or EFI partition is available | [Check the disk layout](#installation-disk) |
+| External-drive installation stops with `Storage graph operations drifted` | [Check the external-drive preflight error](#external-drive-preflight) |
 | Installation finished, but the installed system has a black screen | [Check the installed driver and boot state](#installed-black-screen) |
 
 ## Why does the USB not boot, or fail media verification? { #installation-media }
@@ -100,6 +101,14 @@ lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS,MODEL
 If the intended disk is absent, check whether firmware detects it and collect `journalctl -b -k`. If the disk is present but the coexistence page shows **(None)** for unallocated space or an EFI partition, the installer has not found a suitable layout for that route.
 
 Use **Rescan and Reselect Disk** after preparing genuine unallocated space and the appropriate EFI layout. The installer does not shrink Windows for you. Follow [USB installation](./Install-AnduinOS-From-USB.md#keep-another-operating-system) and [Dual boot with Windows](./Dual-Boot-With-Windows.md) before changing partitions; a missing candidate is not a reason to format an existing Windows or EFI partition.
+
+## External-drive installation stops with `Storage graph operations drifted`. What should I do? { #external-drive-preflight }
+
+The external-drive installation bug tracked in [AnduinOS-2 #31](https://github.com/AiursoftWeb/AnduinOS-2/issues/31) causes the installer's descriptions of its planned storage operations to disagree. Its safety check stops installation before partitioning. This bug is unrelated to SSD capacity, and formatting the target drive again does not resolve it.
+
+The installer fix is included in 2.0.5. When official AnduinOS 2.0.5 or newer installation media containing the fix are available, download the image and recreate your installer USB. Updating an installed system does not update the installer on an older USB.
+
+If the error persists with fixed media, use the installer's **Save Log** button and report the exact ISO filename, computer model, and saved log.
 
 ## Installation succeeded, but the first boot has a black screen. What now? { #installed-black-screen }
 
