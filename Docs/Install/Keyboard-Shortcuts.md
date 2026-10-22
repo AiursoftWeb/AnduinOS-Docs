@@ -16,6 +16,7 @@ We strongly recommend learning and using these shortcuts to improve your product
 * Toggle action center: `Windows + A`
 * Toggle notification center: `Windows + N`
 * Open Emoji and Characters picker: `Windows + ;`
+* Start or stop [Voice Typing](../Applications/System/Control-Panel/Control-Panel.md#voice-typing): `Windows + H` (AnduinOS 2; install Voice Typing and sign out and back in first)
 
 ## Applications
 
