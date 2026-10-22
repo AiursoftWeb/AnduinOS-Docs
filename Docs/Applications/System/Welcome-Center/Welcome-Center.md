@@ -117,6 +117,8 @@ After confirmation, an indeterminate progress bar remains visible while installa
 
 An **Installed** card opens the agent in a new terminal window. DeepSeek Harness uses a local web interface. Its confirmation also explains that, if a compatible Node.js and npm are missing, installation prepares nvm and the latest Node.js release for your user account. The GLM card shares the OpenCode client; select **Z.AI** when configuring its model provider.
 
+After a successful installation through Welcome Center, the agent also appears in your application menu with the same name and logo as its card. Search for it in the Start menu to open a new terminal window, or pin it to the taskbar for later. These shortcuts belong to your account and are stored in `$XDG_DATA_HOME/applications` (normally `~/.local/share/applications`). The shortcut creation command and its output appear in **Advanced Output**.
+
 Provider sign-in or an API key may still be required after installation, and provider charges may apply. The Welcome Center does not collect or store those credentials. Like the application recommendations, this page requires an Internet connection and is omitted after **Continue Offline**.
 
 ## Conditional pages
