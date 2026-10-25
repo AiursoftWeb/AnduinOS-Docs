@@ -86,6 +86,7 @@ nav:
     - System Management:
       - Swap Control Strategy: Skills/System-Management/Swap-Control-Strategy.md
       - GRUB Display Modes: Skills/System-Management/GRUB-Display-Modes.md
+      - Recovery Environment: Skills/System-Management/Recovery-Environment.md
       - Advanced Power Management: Skills/System-Management/Advanced-Power-Management.md
       - Diagnose Sleep: Skills/System-Management/Diagnose-Sleep.md
       - Check system layout: Skills/System-Management/Check-System-Layout.md
