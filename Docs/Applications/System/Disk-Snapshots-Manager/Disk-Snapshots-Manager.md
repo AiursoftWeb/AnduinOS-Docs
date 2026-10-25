@@ -164,6 +164,7 @@ A healthy result means no important warning was reported at the time of the chec
 | Situation | Recommended method |
 |---|---|
 | A package or driver update broke the system | System snapshot rollback |
+| The installed system cannot boot, but GRUB and snapshot storage remain readable | [Independent Recovery Environment](../../../Skills/System-Management/Recovery-Environment.md), on supported installations |
 | A document was edited or deleted | Personal Files history |
 | Return a supported installation to its initial system state | Factory reset, preserving Home by default |
 | Also return Home files and settings to their initial state | Factory reset with Roll back user data, after independent backup |
