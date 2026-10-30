@@ -26,6 +26,7 @@ nav:
     - License: https://github.com/AiursoftWeb/AnduinOS-2/blob/master/LICENSE
     - Release Notes:
       - Overview: CHANGELOG.md
+      - AnduinOS 2.1.0 (draft): Release-Notes/2.1.0.md
       - AnduinOS 2.0.6 (draft): Release-Notes/2.0.6.md
       - AnduinOS 2.0.5: Release-Notes/2.0.5.md
       - AnduinOS 2.0.4: Release-Notes/2.0.4.md
