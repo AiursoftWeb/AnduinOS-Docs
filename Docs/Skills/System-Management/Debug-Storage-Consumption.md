@@ -1,5 +1,7 @@
 # Debug Storage Consumption
 
+Once you have identified the cause, follow [Disk cleanup and free-space maintenance](./Disk-Cleanup.md) for package caches, unused Flatpak runtimes and snapshot retention.
+
 In some cases, you may notice that your storage space is being consumed rapidly. This can be due to various reasons such as log files, cache files, or other temporary files. In this guide, we will show you how to debug storage consumption on your server.
 
 ## Understand Linux disk layout

@@ -1,5 +1,7 @@
 # GRUB Display Modes
 
+To choose the default operating system or make the menu visible, see [GRUB boot menu settings](./GRUB-Boot-Menu.md).
+
 The GRUB screen appears before Linux starts, so its available resolutions come from the firmware and GRUB graphics drivers, not your desktop display settings. AnduinOS uses **Automatic** by default on both the Live ISO and an installed system. Automatic lets GRUB choose a supported mode; it does not promise the panel's native resolution.
 
 After installation, open **Control Panel → Startup and Boot** to choose one of three modes:

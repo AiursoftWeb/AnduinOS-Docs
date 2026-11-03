@@ -68,6 +68,7 @@ nav:
       - Text, Icons and Display Scaling: Install/Text-Icons-and-Displays.md
       - Startup Applications: Install/Startup-Applications.md
       - Shortcuts, Taskbar and Wallpaper: Install/Shortcuts-and-Appearance.md
+      - GNOME Desktop Customization: Install/GNOME-Desktop-Customization.md
     - Learning AnduinOS:
       - Keyboard Shortcuts: Install/Keyboard-Shortcuts.md
       - Touchpad Gestures: Install/Touchpad-Gestures.md
@@ -86,7 +87,10 @@ nav:
     - Introduction: Skills/Introduction.md
     - System Management:
       - Swap Control Strategy: Skills/System-Management/Swap-Control-Strategy.md
+      - GRUB Boot Menu: Skills/System-Management/GRUB-Boot-Menu.md
       - GRUB Display Modes: Skills/System-Management/GRUB-Display-Modes.md
+      - Disk Cleanup: Skills/System-Management/Disk-Cleanup.md
+      - Btrfs Backup and Recovery: Skills/System-Management/Btrfs-Backup-and-Recovery.md
       - Recovery Environment: Skills/System-Management/Recovery-Environment.md
       - Advanced Power Management: Skills/System-Management/Advanced-Power-Management.md
       - Diagnose Sleep: Skills/System-Management/Diagnose-Sleep.md
@@ -243,6 +247,8 @@ nav:
         - GSmartControl: Applications/Utilities/GSmartControl/GSmartControl.md
 
       - Development:
+        - Android Studio: Applications/Development/Android-Studio/Android-Studio.md
+        - Rust: Applications/Development/Rust/Rust.md
         - Docker: Applications/Development/Docker/Docker.md
         - CUDA: Applications/Development/CUDA/CUDA.md
         - Node: Applications/Development/Node/Node.md
