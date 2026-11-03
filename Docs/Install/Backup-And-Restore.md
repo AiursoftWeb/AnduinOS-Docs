@@ -1,5 +1,7 @@
 # Backup and Restore
 
+For a hands-on first checkpoint and file-recovery exercise, follow [Btrfs snapshots: a practical walkthrough](../Skills/System-Management/Btrfs-Backup-and-Recovery.md).
+
 It is crucial to back up your data regularly to prevent data loss. AnduinOS supports both modern graphical tools for effortless backups and powerful command-line utilities for advanced users.
 
 ## Local recovery with Disk Snapshots Manager

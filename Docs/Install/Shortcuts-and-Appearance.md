@@ -1,5 +1,7 @@
 # Desktop shortcuts, taskbar and wallpaper
 
+For existing Dash to Panel settings, optional Tweaks/extensions and wallpaper fitting, see [GNOME desktop customization](./GNOME-Desktop-Customization.md).
+
 These instructions apply to the AnduinOS GNOME desktop. Open **AnduinOS Appearance** from the application menu for the main desktop controls.
 
 ## Show or hide desktop icons
