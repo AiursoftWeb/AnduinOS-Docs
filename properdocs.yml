@@ -177,6 +177,7 @@ nav:
         - Nextcloud Talk: Applications/Communication/NextcloudTalk/NextcloudTalk.md
 
       - Internet Services:
+        - Tailscale: Applications/Internet-Services/Tailscale/Tailscale.md
         - Nextcloud: Applications/Internet-Services/Nextcloud/Nextcloud.md
         - Dropbox: Applications/Internet-Services/Dropbox/Dropbox.md
 
