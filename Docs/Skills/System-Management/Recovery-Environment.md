@@ -276,8 +276,8 @@ The package uses Ubuntu's kernel binary and checks image hashes during deploymen
 
 ## Implementation and upstream references
 
-* [Recovery package, builder, deployment helper, and startup scripts](https://gitlab.aiursoft.com/aiursoft/anduinos-packages/-/tree/master/anduinos-recovery-env)
-* [Installer deployment integration](https://gitlab.aiursoft.com/aiursoft/anduinos-packages/-/blob/master/anduinos-installer-beta/src/installer_core/snapshots_manager.py)
+* [Recovery package, builder, deployment helper, and startup scripts](https://github.com/AiursoftWeb/AnduinOS-Packages/tree/master/anduinos-recovery-env)
+* [Installer deployment integration](https://github.com/AiursoftWeb/AnduinOS-Packages/blob/master/anduinos-installer-beta/src/installer_core/snapshots_manager.py)
 * [Linux initramfs design](https://www.kernel.org/doc/html/latest/filesystems/ramfs-rootfs-initramfs.html)
 * [Linux ext4 mount options](https://www.kernel.org/doc/html/latest/admin-guide/ext4.html#options)
 * [Linux chroot semantics](https://man7.org/linux/man-pages/man2/chroot.2.html)
