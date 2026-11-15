@@ -1,157 +1,143 @@
-# No sound, Dummy Output or microphone not working
+# Troubleshoot sound and microphones
 
-## Confirm the version and symptom
+Follow your symptom below, changing one thing at a time. Driver Center and PipeWire service instructions apply to AnduinOS 2.
 
-Record the [system version](./Troubleshooting.md), whether you use built-in speakers, HDMI, USB or Bluetooth audio, and whether the problem affects every application. AnduinOS 2 desktop packages use PipeWire, its PulseAudio compatibility service and WirePlumber.
+## Check the basics
 
-## Simple checks
+Open **Settings → Sound**:
 
-Open **Settings → Sound**. Under **Output**, choose **Output Device**, adjust **Output Volume**, and use **Test…** at the upper right. Under **Input**, choose your microphone and adjust **Input Volume**. Check the physical mute switch and whether the input meter responds when you speak.
+- **Output:** select your speakers/headset, unmute, adjust volume and click **Test…**. Check physical power, volume and mute controls too.
+- **Input:** select your microphone, unmute and adjust **Input Volume**. Speak and check the input meter.
 
-![Sound settings showing output and input device selection, volume sliders and the output Test button](./images/sound-input-output.png){ width=840 }
+Input and output are selected separately; reconnecting devices may change the selection.
 
-The example plays through **Speakers - USB Audio** and records through **Microphone - G733 Gaming Headset**. Playback and recording can use different devices. HDMI monitors can also become the selected output, so check the selected device rather than only raising the volume. If just one application fails, check its own device selection and microphone permission; browser site permissions are separate.
+![Sound settings showing output and input selection, volume controls and the Test button](./images/sound-input-output.png){ width=840 }
 
-Disconnect and reconnect a USB headset. For Bluetooth, compare a wired headset: microphone use can change the available Bluetooth audio profile and playback quality.
+| What happens? | Go to |
+| --- | --- |
+| No sound, missing device or Dummy Output | [Restore a missing device](#no-sound-or-missing-device) |
+| Microphone silent, quiet or distorted | [Check the microphone](#microphone-problems) |
+| Only one application or website fails | [Check application settings](#only-one-application-fails) |
+| Bluetooth disconnects or sounds muffled during calls | [Check Bluetooth audio](#bluetooth-headsets) |
+| Crackling, echo, delay or a pop after idle | [Identify the noise](#noise-echo-or-delay) |
+| Audio fails after an update or waking from sleep | [Compare before and after](#after-an-update-or-suspend) |
 
-## Collect diagnostic information
+## No sound or missing device
 
-Run these as your desktop user, without `sudo`:
+1. **Analogue:** check the socket and headset adapter. **USB:** try another port without a hub. **HDMI/DisplayPort:** select that output and check the monitor has speakers or an audio output.
+2. Try another headset/speaker to isolate a device or cable problem.
+3. Open [Driver Center](../Applications/System/Driver-Center/Driver-Center.md) → **Audio**, apply offered fixes and reboot if requested. Green checks confirm software components; test the sound separately.
+
+![Driver Center Audio Support showing support packages and runtime checks](./images/driver-center-audio-ready.png){ width=840 }
+
+**Dummy Output** means no usable output is exposed to the sound server. Check services as your desktop user, without `sudo`:
 
 ```bash
-wpctl status
 systemctl --user status pipewire pipewire-pulse wireplumber
-journalctl --user -b -u pipewire -u pipewire-pulse -u wireplumber --since '-10 minutes'
 ```
 
-Also inspect `lspci -nnk`, `lsusb`, and kernel messages with `journalctl -b -k` for missing audio firmware. `Dummy Output` means there is no usable real output exposed to the sound server; it does not identify a single cause.
-
-## Choose the next step
-
-If devices appear in `wpctl status`, select the correct output/input in Settings and retest another application. For an application-only failure, inspect its permissions and audio settings before changing system packages.
-
-If the desktop audio services failed, save work involving audio, then restart them for your user:
+If services failed or audio stopped responding, finish calls/recordings before restarting:
 
 ```bash
 systemctl --user restart pipewire pipewire-pulse wireplumber
 ```
 
-This interrupts active calls and recordings. Retest afterwards. If services or hardware support packages are missing, open **Driver Center → Audio** and review the **Audio Support** page and any proposed fix. A green status checks known software components, not every microphone, physical jack or headset. Reboot after firmware or driver updates when requested.
+Retest. If a service or device remains missing, [collect diagnostics](#still-not-working).
 
-![Driver Center Audio Support showing installed support packages and successful runtime checks](./images/driver-center-audio-ready.png){ width=840 }
+## Microphone problems
 
-The sidebar reports **Audio support ready**. **Support packages** lists Intel SOF firmware and ALSA UCM profiles; **Runtime status** lists available files, modules and active audio drivers. Green checks here describe those components. Use the Sound settings above to confirm that your actual speakers and microphone work.
+- **No input meter activity:** check the hardware mute switch, input device and jack/adapter. Try another microphone or USB port.
+- **Meter responds, but the app records silence:** follow [application settings](#only-one-application-fails).
+- **Quiet or distorted throughout:** adjust input volume and external-interface gain. Compare a local recording with a call to check whether the problem is in capture or the call.
+- **Only the start of a recording is distorted:** try the [HDA power-saving check](#hda-clicks-after-idle) if applicable.
 
-## Clicks or distorted audio when recording starts
+## Only one application fails
 
-Some HDA audio devices produce a click, distorted fade-in or playback pop when waking from automatic power saving. This is one possible cause, not a diagnosis for every audio problem. In [Discussion #482](https://github.com/Anduin2017/AnduinOS/discussions/482), disabling HDA codec power saving resolved a recording startup transient, including after reboot and idle, while normal playback continued to work.
+Check the app's devices, mute, volume and microphone permissions. In browsers, check site permissions and tab mute too. Reopen the app after changes and compare another app.
 
-### Test a temporary workaround
+## Bluetooth headsets
 
-First make a short recording that demonstrates the problem. Keep the same microphone, input selection and recording volume throughout the comparison. Finish any call or recording before changing the setting: changing the audio power state can itself produce a click.
+Connect in **Settings → Bluetooth**, then select the headset in Sound settings. For pairing/disconnections, follow the [Bluetooth guide](./Troubleshoot-Network-and-Bluetooth.md).
 
-Read the current timeout and note its value so you can identify the original configuration:
+Classic Bluetooth headsets may switch from **A2DP** music playback to lower-quality **HFP/HSP** when using the microphone. For music quality, select another microphone, close apps using the headset mic and choose the high-quality profile if available. [Profile support varies by headset](https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/bluetooth.html).
+
+## Noise, echo or delay
+
+- **Crackling/dropouts:** lower excessive volume/gain; compare local playback with streaming and another cable/port/headset. Note whether heavy load triggers it.
+- **Echo/feedback:** try headphones and disable microphone monitoring in the app. Speakers feeding into your microphone can cause call echo.
+- **Delay:** compare wired/USB with Bluetooth and check the app's monitoring/latency settings.
+- **A click, pop or distorted fade-in only when audio starts after idle:** follow the HDA check below.
+
+### HDA clicks after idle
+
+HDA [power-state changes can cause noise](https://docs.kernel.org/sound/designs/powersave.html). Disabling codec power saving helped in [Discussion #482](https://github.com/Anduin2017/AnduinOS/discussions/482), but can increase idle power use and may reduce battery life.
+
+**Test first.** Record the fault, finish calls/recordings and note the current timeout:
 
 ```bash
 cat /sys/module/snd_hda_intel/parameters/power_save
 ```
 
-`0` means automatic codec power saving is disabled. A positive number is the idle timeout in seconds. If the file does not exist, this workaround does not apply to your current driver. If it already reads `0`, leave it unchanged and collect diagnostics below.
-
-If the value is positive, temporarily disable automatic codec power saving:
+If the file is absent or reads `0`, skip this workaround. A positive value is the idle timeout in seconds; temporarily disable it with:
 
 ```bash
 echo 0 | sudo tee /sys/module/snd_hda_intel/parameters/power_save
 ```
 
-Repeat the recording that previously failed, then repeat it after leaving audio idle for a few minutes. Also check normal speaker or headphone playback. Leave `power_save_controller` and other audio settings unchanged so the comparison tests one change.
+The change may click. Keep device, gain and `power_save_controller` unchanged. Test recording/playback immediately and after a few idle minutes. Reboot restores the boot setting. Persist only if it helped.
 
-For a direct ALSA comparison, first list the capture devices:
-
-```bash
-arecord -l
-```
-
-If the affected microphone is on **card 0, device 0**, record five seconds with:
-
-```bash
-arecord -D plughw:0,0 -f cd -d 5 /tmp/hda-mic-test.wav
-```
-
-Replace `0,0` with the card and device numbers shown for your microphone. This command replaces that temporary recording file. Use the same command before and after the setting change. If `arecord` is unavailable, the device is busy or the command fails, include that message when asking for help; a failed recording command does not demonstrate an audio-quality problem.
-
-Rebooting restores the boot configuration after this temporary change. If disabling power saving does not help, reboot and investigate another cause instead of making the setting permanent.
-
-### Keep a setting that has helped
-
-This workaround affects devices handled by `snd_hda_intel` on this computer, rather than only one microphone. It can increase idle power consumption and reduce battery life. Apply it only after the temporary comparison improves the affected audio.
-
-Open a dedicated configuration file:
+**Keep the workaround.** It affects all `snd_hda_intel` devices. Create this file; review existing contents before editing:
 
 ```bash
 sudo nano /etc/modprobe.d/99-local-hda-no-powersave.conf
 ```
 
-If this file already contains settings, stop and review them before changing it. For a new file, enter this single line:
+Enter this line, save with **Ctrl+O**, **Enter**, then exit with **Ctrl+X**:
 
 ```text
 options snd_hda_intel power_save=0
 ```
 
-Save with **Ctrl+O**, press **Enter**, then exit with **Ctrl+X**.
-
-Update existing boot images so the option is available even when the driver loads early:
+Update existing boot images:
 
 ```bash
 sudo update-initramfs -u -k all
 ```
 
-Wait for the command to finish successfully. If it reports an error, ask for help with that error before proceeding. Save your work and reboot normally.
+Reboot only after success; seek help on errors. Recheck with the `cat` command: expect `0`. Retest recording/playback immediately and after idle; report if the value changes later.
 
-After reboot, verify the effective value:
-
-```bash
-cat /sys/module/snd_hda_intel/parameters/power_save
-```
-
-It should return `0`. Repeat the immediate recording, the recording after idle and normal playback. If the value changes back despite keeping the file, report when it changes and any installed power-management tools; another component may be changing it at runtime.
-
-### Undo the persistent workaround
-
-If you created the dedicated file above, remove that file:
+**Undo.** Remove only the dedicated file you created above:
 
 ```bash
 sudo rm /etc/modprobe.d/99-local-hda-no-powersave.conf
 ```
 
-Update the existing boot images again:
+Run `sudo update-initramfs -u -k all` again; after success, reboot and recheck the timeout.
 
-```bash
-sudo update-initramfs -u -k all
-```
+## After an update or suspend
 
-Wait for success, then reboot. This restores the previous boot configuration. Check the effective value again; it depends on your kernel and any other power-management configuration.
+Recheck devices and restart audio services as above. Apply [system updates](./Update-Your-System.md) and reboot. For recurring wake failures, collect logs immediately and follow [sleep diagnostics](../Skills/System-Management/Diagnose-Sleep.md).
 
-### Information for a hardware-specific report
+Compare an earlier installed kernel or Live USB, recording each version and result. Different software versions help narrow the cause but do not prove it.
 
-Include your system and kernel versions, motherboard or laptop model, microphone model, and whether you use a built-in microphone, an analogue jack or a USB adapter. State whether the issue affects recording, playback or both, and whether direct ALSA recording shows it too. For two affected computers, identify whether they share the same microphone or adapter.
+## Still not working?
 
-Show the audio controller and its subsystem IDs:
+Ask in [community discussions](https://github.com/Anduin2017/AnduinOS/discussions) with [system/kernel versions](./Troubleshooting.md), hardware models, connection, symptom, onset and test results. Review output for private information before posting.
 
-```bash
-lspci -nnv -d ::0403
-```
+Run these individually as your desktop user. Include relevant output or any error:
 
-Show the codec identifiers:
+| Command | What it shows |
+| --- | --- |
+| `wpctl status` | Devices and streams visible to PipeWire |
+| `aplay -l` and `arecord -l` | ALSA playback and recording hardware |
+| `lspci -nnk` and `lsusb` | PCI/USB hardware IDs and PCI drivers |
+| `journalctl --user -b -u pipewire -u pipewire-pulse -u wireplumber --since '-10 minutes'` | Recent audio-service errors |
+| `journalctl -b -k` | Kernel messages; include audio/firmware errors near the failure |
+
+For HDA power-saving problems, also include `lspci -nnv -d ::0403`, the original/tested timeout, idle duration and reboot results. Get codec identifiers with:
 
 ```bash
 grep -H -E '^(Codec:|Vendor Id:|Subsystem Id:)' /proc/asound/card*/codec*
 ```
 
-Include the original and tested `power_save` values, the idle interval, and results after reboot. Review diagnostic output before posting it. These details help distinguish a specific hardware compatibility problem from an application or sound-server issue.
-
-The [Linux kernel power-saving documentation](https://docs.kernel.org/sound/designs/powersave.html) describes the timeout and possible noise during power-state transitions. Increasing the timeout can reduce frequent transitions, but still permits the device to sleep after a longer idle period; it does not guarantee a clean first recording on affected hardware.
-
-## When to ask for help
-
-If Dummy Output remains, provide the sound-server status, audio hardware IDs and the relevant firmware error. Say whether a Live USB, USB headset or earlier kernel works. Do not replace PipeWire with another sound server merely to test a single application.
+If multiple computers are affected, say whether they share the same microphone or adapter.
