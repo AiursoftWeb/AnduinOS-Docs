@@ -9,7 +9,7 @@ This repository contains the Markdown source files that power the AnduinOS docum
 
 ### What is AnduinOS Documentation?
 
-This repository is the Markdown source for AnduinOS installation, desktop setup, troubleshooting and system maintenance. Read the published site at [https://docs.anduinos.com/](https://docs.anduinos.com/). The content is served by [DocsViewer](https://github.com/AiursoftWeb/DocsViewer), using `properdocs.yml` for navigation; the `mkdocs-app` repository tag does not mean this site is built with MkDocs.
+This repository is the Markdown source for AnduinOS installation, desktop setup, troubleshooting and system maintenance. Read the published site at [https://docs.anduinos.com/](https://docs.anduinos.com/). The content is served by [DocsViewer](https://github.com/AiursoftWeb/DocsViewer), using `properdocs.yml` for navigation; the viewer renders the content and provides site navigation.
 
 ## Installation
 
