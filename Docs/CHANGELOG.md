@@ -8,15 +8,15 @@ Release notes are organized by major release line so that each page stays focuse
 
 * [AnduinOS 2.0.7 Release Notes (draft)](./Release-Notes/2.0.7.md)
 
+## Current releases
+
 * [AnduinOS 2.1.0 Release Notes](./Release-Notes/2.1.0.md)
 
 * [AnduinOS 2.0.6 Release Notes](./Release-Notes/2.0.6.md)
 
-## Current release
+## Previous releases
 
 * [AnduinOS 2.0.5 Release Notes](./Release-Notes/2.0.5.md)
-
-## Previous releases
 
 * [AnduinOS 2.0.4 Release Notes](./Release-Notes/2.0.4.md)
 
