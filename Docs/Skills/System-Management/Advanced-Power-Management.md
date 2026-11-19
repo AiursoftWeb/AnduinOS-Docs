@@ -11,7 +11,34 @@ Default settings for AnduinOS:
 * Auto sleep after inactivity: 20 minutes (Battery)
 * Auto sleep after inactivity: 30 minutes (AC Power)
 * Power button action: Suspend(sleep)
-* Lid close action: Suspend(sleep)
+* Closing the lid on an undocked laptop with no external display normally suspends it.
+
+## Keep the laptop running when you close the lid
+
+On AnduinOS 2.x, systemd-logind handles the default lid-close action. Dconf Editor may still show the old `lid-close-*` keys shipped by Ubuntu. GNOME no longer reads them when the lid closes.
+
+Create the directory for local logind settings if needed.
+
+```bash
+sudo install -d /etc/systemd/logind.conf.d
+```
+
+Open a drop-in file for your lid settings.
+
+```bash
+sudoedit /etc/systemd/logind.conf.d/90-lid-ignore.conf
+```
+
+Add the following settings to ignore lid-close events on battery, on AC power, and when docked.
+
+```ini
+[Login]
+HandleLidSwitch=ignore
+HandleLidSwitchExternalPower=ignore
+HandleLidSwitchDocked=ignore
+```
+
+Save the file and reboot. To undo the change, remove the file you created and reboot again. For more about the lid settings, see the [systemd-logind configuration reference](https://www.freedesktop.org/software/systemd/man/latest/logind.conf.html).
 
 ## Tune CPU power settings
 
@@ -106,20 +133,18 @@ This command will allow the screen to blank after 5 minutes of inactivity. You c
 
     Avoiding system sleep can cause your computer to consume more power. We recommend using this feature only when necessary. For example, running virtual machines, downloading large files, or hosting a server.
 
-To avoid system sleep using the terminal, you can run the following command:
+Use these settings to disable automatic suspend when the computer is idle.
 
 ```bash
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type 'nothing'
 ```
 
-To disable sleep system wide:
+To disable sleep system-wide, mask the sleep targets.
 
 ```bash
 sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 ```
-
-This command will prevent the system from sleeping when the computer is inactive while connected to AC power.
 
 To revert the changes, you can run the following command:
 
@@ -129,7 +154,7 @@ gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-typ
 sudo systemctl unmask sleep.target suspend.target hibernate.target hybrid-sleep.target
 ```
 
-This command will allow the system to sleep when the computer is inactive while connected to AC power.
+This restores automatic idle suspend and makes the sleep targets available again.
 
 To further diagnose sleep issues, you can refer to the [Diagnose Sleep](./Diagnose-Sleep.md) guide.
 
@@ -154,8 +179,6 @@ gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-tim
 | org.gnome.settings-daemon.plugins.power        | sleep-inactive-battery-timeout           | The time in seconds before the system automatically suspends when inactive and on battery power.   | 1200                       |
 | org.gnome.settings-daemon.plugins.power        | sleep-inactive-battery-type              | The action performed when the system is inactive and on battery power.                             | 'suspend'                  |
 | org.gnome.settings-daemon.plugins.power        | power-button-action                      | The action performed when the power button is pressed.                                             | 'suspend'                  |
-| org.gnome.settings-daemon.plugins.power        | lid-close-ac-action                      | The action performed when the laptop lid is closed while on AC power.                              | 'suspend'                  |
-| org.gnome.settings-daemon.plugins.power        | lid-close-suspend-with-external-monitor  | Disables suspend when the laptop lid is closed with an external monitor connected.                 | false                      |
 | org.gnome.settings-daemon.plugins.power        | ambient-enabled                          | Enables the ambient light sensor to automatically adjust the brightness of the display.            | true                       |
 | org.gnome.desktop.screensaver                  | lock-enabled                             | Enables the auto lock screen feature when the screen is blanked.                                   | true                       |
 | org.gnome.desktop.screensaver                  | ubuntu-lock-on-suspend                   | Ubuntu specific setting to lock the screen when the system is suspended.                           | true                       |
