@@ -17,6 +17,8 @@ You can easily adjust these settings using the graphical interface.
 
 ![Power Settings](images/power-settings.png)
 
+To change what happens when you close a laptop lid on AnduinOS 2.x, see [Keep the laptop running when you close the lid](../Skills/System-Management/Advanced-Power-Management.md#keep-the-laptop-running-when-you-close-the-lid).
+
 ## Adjust Auto Lock Settings
 
 If you set your screen to blank, AnduinOS will lock your session by default for security. If you are using a home desktop and find typing your password annoying, you can disable this:
