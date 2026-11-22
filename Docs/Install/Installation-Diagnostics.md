@@ -7,12 +7,12 @@ Use this page when booting installation media, running the installer, or startin
 | USB does not appear in the boot menu, or media verification fails | [Check the installation media](#installation-media) |
 | Want to enter the Live desktop without waiting for media verification | [Skip the startup check](#skip-media-check) |
 | Live USB starts but the display becomes black or loses signal | [Try Safe Graphics](#live-black-screen) |
-| Startup freezes at the splash screen or shows a `plymouthd` backtrace | [Try Console Compatibility](#plymouth-startup) |
+| Live USB freezes at the splash screen or shows a `plymouthd` backtrace | [Try Console Compatibility](#plymouth-startup) |
 | Installer stops while checking Secure Boot | [Check the firmware detection error](#secure-boot-detection) |
 | Driver installation reports unmet dependencies | [Check the package source and versions](#driver-dependencies) |
 | No target disk, unallocated space, or EFI partition is available | [Check the disk layout](#installation-disk) |
 | External-drive installation stops with `Storage graph operations drifted` | [Check the external-drive preflight error](#external-drive-preflight) |
-| Installation finished, but the installed system has a black screen | [Check the installed driver and boot state](#installed-black-screen) |
+| The installed system freezes on the boot logo or desktop, or the screen goes black | [Diagnose a first-boot display problem](#installed-black-screen) |
 
 ## Why does the USB not boot, or fail media verification? { #installation-media }
 
@@ -110,9 +110,25 @@ The installer fix is included in 2.0.5. When official AnduinOS 2.0.5 or newer in
 
 If the error persists with fixed media, use the installer's **Save Log** button and report the exact ISO filename, computer model, and saved log.
 
-## Installation succeeded, but the first boot has a black screen. What now? { #installed-black-screen }
+## The display freezes or goes black on first boot. What now? { #installed-black-screen }
 
 Confirm that the computer is booting the installed disk. The USB's Safe Graphics and Console Compatibility entries apply to Live startup; selecting them does not diagnose the installed system's driver or boot configuration.
+
+### The screen stops updating while the system still responds
+
+On Intel laptops using the `i915` graphics driver, try turning off Panel Self Refresh (PSR), a power-saving feature for the internal display. An ASUS TUF Gaming F16 (FX608LPG) in Hybrid mode reached the AnduinOS desktop with PSR disabled and the boot splash turned off. A [related TUF Gaming F16 running Arch Linux](https://blog.mmoe.work/tuf-gaming-f16-archlinux/) also showed this symptom.
+
+1. In the installed system's GRUB menu, highlight the normal entry and press **E**. Append `i915.enable_psr=0` to the line starting with `linux`, then press **Ctrl+X** or **F10**. If you previously added `nomodeset`, remove it for this test so the Intel driver can manage the display. The edit applies to one boot.
+2. If the desktop stays responsive, save the tested workaround in a separate GRUB configuration file and regenerate the menu.
+
+   ```bash
+   printf '%s\n' 'GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} i915.enable_psr=0"' | sudo tee /etc/default/grub.d/99-disable-i915-psr.cfg >/dev/null
+   sudo update-grub
+   ```
+
+3. After `update-grub` succeeds, reboot normally. Check `cat /proc/cmdline` for `i915.enable_psr=0` and confirm that the desktop stays responsive. To undo the workaround, remove `/etc/default/grub.d/99-disable-i915-psr.cfg` and run `sudo update-grub` again. See [Update Kernel Parameters](../Skills/System-Management/Update-Kernel-Parameters.md#undo-a-change) if you need to remove the parameter for one boot.
+
+### Check the installed driver and boot state
 
 If a text console is available, use the [terminal-mode guide](../Skills/System-Management/Terminal-Mode.md) and inspect:
 
