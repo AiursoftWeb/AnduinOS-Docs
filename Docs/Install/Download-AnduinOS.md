@@ -26,4 +26,4 @@ Please compare the output of the `sha256sum` command with the checksum provided 
 
 !!! note "Multi-language Support"
 
-    All 28 supported languages ship in a **single ISO**. You can select your preferred language directly from the GRUB boot menu before entering the live session — no separate download needed, and no post-install language switching required.
+    Each release ships all its supported languages in a **single ISO**. Choose the language of the live session from the GRUB boot menu. The installer has its own language selector for the installed system.
