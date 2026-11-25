@@ -2,7 +2,7 @@
 
 Desktop resource protection is enabled by default. Keep using your applications and terminal commands as usual; the system automatically gives the desktop priority when resources are busy.
 
-When the computer has spare resources, other work can use them normally. When you interact with a busy desktop, a heavy job may take a little longer so the desktop can respond promptly.
+When the computer has spare resources, other work can use them normally. When you interact with a busy desktop, a heavy job may take longer so the desktop can respond promptly.
 
 ## Change the setting
 
@@ -38,7 +38,7 @@ These settings require `anduinos-uresourced` 0.5.5-2 or later and the correspond
 
 Advanced Output shows saved values, configuration paths and service errors. Saving formats the INI file and can change comments. A successful save remains in place if applying it to a service fails.
 
-The recommended memory protection is subject to a shared budget of 10% of physical RAM across active users. I/O priority effects depend on storage support. Resource management follows upstream startup and shutdown behavior without snapshots of previous runtime settings.
+The recommended memory protection is subject to a shared budget of 10% of physical RAM across active users. I/O priority effects depend on storage support.
 
 Upstream also recognizes a personal `~/.config/uresourced.conf` (or its XDG equivalent) for application policy. It replaces the system application configuration. The window reports such overrides and leaves the personal file untouched. Restore Recommended Settings changes only the controls in the machine configuration.
 
