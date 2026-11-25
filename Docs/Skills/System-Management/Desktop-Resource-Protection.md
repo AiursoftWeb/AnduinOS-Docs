@@ -31,7 +31,7 @@ Machine settings are stored in **`/etc/uresourced.conf`**. The settings window a
 
 Removing Control Panel leaves the protection service and its settings in place. Removing `anduinos-uresourced` stops the service and retains the configuration for reinstalling. Purging the package also removes its configuration. Package upgrades follow the usual dpkg rules for locally edited configuration files.
 
-<details>
+<details markdown="1">
 <summary>Advanced: configuration and troubleshooting</summary>
 
 These settings require `anduinos-uresourced` 0.5.5-2 or later and the corresponding Control Panel update. The desktop installation recommends the backend; the window offers installation if it is missing.
