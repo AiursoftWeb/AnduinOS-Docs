@@ -40,7 +40,7 @@ For boot-menu resolution, open **Startup and Boot** in Control Panel. It offers 
 
 Under **System**, open **Resource Allocation Settings**. Leave **Prioritize resources needed by the desktop (recommended)** enabled for normal use. **Advanced Options** offers a desktop memory-protection amount and foreground application priority, plus progress output and **Restore Recommended Settings**. Choose **Apply** to authorize and save changes; **Close** discards unapplied edits. Saved changes also apply after restarting.
 
-The settings affect all graphical users. Turning protection off retains your tuning choices and keeps memory-pressure handling and notifications enabled. Swap configuration stays in Virtual Memory Settings. See [Desktop Resource Protection](../../../Skills/System-Management/Desktop-Resource-Protection.md) for the configuration layers, custom overrides, and removal behavior.
+The settings affect all graphical users. Turning protection off retains your tuning choices and keeps memory-pressure handling and notifications enabled. Swap configuration stays in Virtual Memory Settings. See [Desktop Resource Protection](../../../Skills/System-Management/Desktop-Resource-Protection.md) for the single configuration file, personal application preferences, and removal behavior.
 
 ## Voice Typing
 
