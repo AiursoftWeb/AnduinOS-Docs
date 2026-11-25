@@ -230,3 +230,7 @@ sudo rm /etc/default/anduinos-zram /etc/default/anduinos-zswap
 sudo rm /etc/sysctl.d/90-anduinos-swapcontrol.conf
 sudo sysctl --system
 ```
+
+## Desktop resource allocation
+
+Swap configuration controls where pages can be stored. [Desktop Resource Protection](Desktop-Resource-Protection.md) separately manages resource priority, memory-reclamation protection, and application OOM boundaries. Its settings are available under **Control Panel → System → Resource Allocation Settings**.

@@ -26,6 +26,7 @@ Use these entries to configure the corresponding feature:
 | Setting | Where to find it |
 | --- | --- |
 | APT mirrors, Flathub source, and system package updates | Programs → Software Source |
+| Desktop resource protection and foreground application priority | System → Resource Allocation Settings |
 | Bash command suggestions | AI Stack → Bash Command Predictions |
 | Offline voice input | AI Stack → Voice Typing |
 | Local Network Discovery (mDNS) | Network and Internet → Firewall, then its mDNS setting |
@@ -34,6 +35,12 @@ Use these entries to configure the corresponding feature:
 | Online accounts | GNOME Settings → Online Accounts |
 
 For boot-menu resolution, open **Startup and Boot** in Control Panel. It offers High resolution, Automatic, and Large text; see [GRUB Display Modes](../../../Skills/System-Management/GRUB-Display-Modes.md) for how these choices interact with the default configuration.
+
+## Resource allocation
+
+Under **System**, open **Resource Allocation Settings**. Leave **Prioritize resources needed by the desktop (recommended)** enabled for normal use. **Advanced Options** offers a desktop memory-protection amount and foreground application priority, plus progress output and **Restore Recommended Settings**. Choose **Apply** to authorize and save changes; **Close** discards unapplied edits. Saved changes also apply after restarting.
+
+The settings affect all graphical users. Turning protection off retains your tuning choices and keeps memory-pressure handling and notifications enabled. Swap configuration stays in Virtual Memory Settings. See [Desktop Resource Protection](../../../Skills/System-Management/Desktop-Resource-Protection.md) for the single configuration file, personal application preferences, and removal behavior.
 
 ## Voice Typing
 

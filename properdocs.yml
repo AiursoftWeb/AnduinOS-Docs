@@ -89,6 +89,7 @@ nav:
     - Introduction: Skills/Introduction.md
     - System Management:
       - Swap Control Strategy: Skills/System-Management/Swap-Control-Strategy.md
+      - Desktop Resource Protection: Skills/System-Management/Desktop-Resource-Protection.md
       - GRUB Boot Menu: Skills/System-Management/GRUB-Boot-Menu.md
       - GRUB Display Modes: Skills/System-Management/GRUB-Display-Modes.md
       - Disk Cleanup: Skills/System-Management/Disk-Cleanup.md
