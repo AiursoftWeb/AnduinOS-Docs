@@ -81,7 +81,7 @@ sudo /usr/lib/anduinos-uresourced/helper reset
 | Remove `anduinos-uresourced` | Stop the services; retain `/etc/uresourced.conf` for reinstalling |
 | Purge `anduinos-uresourced` | Remove its conffile using normal dpkg behavior |
 
-Upgrades preserve local conffile changes according to dpkg's normal rules. Personal configuration is not package-owned. The upstream-generated `/run/systemd/user/session.slice.d/99-uresourced.conf` is removed when the system service stops; it is not another preferences file.
+Upgrades preserve local conffile changes according to dpkg's normal rules. Personal configuration is not package-owned. The upstream-generated `/run/systemd/user/session.slice.d/99-uresourced.conf` is refreshed when applying settings and removed during package removal; it is not another preferences file.
 
 ## Give heavy terminal jobs their own group
 
